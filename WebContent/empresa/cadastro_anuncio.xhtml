@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://primefaces.org/ui"
+   xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+<h:head>
+   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+   <meta http-equiv="refresh" content="#{session.maxInactiveInterval};url=index.xhtml?reason=expired" />
+
+
+</h:head>
+
+<h:body>
+
+   <ui:composition template="../template.xhtml">
+      <ui:define name="header-info">
+         <ui:include src="../header-info.xhtml" />
+      </ui:define>
+
+      <ui:define name="header-menu">
+         <ui:include src="../header-menu.xhtml" />
+      </ui:define>
+
+
+
+      <ui:define name="content">
+         <b:container fluid="false">
+            <b:row>
+               <b:column span="12">
+
+                  <ui:include src="../form_anuncio.xhtml" />
+               </b:column>
+            </b:row>
+         </b:container>
+
+      </ui:define>
+
+      <ui:define name="footer">
+         <ui:include src="../footer.xhtml" />
+      </ui:define>
+
+   </ui:composition>
+</h:body>
+</html>

@@ -1,0 +1,4 @@
+
+<jboss-web>
+	<context-root>ganimedes</context-root>
+</jboss-web>  

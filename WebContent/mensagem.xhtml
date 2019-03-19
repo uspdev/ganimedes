@@ -1,0 +1,148 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:p="http://primefaces.org/ui" xmlns:b="http://bootsfaces.net/ui" xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+<h:head>
+   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+   <meta http-equiv="refresh" content="#{session.maxInactiveInterval};url=index.xhtml?reason=expired" />
+
+
+</h:head>
+
+<h:body>
+
+   <f:metadata>
+      <f:event type="preRenderView" listener="#{mbMensagem.carregar()}" />
+   </f:metadata>
+
+   <ui:composition template="./template.xhtml">
+
+
+      <ui:define name="content">
+
+         <f:view>
+            <f:loadBundle basename="messages" var="msgs" />
+
+            <b:container fluid="false">
+               <b:row>
+                  <b:column span="12">
+                     <h:form id="main">
+
+                        <h3>Mensagens</h3>
+                        <p:message for="main" />
+
+                     </h:form>
+
+                     <h:form id="consulta">
+
+
+                        <p:dataTable var="m" value="#{mbMensagem.mensagens}" rowClasses="primeiro, ultimo" headerClass="cabecalho"
+                           columnClasses="col20c, col10c,col40c, col20c" styleClass="tabela" id="tbl_log" paginator="true" rows="100"
+                           paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                           rowsPerPageTemplate="100,200,500, 1000, 5000, 10000, 100000" emptyMessage="Nenhum registro encontrado">
+                           <f:facet name="header">
+                              <h:outputText value="" />
+                           </f:facet>
+
+                           <p:column styleClass="col5c">
+                              <f:facet name="header">
+                                 <h:outputText value="Data" />
+                              </f:facet>
+                              <h:outputText value="${m.criacao}">
+                                 <f:convertDateTime type="date" dateStyle="short" locale="pt_BR" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy HH:mm:ss" />
+                              </h:outputText>
+                           </p:column>
+
+
+
+                           <p:column styleClass="col10l">
+                              <f:facet name="header">
+                                 <h:outputText value="Para" />
+                              </f:facet>
+                              <h:outputText value="${m.para}" />
+                           </p:column>
+
+
+
+                           <p:column styleClass="col10l">
+                              <f:facet name="header">
+                                 <h:outputText value="Assunto" />
+                              </f:facet>
+                              <h:outputText value="${m.assunto}" />
+                           </p:column>
+
+
+                           <p:column styleClass="col5c">
+                              <f:facet name="header">
+                                 <h:outputText value="Envio" />
+                              </f:facet>
+                              <h:outputText value="${m.envio}">
+                                 <f:convertDateTime type="date" dateStyle="short" locale="pt_BR" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy HH:mm:ss" />
+                              </h:outputText>
+                           </p:column>
+
+                           <p:column styleClass="col5c">
+                              <p:commandButton icon="fa fa-fw fa-envelope-open" action="#{mbMensagem.show(m)}" value="Detalhes" ajax="false" />
+                           </p:column>
+
+
+
+                        </p:dataTable>
+                        <p:message for="consulta" />
+                     </h:form>
+
+                  </b:column>
+               </b:row>
+            </b:container>
+
+
+            <p:dialog id="dlg_mensagem" header="Mensagem" widgetVar="dlgMensagem" modal="true">
+               <h:form id="mensagem">
+
+
+                  <h:panelGrid columns="2">
+
+                     <h:outputText value="Assunto: " />
+                     <h:outputText value="#{mbMensagem.mensagem.assunto}" />
+
+                     <h:outputText value="Data: " />
+                     <h:outputText value="#{mbMensagem.mensagem.criacao}">
+                        <f:convertDateTime type="date" dateStyle="short" locale="pt_BR" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy HH:mm:ss" />
+                     </h:outputText>
+
+                     <h:outputText value="De: " />
+                     <h:outputText value="#{mbMensagem.mensagem.de}" />
+
+                     <h:outputText value="Para: " />
+                     <h:outputText value="#{mbMensagem.mensagem.para}" />
+                  </h:panelGrid>
+
+                  <hr />
+                  <h:outputText value="#{mbMensagem.mensagem.mensagem}" escape="false" />
+
+
+
+                  <hr />
+                  <h:panelGrid columns="2">
+                     <h:outputText value="Envio: " />
+                     <h:outputText value="${mbMensagem.mensagem.envio}">
+                        <f:convertDateTime type="date" dateStyle="short" locale="pt_BR" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy HH:mm:ss" />
+                     </h:outputText>
+                  </h:panelGrid>
+
+                  <p:commandButton value="OK" onclick="PF('dlgMensagem').hide();" type="button" />
+
+                  <p:commandButton value="Enviar agora" disabled="true" />
+
+               </h:form>
+            </p:dialog>
+         </f:view>
+
+      </ui:define>
+
+
+   </ui:composition>
+</h:body>
+</html>

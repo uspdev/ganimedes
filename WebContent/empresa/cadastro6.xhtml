@@ -1,0 +1,133 @@
+<ui:composition template="/template.xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich" xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<ui:define name="content">
+
+		<f:view contentType="text/html; charset=ISO-8859-1">
+			<f:loadBundle basename="messages" var="msgs" />
+
+
+
+			<h:form id="main" acceptcharset="ISO-8859-1">
+
+				<p:panel>
+					<h:outputText value="Sistema Ganimedes - Cadastro de Usuário" styleClass="page_title" />
+				</p:panel>
+
+				<br />
+
+				<p:messages />
+
+			</h:form>
+
+			<h:form id="cadastro" acceptcharset="ISO-8859-1" binding="#{mbAnunciante.tela.frmCadastro}">
+
+				<p:panel>
+					<h:panelGroup>
+						<h:panelGrid columns="2" styleClass="cadastro">
+							<h:outputText value="Nome completo:" />
+							<p:inputText id="nome" value="#{mbAnunciante.anunciante.nome}" size="30" required="true"
+								requiredMessage="&quot;Nome&quot; é um campo obrigatório." />
+
+							<h:outputText value="Email:" rendered="#{!mbAnunciante.edicao}" />
+							<p:inputText id="codlog" value="#{mbAnunciante.anunciante.codlog}" size="30" rendered="#{!mbAnunciante.edicao}" required="true"
+								requiredMessage="&quot;Email&quot; é um campo obrigatório." validatorMessage="Email inválido.">
+								<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+							</p:inputText>
+
+							<h:outputText value="Confirmar email:" rendered="#{!mbAnunciante.edicao}" />
+							<p:inputText id="codlog2" value="#{mbAnunciante.codlogConfirmacao}" size="30" rendered="#{!mbAnunciante.edicao}" required="true"
+								requiredMessage="&quot;Confirmar email&quot; é um campo obrigatório." />
+
+							<h:outputText value="Email atual:" rendered="#{mbAnunciante.edicao}" />
+							<h:outputText value="#{mbAnunciante.anunciante.codlog}" rendered="#{mbAnunciante.edicao}" />
+
+							<h:outputText value="Novo email:" rendered="#{mbAnunciante.edicao}" />
+							<p:inputText id="codloge" value="#{mbAnunciante.codlog}" size="30" rendered="#{mbAnunciante.edicao}" validatorMessage="Email inválido.">
+								<f:validateRegex pattern="^$|^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+							</p:inputText>
+
+							<h:outputText value="Confirmar novo email:" rendered="#{mbAnunciante.edicao}" />
+							<p:inputText id="codloge2" value="#{mbAnunciante.codlogConfirmacao}" size="30" rendered="#{mbAnunciante.edicao}" />
+
+							<h:outputText value="Senha:" rendered="#{!mbAnunciante.edicao}" />
+							<p:password id="pwd1" value="#{mbAnunciante.senhaNova}" size="30" match="pwd2" rendered="#{!mbAnunciante.edicao}" redisplay="true"
+								required="true" requiredMessage="&quot;Senha&quot; é um campo obrigatório." validatorMessage="Senhas não conferem." />
+
+							<h:outputText value="Confirmar senha:" rendered="#{!mbAnunciante.edicao}" />
+							<p:password id="pwd2" value="#{mbAnunciante.senhaNova}" size="30" rendered="#{!mbAnunciante.edicao}" redisplay="true" required="true"
+								requiredMessage="&quot;Confirmar senha&quot; é um campo obrigatório." />
+
+							<h:outputText value=" Nova senha:" rendered="#{mbAnunciante.edicao}" />
+							<p:password id="pwde1" value="#{mbAnunciante.senhaNova}" size="30" match="pwde2" rendered="#{mbAnunciante.edicao}" redisplay="true"
+								validatorMessage="Senhas não conferem" />
+
+							<h:outputText value="Confirmar nova senha:" rendered="#{mbAnunciante.edicao}" />
+							<p:password id="pwde2" value="#{mbAnunciante.senhaNova}" size="30" redisplay="true" rendered="#{mbAnunciante.edicao}" />
+
+							<p:separator />
+							<p:separator />
+
+							<h:outputText value="CPF:" />
+							<p:inputMask id="cpf" value="#{mbAnunciante.anunciante.cpf}" size="30" mask="?999.999.999-99" required="true"
+								requiredMessage="&quot;CPF&quot; é um campo obrigatório.">
+								<f:validator validatorId="validator.CPFValidator" />
+							</p:inputMask>
+
+
+
+							<h:outputText value="Telefone com DDD:" />
+							<p:inputMask id="telefone" value="#{mbAnunciante.anunciante.telefone}" size="30" mask="?(99) 999999999"
+								validatorMessage="Telefone inválido. Digite apenas números.">
+								<ui:remove>
+									<f:validateRegex pattern="^$|^[(][0-9]{2}[)] [0-9]{4,5}-[0-9]{4}$" />
+								</ui:remove>
+								<f:validateRegex pattern="^$|^[(][0-9]{2}[)] [0-9]{8,9}$" />
+							</p:inputMask>
+
+
+
+							<p:separator rendered="#{mbAnunciante.edicao}" />
+							<p:separator rendered="#{mbAnunciante.edicao}" />
+
+							<h:outputText value="Senha atual:" rendered="#{mbAnunciante.edicao}" />
+							<p:password value="#{mbAnunciante.senhaAtual}" size="30" rendered="#{mbAnunciante.edicao}" required="true"
+								requiredMessage="&quot;Senha atual&quot; é um campo obrigatório." />
+						</h:panelGrid>
+					</h:panelGroup>
+					<p:commandButton value="Confirmar Cadastro" action="#{mbAnunciante.criarAnunciante}" ajax="false" />
+
+					<p:commandButton value="Cancelar" action="#{PageTransition.chamaLogin()}" ajax="false" immediate="true" />
+
+
+				</p:panel>
+
+			</h:form>
+
+
+			<h:form id="confirmacao" acceptcharset="ISO-8859-1" binding="#{mbAnunciante.tela.frmConfirmacao}" rendered="false">
+				<p:panel>
+					<p>
+						<b>Conta Criada com Sucesso!</b>
+					</p>
+
+					<p>
+						Prezado(a)
+						<h:outputText value="#{mbAnunciante.anunciante.nome}" />
+						<br /> <br />Sua conta de acesso ao Sistema Ganimedes foi criada com sucesso. <br />Para acessar o sistema é necessário ativar a sua
+						conta. <br /> <br />O link de ativação de sua conta foi enviado para o seu e-mail
+						<h:outputText value="#{mbAnunciante.anunciante.codlog}" />
+					</p>
+					<p>
+						<br />
+						<p:commandButton action="#{PageTransition.chamaLogin()}" value="Login" ajax="false" />
+						<p:commandButton action="#{PageTransition.chamaCadastro()}" value="Criar Conta" ajax="false" />
+					</p>
+				</p:panel>
+			</h:form>
+
+
+		</f:view>
+	</ui:define>
+</ui:composition>

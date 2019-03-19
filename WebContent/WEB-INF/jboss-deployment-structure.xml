@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jboss-deployment-structure>
+	<deployment>
+		<dependencies>
+			<module name="org.scribe" slot="main">
+				<imports>
+					<include path="**" />
+				</imports>
+			</module>
+			<module name="org.primefaces" slot="main">
+				<imports>
+					<include path="**" />
+				</imports>
+			</module>
+
+
+			<module name="net.sf.json" slot="main">
+				<imports>
+					<include path="**" />
+				</imports>
+			</module>
+
+			<module name="com.lowagie" slot="main">
+				<imports>
+					<include path="**" />
+				</imports>
+			</module>
+
+			<module name="com.itextpdf" slot="main">
+				<imports>
+					<include path="**" />
+				</imports>
+			</module>
+
+
+			<module name="com.itextpdf" slot="main">
+				<imports>
+					<include path="**" />
+				</imports>
+			</module>
+
+
+			<module name="org.apache.commons.codec" slot="main">
+				<imports>
+					<include path="**" />
+				</imports>
+			</module>
+
+
+		</dependencies>
+	</deployment>
+</jboss-deployment-structure>

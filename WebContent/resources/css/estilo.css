@@ -1,0 +1,828 @@
+body {
+	background-color: #ffffff;
+	font-size: 12px;
+	/*font-family: Verdana, Arial, Helvetica, sans-serif;*/
+	font-family: sans-serif;
+	color: black;
+}
+
+#page {
+	color: black;
+	/*	margin: 0px 50px 0px 5px;*/
+	padding: 0px;
+	width: 960 px;
+	height: 90%;
+}
+
+#container {
+	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#header {
+	/*
+	position: relative;
+	background-color: #FFF;
+	*/
+	
+}
+
+#header-info {
+	position: relative;
+	float: right;
+	width: 100%;
+	clear: both;
+}
+
+#header-menu {
+	width: 100%;
+	clear: both;
+}
+
+#content {
+	position: relative;
+	clear: both;
+	padding: 15px;
+	background-color: #fff;
+	margin-bottom: 10px;
+}
+
+#footer {
+	background-color: #E8E8E8;
+	position: fixed;
+	bottom: 0;
+	z-index: 999999;
+	/*position: relative;*/
+	/*	bottom: 0;*/
+	/*z-index: 150;*/
+	width: 99%;
+	margin-left: auto;
+	margin-right: auto;
+	border: thin;
+	border-color: black;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+a:link {
+	/*	color: #A72D31;*/
+	color: #000066;
+	text-decoration: none
+}
+
+a:visited {
+	/*color: #A72D31;*/
+	color: #000066;
+	text-decoration: none
+}
+
+a:hover {
+	/*color: red;*/
+	color: #000066;
+	text-decoration: none
+}
+/*
+estilo criado para o datagrid
+*/
+#dg_aplicacoes {
+	padding-top: 50px;
+}
+
+.rf-dg-c, .rf-dg {
+	border: none;
+	background: #fff;
+}
+
+.rf-p-hdr {
+	font-size: 150%;
+	text-align: center;
+}
+
+/*
+ fim do estilo do datagrid
+*/
+#top a:link, #top a:visited {
+	color: white;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+#top a:link:hover, #top a:visited:hover {
+	color: black;
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+.media {
+	font-size: 16px;
+	color: #003366;
+}
+
+.info {
+	font-size: 16px;
+	color: blue;
+	font-style: bold;
+	font-size: 22px;
+}
+
+.alerta {
+	color: #800000;
+	font-weight: bold;
+	font-size: 16px;
+}
+
+.alerta-vermelho {
+	color: #A00000;
+	font-weight: bold;
+	font-size: 16px;
+	text-align: center;
+}
+
+.alerta-azul {
+	color: #0000FF;
+	font-weight: bold;
+	font-size: 15px;
+}
+
+.alerta-vinho {
+	color: #770000;
+	font-weight: bold;
+	font-size: 15px;
+}
+
+.media-azul {
+	color: #0000FF;
+	font-size: 14px;
+}
+
+.media-preto {
+	color: #000000;
+	font-size: 14px;
+}
+
+.pequena-preto {
+	color: #000000;
+	font-size: 10px;
+	font-style: bold;
+}
+
+.pequena-cinza {
+	font-size: 10px;
+	font-stretch: expanded;
+	font-weight: bolder;
+	color: #505050;
+}
+
+.grande-azul-escuro {
+	color: #003366;
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.grande-preto {
+	color: #000000;
+	font-size: 19px;
+	font-weight: bold;
+}
+
+.botao {
+	padding: 5px;
+	margin: 10px 5px;
+}
+
+.botao100 {
+	width: 100px;
+	padding: 5px;
+	margin: 10px 5px;
+	font-size: 1.1em !important;
+}
+
+.botao200 {
+	width: 200px;
+	margin: 20px 5px !important;
+	font-size: 1.1em !important;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+.foto {
+	width: 130px;
+	/*
+	margin-left: 10px;
+	margin-right: 10px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	*/
+	border-style: solid;
+	/*border-width: 2px;*/
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.mini-foto {
+	width: 70px;
+	/*
+	margin-left: 30px;
+	margin-right: 30px;
+	margin-top: 30px;
+	margin-bottom: 30px;
+	border-style: solid;
+	border-width: 1px;
+	display: block;
+	*/ /* background: #BCEE68; */ /*background-color: #BFE3FE;*/
+}
+
+.tabela {
+	border-width: 0px;
+}
+
+table, th, td {
+	border: 0px solid black;
+	padding: 3px;
+}
+
+.page_title {
+	font-size: 13px;
+	font-weight: bold;
+}
+
+.page_section {
+	font-size: 12px;
+	font-weight: bold;
+}
+
+.media {
+	font-size: 16px;
+}
+
+.tabela {
+	border: 1;
+	cellspacing: 0;
+	cellpadding: 3;
+	/*width: 900px;*/
+}
+
+.tabela300 {
+	border: 1;
+	cellspacing: 0;
+	cellpadding: 3;
+	width: 300px;
+}
+
+.tabela400 {
+	border: 1;
+	cellspacing: 0;
+	cellpadding: 3;
+	width: 400px;
+}
+
+.tabela600 {
+	border: 1;
+	cellspacing: 0;
+	cellpadding: 3;
+	width: 600px;
+}
+
+.tabela800 {
+	border: 1;
+	cellspacing: 0;
+	cellpadding: 3;
+	width: 800px;
+}
+
+.tabela1024 {
+	border: 1;
+	cellspacing: 0;
+	cellpadding: 3;
+	width: 1024px;
+}
+
+.borderless {
+	border: 0px;
+}
+
+.col2j {
+	width: 2%;
+	text-align: justify;
+}
+
+.col2c {
+	width: 2%;
+	text-align: center;
+}
+
+.col2l {
+	width: 2%;
+	text-align: left;
+}
+
+.col2r {
+	width: 2%;
+	text-align: right;
+}
+
+.col5j {
+	width: 5%;
+	text-align: justify;
+}
+
+.col5c {
+	width: 5%;
+	text-align: center;
+}
+
+.col5l {
+	width: 5%;
+	text-align: left;
+}
+
+.col5r {
+	width: 5%;
+	text-align: right;
+}
+
+.col10j {
+	width: 10%;
+	text-align: justify;
+}
+
+.col10c {
+	width: 10%;
+	text-align: center;
+}
+
+.col10l {
+	width: 10%;
+	text-align: left;
+}
+
+.col10r {
+	width: 10%;
+	text-align: right;
+}
+
+.col20j {
+	width: 20%;
+	text-align: justify;
+}
+
+.col20c {
+	width: 20%;
+	text-align: center;
+}
+
+.col20l {
+	width: 20%;
+	text-align: left;
+}
+
+.col20r {
+	width: 20%;
+	text-align: right;
+}
+
+.col30j {
+	width: 30%;
+	text-align: justify;
+}
+
+.col30c {
+	width: 30%;
+	text-align: center;
+}
+
+.col30l {
+	width: 30%;
+	text-align: left;
+}
+
+.col30r {
+	width: 30%;
+	text-align: right;
+}
+
+.col40j {
+	width: 40%;
+	text-align: justify;
+}
+
+.col40c {
+	width: 40%;
+	text-align: center;
+}
+
+.col40l {
+	width: 40%;
+	text-align: left;
+}
+
+.col40r {
+	width: 40%;
+	text-align: right;
+}
+
+.col50j {
+	width: 40%;
+	text-align: justify;
+}
+
+.col50c {
+	width: 40%;
+	text-align: center;
+}
+
+.col50l {
+	width: 40%;
+	text-align: left;
+}
+
+.col50r {
+	width: 40%;
+	text-align: right;
+}
+
+/* Definicao de estilos para tabs */
+.tab800 {
+	width: 840px;
+}
+
+.tab600 {
+	max-width: 640px;
+}
+
+.tab400 {
+	max-width: 440px;
+}
+
+/* Definicaoo de estilos para linha de cabecalho da tabela*/
+.negrito {
+	font-weight: bold;
+}
+
+.cabecalho {
+	text-align: center;
+	background-color: /*font: 12px Arial, sans-serif;*/
+}
+
+/* Definição de estilos para coluna */
+.primeiro {
+	text-align: center;
+	background-color: #FFFFFF;
+	padding: 50px;
+}
+
+/* Definicao de estilos para coluna */
+.ultimo {
+	text-align: center;
+	/* background: #BCEE68; */ /*background-color: #BFE3FE;*/
+	background-color: #EEEEEE;
+}
+
+.ui-datatable .ui-datatable-data .even-row td {
+	background-color: #F2DEDE;
+}
+
+.ui-datatable .ui-datatable-data .odd-row td {
+	background-color: #FFFFFF;
+}
+
+.ui-datatable tr.ui-datatable-even:hover, .ui-datatable tr.ui-datatable-odd:hover
+	{
+	background: -moz-linear-gradient(center top, rgba(255, 255, 255, 0.6),
+		rgba(255, 255, 255, 0)) repeat scroll 0 0 #85B2CB;
+	box-shadow: 0 0 8px #85B2CB;
+	background-color: #BBBBBB;
+}
+
+.logo-imagem {
+	background: url(../images/usp-logo.png) no-repeat;
+	width: 130px;
+	height: 50px;
+	margin: 5px;
+	padding: 10px;
+	float: left;
+	text-indent: -9999px;
+}
+
+.logo-texto {
+	background: url(../images/usp-logo-texto.png) no-repeat;
+	width: 260px;
+	height: 50px;
+	margin: 5px;
+	padding: 10px;
+	float: left;
+	text-indent: -9999px;
+}
+
+.logo-faixa {
+	background-image: url(../images/bg-headtop.gif);
+	margin-bottom: 5px;
+	text-align: right;
+	color: white;
+	padding-top: 12px;
+	font-size: 10px;
+}
+
+.logo-faixa a:link {
+	color: #FFFFFF;
+	text-decoration: none
+}
+
+.logo-faixa a:visited {
+	color: #FFFFFF;
+	text-decoration: none
+}
+
+.logo-faixa a:hover {
+	color: #FFFFEE;
+	text-decoration: underline
+}
+
+.link-faixa {
+	margin-right: 10px;
+	font-weight: bold;
+}
+
+.caixa_login {
+	background-color: #fcb421;
+	background-color: #fff;
+	border-radius: 5px;
+	padding: 10px;
+	margin-bottom: 20px;
+}
+
+.caixa_login a {
+	color: #1094ab;
+	padding: 5px;
+	display: block;
+}
+
+.caixa_login input {
+	display: block;
+	padding: 10px;
+	margin: 5px;
+	width: 80%;
+}
+
+.caixa_login button {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	display: block;
+}
+
+.caixa_login p {
+	display: block;
+	padding: 10px;
+	margin: 5px;
+}
+
+/* inicio de caixa_login_empresa */
+
+.caixa_login_empresa {
+	background-color: #1094ab; 
+	border-radius: 5px;
+	padding: 10px;
+	
+}
+
+.caixa_login_empresa a {
+	color: #fcb421;
+	padding: 5px;
+	display: block;
+}
+
+.caixa_login_empresa input {
+	display: block;
+	padding: 10px;
+	margin: 5px;
+	width: 80%;
+}
+
+.caixa_login_empresa button {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	display: block;
+}
+
+.caixa_login_empresa h4 {
+	color: #fff;
+
+}
+
+.caixa_login_empresa h3 {
+	color: #fff;
+	text-align: left;
+}
+
+.caixa_login_empresa p {
+	display: block;
+	padding: 10px;
+	margin: 5px;
+	color: #fff;
+}
+/* fim de caixa_login_empresa */
+
+
+
+/* inicio de caixa_login_local */
+
+.caixa_login_local {
+	background-color: #1094ab; 
+	/*background-color: #64c4d2;*/
+	border-radius: 5px;
+	padding: 10px;
+	/*border: 1px solid black;*/
+	display: none
+	
+}
+
+.caixa_login_local a {
+	color: #fcb421;
+	padding: 5px;
+	display: block;
+}
+
+.caixa_login_local input {
+	display: block;
+	padding: 10px;
+	margin: 5px;
+	width: 80%;
+}
+
+.caixa_login_local button {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	display: block;
+}
+
+.caixa_login_local h4 {
+	color: #fff;
+
+}
+
+.caixa_login_local h3 {
+	color: #fff;
+	text-align: left;
+}
+
+.caixa_login_local p {
+	display: block;
+	padding: 10px;
+	margin: 5px;
+	color: #fff;
+}
+/* fim de caixa_login_local */
+
+
+
+.caixa_forgot {
+	background-color: #fcb421;
+	border-radius: 5px;
+	padding: 10px;
+}
+
+.caixa_forgot a {
+	color: #1094ab;
+	padding: 5px;
+	display: block;
+}
+
+.caixa_forgot input {
+	display: block;
+	padding: 10px;
+	margin: 5px;
+	width: 80%;
+}
+
+.caixa_forgot button {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	display: block;
+}
+
+.caixa_forgot p {
+	display: block;
+	padding: 10px;
+	margin: 5px;
+}
+
+.ui-button {
+	padding: 0.4em;
+	margin: 6px 3px;
+}
+
+.ui-message-info {
+	padding: 0.7em;
+	margin: 5px;
+	border-radius: 6px;
+}
+
+.ui-message-error {
+	padding: 0.7em !important;
+	margin: 5px !important;
+	border-radius: 6px;
+}
+
+.comprovante {
+	font-family: "Courier New", Courier, monospace;
+	font-size: 15px;
+	padding: 1em;
+	margin: 0.3em;
+}
+
+/*
+.anuncios :nth-of-type(odd) {
+	background-color: #a72d31;
+}
+
+
+
+
+.anuncios :nth-of-type(even) {
+	background-color: #e5e5e5;
+}
+*/
+
+.item-anuncio {
+	border-bottom: 1px solid #4f4f4f;
+	padding: 15px;
+	color: #4f4f4f;
+}
+
+
+
+
+
+
+
+.item-anuncio h4 {
+	text-transform: uppercase;
+}
+
+.item-anuncio a {
+	text-decoration: none;
+	color: #4f4f4f;
+}
+
+.anuncio h3 {
+	text-transform: uppercase;
+	
+}
+
+.anuncio p {
+	text-align: justify;
+/*	font-size: 1.5rem;*/
+}
+
+
+.botao_senha_unica_original {
+
+	border-bottom: 1px solid black;
+    -webkit-appearance: button;
+    -moz-appearance: button;
+    appearance: button;
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    
+    margin: 5px;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+    min-width: 100%
+}
+
+.botao_senha_unica {
+	background-color: #fcb421;
+    -webkit-appearance: button;
+    -moz-appearance: button;
+    appearance: button;
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+    min-width: 100%
+}
+
+
+.botao_login_local {
+	background-color: #fcb421;
+    -webkit-appearance: button;
+    -moz-appearance: button;
+    appearance: button;
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+    min-width: 100%
+}
+

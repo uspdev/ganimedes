@@ -1,0 +1,34 @@
+<ui:composition template="/template.xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich" xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<ui:define name="content">
+		<h:form rendered="#{!UsuarioLogado.autenticado}">
+			<p:panel>
+				<h:outputText value="Reenviar email de confirmação" styleClass="page_title" />
+			</p:panel>
+
+
+			<p:panel>
+
+				<h:panelGrid columns="2">
+					<h:outputText value="Email: " />
+					<p:inputText id="codlog" value="#{mbConfirmacaoEmail.codlog}" size="30" />
+				</h:panelGrid>
+
+				<p:commandButton value="Enviar" actionListener="#{mbConfirmacaoEmail.reenviarEmail()}" ajax="false" />
+				<p:commandButton action="#{PageTransition.chamaLogin()}" value="Login" ajax="false" />
+
+				<p:separator />
+
+				<p:commandButton value="Primeiro Acesso" actionListener="#{ControladorAAAnunciante.cadastrar}" ajax="false" />
+				<p:commandButton value="Recuperar Senha" actionListener="#{ControladorAAAnunciante.esqueciMinhaSenha}" ajax="false" />
+				
+
+				<p:messages id="main" />
+
+
+			</p:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>

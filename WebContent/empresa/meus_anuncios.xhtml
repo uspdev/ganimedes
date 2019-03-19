@@ -1,0 +1,145 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich" xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+<h:head>
+	<meta http-equiv="content-type" content="text/html;charset=ISO-8859-1" />
+	<meta http-equiv="refresh" content="#{session.maxInactiveInterval};url=index.xhtml?reason=expired" />
+
+
+</h:head>
+
+<h:body>
+
+	<ui:composition template="../template.xhtml">
+		<ui:define name="header-info">
+			<ui:include src="../header-info.xhtml" />
+		</ui:define>
+
+		<ui:define name="header-menu">
+			<ui:include src="../header-menu.xhtml" />
+		</ui:define>
+
+
+
+		<ui:define name="content">
+
+			<f:view contentType="text/html; charset=ISO-8859-1">
+				<f:loadBundle basename="messages" var="msgs" />
+
+
+
+				<h:form id="main" acceptcharset="ISO-8859-1">
+
+					<p:panel>
+						<h:outputText value="Meus Anúncios" styleClass="page_title" />
+					</p:panel>
+					<br />
+
+					<p:message for="main" />
+					<p:growl id="main" showDetail="false" sticky="true" life="100000" />
+				</h:form>
+
+				<h:form id="listagem" acceptcharset="ISO-8859-1" binding="#{mbAnuncio.tela.frmLista}">
+
+
+					<p:dataTable id="listagem_anuncios" var="a" value="#{mbAnuncio.meusAnuncios}" rowStyleClass="col5c, col10c" styleClass="ultimo,primeiro"
+						emptyMessage="Nenhum registro encontrado">
+						<f:facet name="header">
+						</f:facet>
+
+
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Oportunidade" />
+							</f:facet>
+							<h:outputText value="#{a.nomeEmpresa}" styleClass="alerta-vinho" />
+							<br />
+							<h:outputText value="#{a.regimeTrabalho.valor}" />
+							<br />
+							<h:outputText value="#{a.titvag}" />
+						</p:column>
+
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Informações" />
+							</f:facet>
+							<p:panelGrid columns="2">
+
+								<h:outputText value="Data de Cadastro: " />
+								<h:outputText value="#{a.dtaCriacao}">
+									<f:convertDateTime type="date" dateStyle="short" locale="pt_BR" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy HH:mm:ss" />
+								</h:outputText>
+
+
+								<h:outputText value="Período de Publicação: " />
+								<h:panelGroup>
+									<h:outputText value="#{a.dtainidiv}">
+										<f:convertDateTime type="date" dateStyle="short" locale="pt_BR" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy" />
+									</h:outputText>
+									<h:outputText value=" a " />
+									<h:outputText value="#{a.dtafimdiv}">
+										<f:convertDateTime type="date" dateStyle="short" locale="pt_BR" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy" />
+									</h:outputText>
+								</h:panelGroup>
+
+								<ui:remove>
+									<h:outputText value="Confirmação Trote" />
+									<h:panelGroup>
+										<h:outputText rendered="#{a.repchk}" value="Sim" />
+										<h:outputText rendered="#{not a.repchk}" value="Não" />
+									</h:panelGroup>
+								</ui:remove>
+
+
+
+								<h:outputText value="Status" />
+								<h:panelGroup>
+									<h:outputText value="#{a.status}" />
+								</h:panelGroup>
+
+
+							</p:panelGrid>
+						</p:column>
+
+
+
+
+
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Ações" />
+							</f:facet>
+
+							<p:splitButton value="Cartaz" styleClass="botao">
+								<p:menuitem action="#{mbAnuncio.downloadAnuncio(a)}" value="da Empresa" ajax="false" icon="ui-icon-print" rendered="#{not empty a.cartaz}" />
+								<p:menuitem action="#{mbAnuncio.gerarCartaz(a)}" value="do Sistema" ajax="false" icon="ui-icon-print" />
+							</p:splitButton>
+
+							<p:commandButton value="Editar" action="#{mbAnuncio.editarAnuncio(a)}" icon="ui-icon-pencil" ajax="false" />
+						</p:column>
+
+					</p:dataTable>
+				</h:form>
+
+
+				<h:form id="edicao" acceptcharset="ISO-8859-1" binding="#{mbAnuncio.tela.frmEdicao}" rendered="false">
+
+					<ui:include src="../form_anuncio.xhtml" />
+
+				</h:form>
+			</f:view>
+		</ui:define>
+
+		<ui:define name="footer">
+			<ui:include src="../footer.xhtml" />
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

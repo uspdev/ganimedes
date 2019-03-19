@@ -1,0 +1,929 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:p="http://primefaces.org/ui" xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:b="http://bootsfaces.net/ui">
+
+<h:head>
+   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+   <meta http-equiv="refresh" content="#{session.maxInactiveInterval};url=index.xhtml?reason=expired" />
+</h:head>
+<h:body>
+   <f:metadata>
+      <f:viewParam name="codpes" value="#{mbEstagio.tela.codpes}" />
+      <f:event type="preRenderView" listener="#{mbEstagio.iniciarTelaAluno()}" />
+   </f:metadata>
+
+   <ui:composition template="./template.xhtml">
+      <ui:define name="content">
+
+         <f:view contentType="text/html; charset=UTF-8">
+            <f:loadBundle basename="messages" var="msgs" />
+
+
+            <b:container fluid="false" rendered="#{UsuarioLogado.adm || UsuarioLogado.opr}">
+               <b:row>
+                  <b:column>
+                     <h:form id="main">
+                        <h2>Estágios</h2>
+                        <p:message for="main" />
+                        
+                       
+                     </h:form>
+
+                     <h:form id="frm_lista" binding="#{mbEstagio.tela.frmLista}">
+                        <p:commandButton value="Adicionar aluno" onclick="PF('dlgAddAluno').show();" icon="fa fa-fw fa-plus-circle" />
+
+                        <p:dataTable value="#{mbEstagio.alunos}" var="a" emptyMessage="Nenhum registro encontrado" paginator="true" rows="30">
+                           <p:column styleClass="col5c" filterBy="#{a.codpes}" headerText="Número USP" filterMatchMode="contains">
+                              <p:commandLink action="#{mbEstagio.iniciarTelaAluno}" value="#{a.codpes}" ajax="false">
+                                 <f:setPropertyActionListener target="#{mbEstagio.tela.codpes}" value="#{a.codpes}" />
+                              </p:commandLink>
+                           </p:column>
+                           <p:column styleClass="col10l" filterBy="#{a.nompes}" headerText="Nome" filterMatchMode="contains">
+
+                              <p:commandLink action="#{mbEstagio.iniciarTelaAluno}" value="#{a.nompes}" ajax="false">
+                                 <f:setPropertyActionListener target="#{mbEstagio.tela.codpes}" value="#{a.codpes}" />
+                              </p:commandLink>
+                           </p:column>
+                        </p:dataTable>
+                     </h:form>
+
+                     <h:form id="frm_aluno" rendered="false" binding="#{mbEstagio.tela.frmAluno}">
+                     <p:link value=" X " href="aluno.xhtml" style="float: right" styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left" icon="fa fa-fw fa-window-close" />
+                         
+                        
+
+
+                        <ui:repeat value="#{mbEstagio.tela.aluno}" var="a" rendered="#{not empty mbEstagio.tela.aluno.nompes}">
+                           <p:panel>
+                              <h:panelGrid columns="3">
+
+
+                                 <h:panelGrid columns="2">
+                                    <h:outputText value="Nome:" styleClass="bold" />
+                                    <h:outputText value="#{a.nompes}" />
+                                    <h:outputText value="No. USP:" styleClass="bold" />
+                                    <h:outputText value="#{a.codpes}" />
+
+
+
+                                    <h:outputText value="Sexo:" styleClass="bold" />
+                                    <h:outputText value="Masculino" rendered="#{a.sexpes == 'M'}" />
+                                    <h:outputText value="Feminino" rendered="#{a.sexpes == 'F'}" />
+
+
+                                    <h:outputText value="Nascimento:" styleClass="bold" />
+                                    <h:outputText value="#{a.dtanas}">
+                                       <f:convertDateTime type="date" dateStyle="short" locale="pt_BR" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy" />
+                                    </h:outputText>
+
+
+
+
+                                    <h:outputText value="Documento:" styleClass="bold" />
+                                    <h:panelGroup>
+                                       <h:outputText value="#{a.tipdocidf} #{a.numdocidf} #{a.sglorgexdidf}-#{a.sglest} " />
+                                       <h:outputText value="#{a.dtaexdidf}">
+                                          <f:convertDateTime type="date" dateStyle="short" locale="pt_BR" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy" />
+                                       </h:outputText>
+                                    </h:panelGroup>
+
+                                    <h:outputText value="CPF:" styleClass="bold" />
+                                    <h:outputText value="#{a.cpfMask}" />
+
+
+                                    <h:outputText value="E-mail:" styleClass="bold" />
+                                    <h:outputText value="#{a.email}" />
+
+                                 </h:panelGrid>
+
+
+                                 <h:panelGrid columns="2">
+                                    <h:outputText value="Curso:" styleClass="bold" />
+                                    <h:outputText value="#{a.codcur} - #{a.nomcur}" />
+                                    <h:outputText value="Habilitação:" styleClass="bold" />
+                                    <h:outputText value="#{a.codhab} - #{a.nomhab}" />
+
+                                    <h:outputText value="Ingresso:" styleClass="bold" />
+                                    <h:panelGroup>
+                                       <h:outputText value="#{a.tiping} " />
+                                       <h:outputText value="#{a.dtainivin}">
+                                          <f:convertDateTime type="date" dateStyle="short" locale="pt_BR" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy" />
+                                       </h:outputText>
+                                    </h:panelGroup>
+
+                                    <h:outputText value="Situação:" styleClass="bold" />
+                                    <h:outputText value=" #{a.sitatl} / #{a.sitoco}" />
+
+                                    <h:outputText value="Vínculos:" styleClass="bold" />
+                                    <h:panelGroup>
+                                       <table>
+
+                                          <ui:repeat value="#{a.vinculos}" var="v">
+                                             <tr>
+                                                <td><h:outputText value="#{v.vinculoPessoaUspPK.tipvin}" /> <h:outputText value=" " /> <h:outputText
+                                                      value="#{v.local}" /> <h:outputText value=" " /> <h:outputText value="#{v.nomabvfnc}" /> <h:outputText
+                                                      value=" " /> <h:outputText value="#{v.tipjor} " /> <h:outputText value="#{v.tiping}" /></td>
+                                                <td><h:outputText value="INATIVO" rendered="#{v.sitatl == 'D'}" /> <h:outputText value="ATIVO"
+                                                      rendered="#{v.sitatl == 'A'}" /> <h:outputText value="APOSENTADO" rendered="#{v.sitatl == 'P'}" /></td>
+                                                <td><h:outputText value="#{v.dtainivin}">
+                                                      <f:convertDateTime type="date" dateStyle="short" locale="pt_BR" timeZone="America/Sao_Paulo"
+                                                         pattern="dd/MM/yyyy" />
+                                                   </h:outputText> - <h:outputText value="#{v.dtafimvin}">
+                                                      <f:convertDateTime type="date" dateStyle="short" locale="pt_BR" timeZone="America/Sao_Paulo"
+                                                         pattern="dd/MM/yyyy" />
+                                                   </h:outputText> <h:outputText value="atual" rendered="#{empty v.dtafimvin}" /></td>
+                                             </tr>
+                                          </ui:repeat>
+                                       </table>
+                                    </h:panelGroup>
+
+                                 </h:panelGrid>
+                              </h:panelGrid>
+
+                              <p:commandButton action="#{mbEstagio.abrirCadastroEstagio()}" icon="fa fa-fw fa-plus-circle" ajax="false" immediate="true"
+                                 value="Cadastrar novo estágio" />
+
+
+                           </p:panel>
+                        </ui:repeat>
+                     </h:form>
+
+
+
+                     <h:form id="frm_estagios" rendered="#{UsuarioLogado.adm || UsuarioLogado.opr}" binding="#{mbEstagio.tela.frmEstagios}">
+                        <p:panel rendered="#{not empty mbEstagio.tela.aluno.estagios}">
+
+                           <p:accordionPanel activeIndex="" value="#{mbEstagio.tela.aluno.estagios}" var="e" multiple="true">
+                              <p:tab title="#{e.nomeEmpresaVigencia}" titleStyle="bold">
+
+
+
+                                 <div style="float: right">
+                                    <p:commandButton action="#{mbEstagio.abrirEdicao(e)}" ajax="false" update="@form" icon="fa fa-fw fa-edit" />
+                                 </div>
+
+                                 <h:panelGrid columns="2">
+                                    <h:outputText value="Número: " styleClass="bold" />
+                                    <h:outputText value="#{e.id}" />
+                                    <h:outputText value="Razão Social: " styleClass="bold" />
+                                    <h:outputText value="#{e.empresa.nome}" />
+                                    <h:outputText value="CNPJ: " styleClass="bold" />
+                                    <h:outputText value="#{e.empresa.cnpj}" />
+
+
+
+                                    <h:outputText value="Período: " styleClass="bold" />
+                                    <h:panelGroup>
+                                       <h:outputText value="#{e.periodo}" />
+                                       <h:outputText value=" VIGENTE " styleClass="bold" rendered="#{e.ativo}" />
+                                    </h:panelGroup>
+
+
+                                    <h:outputText value="Remuneração: " styleClass="bold" />
+                                    <h:outputText value="#{e.remuneracao}" />
+
+
+                                    <h:outputText value="Carga Horária: " styleClass="bold" />
+                                    <h:outputText value="#{e.jornada}" />
+
+
+                                    <h:outputText value="Supervisor: " styleClass="bold" />
+                                    <h:outputText value="#{e.supervisor}" />
+                                 </h:panelGrid>
+
+
+
+                                 <p:panelGrid columns="2">
+
+
+                                    <ui:remove>
+                                       <h:outputText value="Vigente" />
+                                       <h:panelGroup>
+                                          <h:outputText value="SIM" rendered="#{e.ativo}" styleClass="alerta-verde" />
+                                          <h:outputText value="NÃO" rendered="#{!e.ativo}" styleClass="alerta-vermelho" />
+                                       </h:panelGroup>
+                                    </ui:remove>
+
+
+                                    <h:outputText value="Termo de Compromisso" />
+                                    <h:panelGroup>
+                                       <h:outputText value="APROVADO" rendered="#{e.temTermoCompromissoAprovado()}" styleClass="alerta-verde" />
+                                       <h:outputText value="SEM APROVAÇÃO" rendered="#{!e.temTermoCompromissoAprovado()}" styleClass="alerta-vermelho" />
+                                    </h:panelGroup>
+
+
+
+                                    <h:outputText value="Relatório de Atividades" />
+                                    <h:panelGroup>
+                                       <h:outputText value="DEVE" rendered="#{e.deveRelatorioAtividade()}" styleClass="alerta-vermelho" />
+                                       <ui:remove>
+                                          <h:outputText value="--" rendered="#{!e.deveRelatorioAtividade()}" styleClass="alerta-verde" />
+                                       </ui:remove>
+                                    </h:panelGroup>
+
+
+
+                                    <h:outputText value="Encerra em 30 dias" rendered="#{e.ativo}" />
+                                    <h:panelGroup rendered="#{e.ativo}">
+                                       <h:outputText value="SIM" rendered="#{e.proximoEncerramento()}" styleClass="alerta-laranja" />
+                                       <h:outputText value="NÃO" rendered="#{!e.proximoEncerramento()}" styleClass="alerta-verde" />
+                                    </h:panelGroup>
+
+
+
+
+                                    <h:outputText value="Termo de Realização" rendered="#{!e.ativo}" />
+                                    <h:panelGroup rendered="#{!e.ativo}">
+                                       <h:outputText value="APROVADO" rendered="#{e.temEncerramentoAprovado()}" styleClass="alerta-verde" />
+                                       <h:outputText value="DEVE" rendered="#{e.encerradoSemComprovacao()}" styleClass="alerta-vermelho" />
+                                    </h:panelGroup>
+
+
+                                 </p:panelGrid>
+
+
+                                 <br />
+
+
+                                 <p:dataTable value="#{e.documentos}" var="d" emptyMessage="Nenhum documento cadastrado" styleClass="ultimo,primeiro"
+                                    selection="#{mbEstagio.tela.documentos}" rowKey="#{d.id}">
+
+
+
+                                    <p:column styleClass="col5c">
+                                       <f:facet name="header">
+                                          <h:outputText value="Número" />
+                                       </f:facet>
+
+                                       <h:outputText value="#{d.id}" />
+                                    </p:column>
+
+
+                                    <p:column styleClass="col10c">
+                                       <f:facet name="header">
+                                          <h:outputText value="Documento" />
+
+                                       </f:facet>
+
+
+                                       <h:outputText value="#{d.tipo.valor}" />
+                                    </p:column>
+
+                                    <p:column styleClass="col5c">
+                                       <f:facet name="header">
+                                          <h:outputText value="Entrada" />
+                                       </f:facet>
+                                       <h:outputText value="#{d.dtaent}">
+                                          <f:convertDateTime type="date" dateStyle="short" locale="pt_BR" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy" />
+                                       </h:outputText>
+                                    </p:column>
+
+
+                                    <p:column styleClass="col5c">
+                                       <f:facet name="header">
+                                          <h:outputText value="Início" />
+                                       </f:facet>
+                                       <h:outputText value="#{d.dtaini}">
+                                          <f:convertDateTime type="date" dateStyle="short" locale="pt_BR" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy" />
+                                       </h:outputText>
+                                    </p:column>
+
+
+                                    <p:column styleClass="col5c">
+                                       <f:facet name="header">
+                                          <h:outputText value="Término" />
+                                       </f:facet>
+                                       <h:outputText value="#{d.dtafim}">
+                                          <f:convertDateTime type="date" dateStyle="short" locale="pt_BR" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy" />
+                                       </h:outputText>
+                                    </p:column>
+
+                                    <p:column styleClass="col5c">
+                                       <f:facet name="header">
+                                          <h:outputText value="Andamento" />
+                                       </f:facet>
+                                       <h:outputText value="#{d.statusAndamentoDoc.valor}" />
+
+                                    </p:column>
+
+
+
+
+                                    <p:column styleClass="col5c">
+                                       <f:facet name="header">
+                                          <h:outputText value="Parecer" />
+                                       </f:facet>
+                                       <h:outputText value="#{d.statusDoc.valor}" />
+                                    </p:column>
+
+
+
+                                 </p:dataTable>
+                              </p:tab>
+                           </p:accordionPanel>
+                        </p:panel>
+                     </h:form>
+
+                     <h:form id="frm_estagio" rendered="false" binding="#{mbEstagio.tela.frmEstagio}">
+                        <p:panel>
+                           <div style="float: right">
+
+                              <ui:remove>
+                                 <p:commandButton action="#{mbEstagio.salvarEstagio()}" styleClass="botao" icon="fa fa-fw fa-save" ajax="false" alt="Salvar" />
+                              </ui:remove>
+
+                              <p:commandButton styleClass="botao" icon="fa fa-fw fa-window-close" action="#{mbEstagio.fecharEdicao}" ajax="false" update="@form"
+                                 immediate="true" alt="Fechar" />
+
+                              <br />
+                           </div>
+
+
+
+
+
+
+                           <h:panelGrid columns="2">
+                              <h:outputText value="Número: " styleClass="bold" />
+                              <h:outputText value="#{mbEstagio.tela.estagio.id}" />
+                              <h:outputText value="Razão Social: " styleClass="bold" />
+                              <h:outputText value="#{mbEstagio.tela.estagio.empresa.nome}" />
+                              <h:outputText value="CNPJ: " styleClass="bold" />
+                              <h:outputText value="#{mbEstagio.tela.estagio.empresa.cnpj}" />
+
+                              <h:outputText value="Período: " styleClass="bold" />
+                              <h:panelGroup>
+                                 <h:outputText value="#{mbEstagio.tela.estagio.periodo}" />
+                                 <h:outputText value=" VIGENTE " styleClass="bold" rendered="#{e.ativo}" />
+                              </h:panelGroup>
+
+                              <h:outputText value="Remuneração: " styleClass="bold" />
+                              <h:outputText value="#{mbEstagio.tela.estagio.remuneracao}" />
+
+
+                              <h:outputText value="Carga Horária: " styleClass="bold" />
+                              <h:outputText value="#{mbEstagio.tela.estagio.jornada}" />
+
+
+                              <h:outputText value="Supervisor: " styleClass="bold" />
+                              <h:outputText value="#{mbEstagio.tela.estagio.supervisor}" />
+
+                           </h:panelGrid>
+
+
+
+
+                           <h:outputText value="ATENÇÃO: Verifique inconsistência de datas" rendered="#{e.existeConflitoDatas()}" styleClass="alerta-vermelho" />
+                           <br />
+                           <h:outputText value="ATENÇÃO: Verifique inconsistência de datas" rendered="#{e.existeErroDatas()}" styleClass="alerta-vermelho" />
+
+
+
+                           <p:commandButton styleClass="botao" onclick="PF('dlgEditRemuneracao').show();" icon="fa fa-fw fa-dollar" alt="Remuneração"
+                              value="Remuneração" />
+
+                           <p:commandButton styleClass="botao" icon="fa far-fw fa-hourglass-end" onclick="PF('dlgEditJornada').show();" value="Carga horária" />
+
+                           <p:commandButton styleClass="botao" icon="fa fa-fw fa-user-circle" onclick="PF('dlgEditSupervisor').show();" value="Supervisor" />
+
+
+                           <p:commandButton styleClass="botao" icon="fa fa-fw fa-envelope" onclick="PF('dlgEditNotificacao').show();" value="Notificação" />
+
+                           <p:commandButton action="#{mbEstagio.deletarEstagio}" ajax="false" immediate="true" update="@form" icon="fa fa-fw fa-trash"
+                              onclick="return confirm('Confirma a exclusão do estágio?')" alt="Excluir" value="Excluir" />
+
+
+                           <p:dataTable value="#{mbEstagio.tela.estagio.documentos}" var="d" emptyMessage="Nenhum documento cadastrado"
+                              styleClass="ultimo,primeiro" rendered="#{UsuarioLogado.adm || UsuarioLogado.opr}">
+
+
+                              <p:column styleClass="col5c">
+                                 <f:facet name="header">
+                                    <h:outputText value="Número" />
+                                 </f:facet>
+
+                                 <h:outputText value="#{d.id}" />
+                              </p:column>
+
+
+                              <p:column styleClass="col10c">
+                                 <f:facet name="header">
+                                    <h:outputText value="Documento" />
+
+                                 </f:facet>
+
+
+                                 <h:outputText value="#{d.tipo.valor}" />
+                              </p:column>
+
+
+                              <p:column styleClass="col5c">
+                                 <f:facet name="header">
+                                    <h:outputText value="Entrada" />
+                                 </f:facet>
+                                 <h:outputText value="#{d.dtaent}">
+                                    <f:convertDateTime type="date" dateStyle="short" locale="pt_BR" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy" />
+                                 </h:outputText>
+                              </p:column>
+
+                              <p:column styleClass="col5c">
+                                 <f:facet name="header">
+                                    <h:outputText value="Início" />
+                                 </f:facet>
+                                 <h:outputText value="#{d.dtaini}">
+                                    <f:convertDateTime type="date" dateStyle="short" locale="pt_BR" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy" />
+                                 </h:outputText>
+                              </p:column>
+
+
+                              <p:column styleClass="col5c">
+                                 <f:facet name="header">
+                                    <h:outputText value="Término" />
+                                 </f:facet>
+                                 <h:outputText value="#{d.dtafim}">
+                                    <f:convertDateTime type="date" dateStyle="short" locale="pt_BR" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy" />
+                                 </h:outputText>
+                              </p:column>
+
+                              <p:column styleClass="col5c">
+                                 <f:facet name="header">
+                                    <h:outputText value="Andamento" />
+                                 </f:facet>
+                                 <h:outputText value="#{d.statusAndamentoDoc.valor}" />
+
+                              </p:column>
+
+
+
+
+                              <p:column styleClass="col5c">
+                                 <f:facet name="header">
+                                    <h:outputText value="Parecer" />
+                                 </f:facet>
+                                 <h:outputText value="#{d.statusDoc.valor}" />
+                              </p:column>
+
+                              <p:column styleClass="col5c">
+                                 <f:facet name="header">
+                                    <p:commandButton action="#{mbEstagio.adicionarNovoDocumento()}" styleClass="botao" icon="fa fa-fw fa-plus-circle"
+                                       ajax="false" update="@form" alt="Adicionar Documento" />
+                                 </f:facet>
+
+                                 <p:commandButton action="#{mbEstagio.abrirEdicaoDocumento(d)}" ajax="false" immediate="true" update="@form"
+                                    icon="fa fa-fw fa-edit" />
+
+                                 <p:commandButton action="#{mbEstagio.deletarDocumento(d)}" ajax="false" update="@form" icon="fa fa-fw fa-trash"
+                                    immediate="true" onclick="return confirm('Confirma a exclusão do documento?')" />
+
+
+
+                              </p:column>
+                           </p:dataTable>
+                        </p:panel>
+                     </h:form>
+
+
+
+
+
+
+
+
+                  </b:column>
+               </b:row>
+            </b:container>
+
+
+
+            <p:dialog id="dlgAddEstagio" header="Cadastro de Estágio" widgetVar="dlgAddEstagio" modal="true">
+
+               <h:form id="frm_cadastro_estagio">
+
+                  <p:panel>
+                     <h:panelGrid columns="2">
+
+
+                        <h:outputText value="Empresa: " />
+
+
+                        <p:selectOneMenu id="empresa" value="#{mbEstagio.tela.estagio.empresa}" converter="converter" effect="fade" filter="true"
+                           filterMatchMode="contains" var="e" required="true" requiredMessage="Selecione uma empresa">
+                           <f:selectItem itemValue="" itemLabel="selecione uma empresa" />
+                           <f:selectItems value="#{comboEmpresas.empresas}" var="empresa" itemLabel="#{e.nome}" itemValue="#{e}" />
+
+                           <p:column style="width:10%">
+                              <h:outputText styleClass="ui-theme ui-theme-#{e.nome}" />
+                           </p:column>
+
+                           <p:column>
+                              <h:outputText value="#{e.nome}" />
+                           </p:column>
+                        </p:selectOneMenu>
+
+
+                        <h:outputText value="Tipo Documento:" />
+                        <p:selectOneMenu value="#{mbEstagio.tela.documento.tipo}">
+                           <f:selectItems value="#{comboTiposDocumento.termoCompromisso}" var="t" itemLabel="#{t.description}" itemValue="#{t}" />
+                        </p:selectOneMenu>
+
+
+
+
+                        <h:outputText value="Data Início:" />
+                        <p:calendar value="#{mbEstagio.tela.documento.dtaini}" locale="pt" id="calDataIni" required="true"
+                           requiredMessage="Informe a data inicial" readonlyInput="false" mask="99/99/9999" pattern="dd/MM/yyyy" />
+
+                        <h:outputText value="Data Término:" />
+                        <p:calendar value="#{mbEstagio.tela.documento.dtafim}" locale="pt" id="calDataFim" required="true"
+                           requiredMessage="Informe a data de término" readonlyInput="false" mask="99/99/9999" pattern="dd/MM/yyyy" />
+
+
+                        <h:outputText value="Carga Horária Semanal: " />
+                        <p:inputText value="#{mbEstagio.tela.jornada.jornada}" required="true" requiredMessage="Informe a carga horária semanal">
+                           <f:convertNumber locale="pt_br" integerOnly="true" />
+                        </p:inputText>
+
+
+
+                        <h:outputText value="Remuneração Mensal: " />
+                        <p:inputText value="#{mbEstagio.tela.remuneracao.remuneracao}" required="true" requiredMessage="Informe o salário mensal"
+                           id="txt_remuneracao">
+                           <p:ajax event="valueChange" update="@this" />
+                           <f:convertNumber minFractionDigits="2" locale="pt" />
+                        </p:inputText>
+
+
+                        <h:outputText value="Nome Supervisor: " />
+                        <p:inputText value="#{mbEstagio.tela.supervisor.nome}" required="true" requiredMessage="Informe o salário mensal" id="txt_supervisor" />
+
+
+
+
+                        <h:outputText value="Andamento:" />
+                        <p:selectOneMenu value="#{mbEstagio.tela.documento.statusAndamentoDoc}" rendered="true" requiredMessage="Indique o andamento">
+                           <f:selectItems value="#{comboStatusAndamentoDoc.statusAndamentoDoc}" var="s" itemLabel="#{s.description}" itemValue="#{s}" />
+                        </p:selectOneMenu>
+
+
+
+
+                        <h:outputText value="Parecer:" />
+                        <p:selectOneMenu value="#{mbEstagio.tela.documento.statusDoc}" required="true" requiredMessage="Indique o parecer">
+                           <f:selectItems value="#{comboStatusDoc.statusDoc}" var="s" itemLabel="#{s.description}" itemValue="#{s}" />
+                        </p:selectOneMenu>
+
+
+                        <h:outputText value="Data Entrada:" />
+                        <p:calendar value="#{mbEstagio.tela.documento.dtaent}" locale="pt" id="calDataEnt" required="true"
+                           requiredMessage="Informe a data de entrada" readonlyInput="false" mask="99/99/9999" pattern="dd/MM/yyyy" />
+
+
+                     </h:panelGrid>
+
+                     <p:commandButton value="Cadastrar" action="#{mbEstagio.cadastrarEstagio}" ajax="false" styleClass="botao" />
+                     <p:commandButton value="Cancelar" styleClass="botao" action="#{mbEstagio.cancelarCadastroEstagio()}" immediate="true" ajax="false"
+                        onclick="return confirm('O cadastro será cancelado')" />
+
+                  </p:panel>
+               </h:form>
+            </p:dialog>
+
+
+
+            <p:dialog id="dlgAddDocumento" header="Cadastro de Documento" widgetVar="dlgAddDocumento" modal="true">
+
+               <h:form id="frm_cadastro_documento">
+
+                  <p:panel>
+                     <h:panelGrid columns="2">
+
+
+                        <h:outputText value="Empresa: " />
+
+                        <h:panelGroup>
+                           <h:outputText value="#{mbEstagio.tela.estagio.empresa.nome}" />
+                           <h:outputText value=" - " />
+                           <h:outputText value="#{mbEstagio.tela.estagio.empresa.cnpj}" />
+                        </h:panelGroup>
+
+
+                        <h:outputText value="Período: " />
+
+                        <h:panelGroup>
+                           <h:outputText value="#{mbEstagio.tela.estagio.dtaini}">
+                              <f:convertDateTime type="date" dateStyle="short" locale="pt_BR" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy" />
+                           </h:outputText>
+                           <h:outputText value=" a " />
+                           <h:outputText value="#{mbEstagio.tela.estagio.dtafim}">
+                              <f:convertDateTime type="date" dateStyle="short" locale="pt_BR" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy" />
+                           </h:outputText>
+                        </h:panelGroup>
+
+                        <h:outputText value="Tipo Documento:" />
+                        <p:selectOneMenu value="#{mbEstagio.tela.documento.tipo}">
+                           <f:selectItems value="#{comboTiposDocumento.tiposDocumento}" var="t" itemLabel="#{t.description}" itemValue="#{t}" />
+                        </p:selectOneMenu>
+
+
+
+
+                        <h:outputText value="Data Início:" />
+                        <p:calendar value="#{mbEstagio.tela.documento.dtaini}" locale="pt" id="calDataIni" required="true"
+                           requiredMessage="Informe a data inicial" readonlyInput="false" mask="99/99/9999" pattern="dd/MM/yyyy" />
+
+                        <h:outputText value="Data Término:" />
+                        <p:calendar value="#{mbEstagio.tela.documento.dtafim}" locale="pt" id="calDataFim" required="true"
+                           requiredMessage="Informe a data de término" readonlyInput="false" mask="99/99/9999" pattern="dd/MM/yyyy" />
+
+
+                        <h:outputText value="Andamento:" />
+                        <p:selectOneMenu value="#{mbEstagio.tela.documento.statusAndamentoDoc}">
+                           <f:selectItems value="#{comboStatusAndamentoDoc.statusAndamentoDoc}" var="s" itemLabel="#{s.description}" itemValue="#{s}" />
+                        </p:selectOneMenu>
+
+
+
+
+                        <h:outputText value="Parecer:" />
+                        <p:selectOneMenu value="#{mbEstagio.tela.documento.statusDoc}">
+                           <f:selectItems value="#{comboStatusDoc.statusDoc}" var="s" itemLabel="#{s.description}" itemValue="#{s}" />
+                        </p:selectOneMenu>
+
+
+                        <h:outputText value="Data Entrada:" />
+                        <p:calendar value="#{mbEstagio.tela.documento.dtaent}" locale="pt" id="calDataEnt" required="true"
+                           requiredMessage="Informe a data de entrada" readonlyInput="false" mask="99/99/9999" pattern="dd/MM/yyyy" />
+
+
+                     </h:panelGrid>
+                     <p:commandButton value="Cadastrar" action="#{mbEstagio.cadastrarDocumento}" ajax="false" styleClass="botao" update="@form" />
+                     <p:commandButton value="Cancelar" styleClass="botao" action="#{mbEstagio.cancelarCadastroDocumento()}" immediate="true" ajax="false"
+                        onclick="return confirm('O cadastro será cancelado')" />
+
+                  </p:panel>
+               </h:form>
+            </p:dialog>
+
+
+            <p:dialog id="dlgEditRemuneracao" header="Edição de Remuneração" widgetVar="dlgEditRemuneracao" modal="true">
+
+
+               <h:form id="frm_edicao_remuneracao">
+
+                  <p:dataTable value="#{mbEstagio.tela.estagio.remuneracoes}" var="r" emptyMessage="Nenhum cadastro" styleClass="tabela600">
+                     <f:facet name="header">
+
+                     </f:facet>
+
+                     <p:column styleClass="col10c">
+                        <f:facet name="header">
+                           <h:outputText value="Início" />
+                        </f:facet>
+                        <p:calendar value="#{r.dtaini}" locale="pt" id="cal_rem" required="true" requiredMessage="Informe a data inicial" readonlyInput="false"
+                           mask="99/99/9999" pattern="dd/MM/yyyy" size="7" />
+
+                     </p:column>
+                     <p:column styleClass="col10c">
+                        <f:facet name="header">
+                           <h:outputText value="Remuneração" />
+                        </f:facet>
+
+
+                        <p:inputText value="#{r.remuneracao}" required="true" requiredMessage="Informe a remuneração">
+                           <p:ajax event="valueChange" update="@this" />
+                           <f:convertNumber minFractionDigits="2" locale="pt" />
+                        </p:inputText>
+                     </p:column>
+
+
+
+                     <p:column styleClass="col5c">
+                        <f:facet name="header">
+
+                           <p:commandButton action="#{mbEstagio.adicionarNovaRemuneracao}" styleClass="botao" icon="fa fa-fw fa-plus-circle" ajax="true"
+                              update="@form" />
+
+                           <p:commandButton action="#{mbEstagio.salvarRemuneracao()}" styleClass="botao" icon="fa fa-fw fa-save" ajax="true" update="@form" />
+                        </f:facet>
+                        <p:commandButton action="#{mbEstagio.deletarRemuneracao(r)}" ajax="true" icon="fa fa-fw fa-trash" immediate="true" update="@form"
+                           onclick="return confirm('Confirma a exclusão?')" />
+                     </p:column>
+
+                  </p:dataTable>
+
+                  <p:messages />
+
+               </h:form>
+            </p:dialog>
+
+
+
+            <p:dialog id="dlgEditJornada" header="Edição de Jornada" widgetVar="dlgEditJornada" modal="true">
+
+               <h:form id="frm_edicao_jornada">
+                  <p:dataTable value="#{mbEstagio.tela.estagio.jornadas}" var="j" emptyMessage="Nenhum cadastro" styleClass="tabela600">
+
+                     <p:column styleClass="col5c">
+                        <f:facet name="header">
+                           <h:outputText value="Início" />
+                        </f:facet>
+                        <p:calendar value="#{j.dtaini}" locale="pt" id="cal_rem" required="true" requiredMessage="Informe a data inicial" readonlyInput="false"
+                           mask="99/99/9999" pattern="dd/MM/yyyy" size="7" />
+
+                     </p:column>
+                     <p:column styleClass="col5c">
+                        <f:facet name="header">
+                           <h:outputText value="Carga Horária" />
+                        </f:facet>
+                        <p:inputText value="#{j.jornada}" size="2">
+                           <f:convertNumber integerOnly="true" locale="pt" />
+                        </p:inputText>
+                     </p:column>
+
+                     <p:column styleClass="col5c">
+                        <f:facet name="header">
+                           <p:commandButton action="#{mbEstagio.adicionarNovaJornada}" styleClass="botao" icon="fa fa-fw fa-plus-circle" ajax="true"
+                              update="@form" />
+                           <p:commandButton action="#{mbEstagio.salvarJornada()}" styleClass="botao" icon="fa fa-fw fa-save" ajax="true" update="@form" />
+
+                        </f:facet>
+                        <p:commandButton action="#{mbEstagio.deletarJornada(j)}" ajax="false" update="frm_edicao_jornada, frm_estagio" icon="fa fa-fw fa-trash"
+                           immediate="true" onclick="return confirm('Confirma a exclusão?')" />
+                     </p:column>
+
+
+                  </p:dataTable>
+
+                  <p:messages />
+
+               </h:form>
+            </p:dialog>
+
+
+            <p:dialog id="dlgEditSupervisor" header="Edição de Supervisor" widgetVar="dlgEditSupervisor" modal="true">
+
+               <h:form id="frm_edicao_supervisor">
+                  <p:dataTable value="#{mbEstagio.tela.estagio.supervisores}" var="s" emptyMessage="Nenhum cadastro" styleClass="tabela600">
+
+                     <p:column styleClass="col5c">
+                        <f:facet name="header">
+                           <h:outputText value="Início" />
+                        </f:facet>
+                        <p:calendar value="#{s.dtaini}" locale="pt" id="cal_ini_rem" required="true" requiredMessage="Informe a data inicial"
+                           readonlyInput="false" mask="99/99/9999" pattern="dd/MM/yyyy" size="7" />
+
+                     </p:column>
+                     <p:column styleClass="col10l">
+                        <f:facet name="header">
+                           <h:outputText value="Nome" />
+                        </f:facet>
+                        <p:inputText value="#{s.nome}" size="30" />
+
+                     </p:column>
+
+                     <p:column styleClass="col5c">
+                        <f:facet name="header">
+
+                           <p:commandButton action="#{mbEstagio.adicionarNovoSupervisor}" styleClass="botao" icon="fa fa-fw fa-plus-circle" ajax="true"
+                              update="@form" />
+                           <p:commandButton action="#{mbEstagio.salvarSupervisor()}" styleClass="botao" icon="fa fa-fw fa-save" ajax="true" update="@form" />
+
+                        </f:facet>
+                        <p:commandButton action="#{mbEstagio.deletarSupervisor(s)}" ajax="false" update="@form" icon="fa fa-fw fa-trash" immediate="true"
+                           onclick="return confirm('Confirma a exclusão?')" />
+                     </p:column>
+
+
+                  </p:dataTable>
+
+                  <p:messages />
+
+               </h:form>
+            </p:dialog>
+
+
+            <p:dialog id="dlgEditNotificacao" header="Notificações" widgetVar="dlgEditNotificacao" modal="true">
+
+               <h:form id="frm_edicao_notificacao">
+                  <br />
+
+                  <h:panelGrid columns="2">
+                     <h:outputText value="E-mail: " styleClass="bold" />
+                     <h:outputText value="#{mbEstagio.tela.aluno.email}" />
+
+                  </h:panelGrid>
+
+                  <p:commandButton action="#{mbEstagio.notificarRetiradaDocumento()}" value="Notificar retirada de documento" update="@form"
+                     onclick="return confirm('Confirma o envio por e-mail?')" icon="fa fa-fw fa-envelope"
+                     title="Envia notificação para o aluno retirar documento " disabled="#{empty mbEstagio.tela.aluno.email}" />
+
+                  <br />
+                  <br />
+
+                  <p:dataTable value="#{mbEstagio.tela.estagio.notificacoes}" var="n" emptyMessage="Nenhum cadastro" styleClass="tabela600">
+                     <p:column styleClass="col5c">
+                        <f:facet name="header">
+                           <h:outputText value="Data" />
+                        </f:facet>
+
+
+                        <h:outputText value="#{n.data}">
+                           <f:convertDateTime type="date" dateStyle="short" locale="pt_BR" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy HH:mm:ss" />
+                        </h:outputText>
+                     </p:column>
+
+                     <p:column styleClass="col5c">
+                        <f:facet name="header">
+                           <h:outputText value="Código" />
+                        </f:facet>
+                        <h:outputText value="#{n.codigo}" />
+                     </p:column>
+
+
+                     <p:column styleClass="col10l">
+                        <f:facet name="header">
+                           <h:outputText value="Tipo de Notificação" />
+                        </f:facet>
+                        <h:outputText value="#{n.tipo.valor}" />
+                     </p:column>
+
+                  </p:dataTable>
+                  <p:messages />
+               </h:form>
+            </p:dialog>
+
+
+
+            <p:dialog id="dlgEditDocumento" header="Edição de Documento" widgetVar="dlgEditDocumento" modal="true">
+
+
+               <h:form id="frm_edicao_documento">
+
+
+                  <h:panelGrid columns="2">
+                     <h:outputText value="Número" />
+                     <h:outputText value="#{mbEstagio.tela.documento.id}" />
+                     <h:outputText value="Documento" />
+
+                     <p:selectOneMenu value="#{mbEstagio.tela.documento.tipo}">
+                        <f:selectItem itemLabel="#{mbEstagio.tela.documento.tipo.valor}" itemValue="#{d.tipo}" />
+                        <f:selectItems value="#{comboTiposDocumento.tiposDocumento}" var="t" itemLabel="#{t.description}" itemValue="#{t}" />
+
+                     </p:selectOneMenu>
+
+                     <h:outputText value="Entrada" />
+
+                     <p:calendar value="#{mbEstagio.tela.documento.dtaent}" locale="pt" id="cal_dta_ent" required="true"
+                        requiredMessage="Informe a data inicial" readonlyInput="false" mask="99/99/9999" pattern="dd/MM/yyyy" size="7" />
+
+                     <h:outputText value="Início" />
+                     <p:calendar value="#{mbEstagio.tela.documento.dtaini}" locale="pt" id="cal_dta_ini" required="true"
+                        requiredMessage="Informe a data inicial" readonlyInput="false" mask="99/99/9999" pattern="dd/MM/yyyy" size="7" />
+
+                     <h:outputText value="Término" />
+                     <p:calendar value="#{mbEstagio.tela.documento.dtafim}" locale="pt" id="cal_dta_fim" required="true"
+                        requiredMessage="Informe a data de término" readonlyInput="false" mask="99/99/9999" pattern="dd/MM/yyyy" size="7" />
+
+                     <h:outputText value="Andamento" />
+                     <p:selectOneMenu value="#{mbEstagio.tela.documento.statusAndamentoDoc}" id="sel_sta_and_doc">
+                        <f:selectItem itemLabel="#{mbEstagio.tela.documento.statusAndamentoDoc.valor}" itemValue="#{d.statusAndamentoDoc}" />
+                        <f:selectItems value="#{comboStatusAndamentoDoc.statusAndamentoDoc}" var="s" itemLabel="#{s.description}" itemValue="#{s}" />
+                     </p:selectOneMenu>
+                     <h:outputText value="Parecer" />
+                     <p:selectOneMenu value="#{mbEstagio.tela.documento.statusDoc}" id="par_doc" required="true"
+                        requiredMessage="Indique o parecer para o documento">
+                        <f:selectItem itemValue="#{mbEstagio.tela.documento.statusDoc}" itemLabel="#{mbEstagio.tela.documento.statusDoc.valor}" />
+                        <f:selectItems value="#{comboStatusDoc.statusDoc}" var="s" itemLabel="#{s.description}" itemValue="#{s}" />
+                     </p:selectOneMenu>
+
+                  </h:panelGrid>
+
+                  <p:commandButton value="Salvar" action="#{mbEstagio.salvarDocumento(mbEstagio.tela.documento)}" ajax="false" />
+                  <p:commandButton value="Cancelar" onclick="PF('dlgEditDocumento').hide();" />
+
+
+               </h:form>
+            </p:dialog>
+
+
+            <p:dialog id="dlgAddAluno" header="Adicionar Aluno" widgetVar="dlgAddAluno" modal="true">
+               <h:form id="addAluno">
+                  <h:panelGrid columns="1">
+                     <h:outputText value="No. USP:" />
+
+                     <p:inputText value="#{mbEstagio.tela.codpes}" />
+                  </h:panelGrid>
+                  <h:panelGrid columns="2">
+                     <p:commandButton action="#{mbEstagio.adicionarAluno}" value="Adicionar" ajax="false" />
+                     <p:commandButton value="Cancelar" onclick="PF('dlgAddPapel').hide();" type="button" />
+                  </h:panelGrid>
+               </h:form>
+            </p:dialog>
+
+         </f:view>
+      </ui:define>
+   </ui:composition>
+</h:body>
+</html>

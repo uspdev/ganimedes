@@ -1,0 +1,343 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:p="http://primefaces.org/ui" xmlns:b="http://bootsfaces.net/ui" xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+<h:head>
+   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+   <meta http-equiv="refresh" content="#{session.maxInactiveInterval};url=index.xhtml?reason=expired" />
+
+
+</h:head>
+
+<h:body>
+
+   <f:metadata>
+      <f:event type="preRenderView" listener="#{mbAnuncio.buscarAnuncios}" />
+   </f:metadata>
+
+
+
+   <ui:composition template="./template.xhtml">
+
+
+      <ui:define name="content">
+
+         <f:view>
+            <f:loadBundle basename="messages" var="msgs" />
+
+
+            <b:container fluid="false">
+               <b:row>
+                  <b:column span="12">
+
+
+                     <h:form id="main" rendered="#{UsuarioLogado.adm || UsuarioLogado.opr }">
+
+                        <h2>Anúncios</h2>
+
+
+
+
+
+
+
+                        <p:message for="main" />
+                     </h:form>
+
+
+                     <h:form id="listagem" binding="#{mbAnuncio.tela.frmLista}">
+
+
+                        <p:commandButton value="Aguardando aprovação" action="#{mbAnuncio.buscarAnuncios()}" ajax="false" styleClass="botao"
+                           icon="fa fa-fw fa-inbox">
+                           <f:setPropertyActionListener target="#{mbAnuncio.tela.status}" value="AGUARDANDO" />
+                        </p:commandButton>
+
+                        <p:commandButton value="Aprovados" action="#{mbAnuncio.buscarAnuncios()}" ajax="false" styleClass="botao" icon="fa fa-fw fa-thumbs-up">
+                           <f:setPropertyActionListener target="#{mbAnuncio.tela.status}" value="APROVADOS" />
+                        </p:commandButton>
+
+                        <p:commandButton value="Rejeitados" action="#{mbAnuncio.buscarAnuncios()}" ajax="false" styleClass="botao"
+                           icon="fa fa-fw fa-thumbs-down" rendered="#{UsuarioLogado.adm || UsuarioLogado.opr}">
+                           <f:setPropertyActionListener target="#{mbAnuncio.tela.status}" value="REJEITADOS" />
+                        </p:commandButton>
+
+                        <p:commandButton value="Encerrados" action="#{mbAnuncio.buscarAnuncios()}" ajax="false" styleClass="botao"
+                           icon="fa fa-fw fa-times-circle" rendered="#{UsuarioLogado.adm || UsuarioLogado.opr}">
+                           <f:setPropertyActionListener target="#{mbAnuncio.tela.status}" value="ENCERRADOS" />
+                        </p:commandButton>
+
+                        <p:commandButton value="Cadastrar" action="#{PageTransition.chamaAnuncio()}" ajax="false" styleClass="botao"
+                           icon="fa fa-fw fa-plus-circle" rendered="#{UsuarioLogado.adm || UsuarioLogado.opr}" />
+
+
+
+
+                        <p:dataTable id="listagem_anuncios" var="a" value="#{mbAnuncio.tela.anuncios}" emptyMessage="Nenhum registro encontrado" rows="20"
+                           paginator="true"
+                           paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                           rowsPerPageTemplate="20,50,100,500,1000">
+                           <f:facet name="header">
+                           </f:facet>
+
+
+
+                           <p:column styleClass="col10l">
+                              <f:facet name="header">
+                                 <h:outputText value="Anúncios" />
+                              </f:facet>
+                              <h4>#{a.nomeEmpresa}</h4>
+                              <h:outputText value="#{a.regimeTrabalho.valor}" />
+                              <br />
+                              <h:outputText value="#{a.titvag}" />
+                           </p:column>
+
+
+                           <p:column styleClass="col10l">
+                              <f:facet name="header">
+                                 <h:outputText value="Informações" />
+                              </f:facet>
+
+                              <h5 style="text-transform: uppercase;">#{a.status.valor}</h5>
+
+                              <h:outputText value="Cadastrado em  " />
+                              <h:outputText value="#{a.dtaCriacao}">
+                                 <f:convertDateTime type="date" dateStyle="short" locale="pt_BR" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy HH:mm:ss" />
+                              </h:outputText>
+                              por  
+                              <p:commandLink value="#{a.usuario.nompes}" action="#{mbAnuncio.buscarAnuncios()}" ajax="false">
+                                 <f:setPropertyActionListener target="#{mbAnuncio.tela.status}" value="POR_ANUNCIANTE" />
+                                 <f:setPropertyActionListener target="#{mbAnuncio.tela.anuncio}" value="#{a}" />
+                              </p:commandLink>
+                              <em> #{a.usuario.codlog}</em>
+                              <br />
+                              <br />
+
+                              <h:outputText value="Período de divulgação: " />
+                              <h:panelGroup>
+                                 <h:outputText value="#{a.dtainidiv}">
+                                    <f:convertDateTime type="date" dateStyle="short" locale="pt_BR" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy" />
+                                 </h:outputText>
+                                 <h:outputText value=" a " />
+                                 <h:outputText value="#{a.dtafimdiv}">
+                                    <f:convertDateTime type="date" dateStyle="short" locale="pt_BR" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy" />
+                                 </h:outputText>
+                              </h:panelGroup>
+
+                              <ui:remove>
+                                 <h:outputText value="Confirmação Trote" />
+                                 <h:panelGroup>
+                                    <h:outputText rendered="#{a.repchk}" value="Sim" />
+                                    <h:outputText rendered="#{not a.repchk}" value="Não" />
+                                 </h:panelGroup>
+                              </ui:remove>
+
+                              <br />
+                              <br />
+
+                              <p:splitButton value="Cartaz">
+                                 <p:menuitem action="#{mbAnuncio.downloadAnuncio(a)}" value=" &nbsp; da Empresa " ajax="false" icon="fa fa-fw fa-print"
+                                    rendered="#{not empty a.cartaz}" />
+                                 <p:menuitem action="#{mbAnuncio.gerarCartaz(a)}" value=" &nbsp; do Sistema " ajax="false" icon="fa fa-fw fa-print" />
+                              </p:splitButton>
+
+
+                              <p:splitButton value="Situação" rendered="#{UsuarioLogado.adm || UsuarioLogado.opr}">
+                                 <p:menuitem value="Aprovar" action="#{mbAnuncio.aprovarAnuncio(a)}" icon="ui-icon-check" ajax="false"
+                                    disabled="#{a.status == 'APROVADO'}" />
+
+                                 <p:menuitem value="Encerrar" action="#{mbAnuncio.encerrarAnuncio(a)}" icon="ui-icon-close" ajax="false"
+                                    disabled="#{a.status == 'ENCERRADO' || a.status == 'REJEITADO' }" />
+
+                                 <p:menuitem value="Rejeitar" action="#{mbAnuncio.rejeitarAnuncio(a)}" icon="ui-icon-trash" ajax="false"
+                                    disabled="#{a.status == 'REJEITADO' || a.status == 'ENCERRADO'}" />
+
+                              </p:splitButton>
+
+
+                              <p:commandButton value="Editar" action="#{mbAnuncio.editar}" icon="fa fa-fw fa-edit" ajax="false"
+                                 rendered="#{UsuarioLogado.adm || UsuarioLogado.opr}">
+                                 <f:setPropertyActionListener target="#{mbAnuncio.tela.anuncio}" value="#{a}" />
+                              </p:commandButton>
+
+
+
+                           </p:column>
+
+                        </p:dataTable>
+                     </h:form>
+
+                     <h:form id="edicao" binding="#{mbAnuncio.tela.frmCadastro}" rendered="false">
+                        <p:panel>
+                           <h:outputText value="Empresa" styleClass="page_section" />
+
+                           <h:panelGrid columns="2">
+
+
+                              <h:outputText value="Nome da Empresa: " />
+                              <p:inputText value="#{mbAnuncio.tela.anuncio.nomeEmpresa}" size="70" required="true" requiredMessage="Informe o nome da empresa" />
+
+                              <h:outputText value="Breve Descrição: " />
+                              <p:inputTextarea value="#{mbAnuncio.tela.anuncio.descricaoEmpresa}" cols="80" rows="5" />
+
+                              <h:outputText value="Área de Atuação: " />
+                              <p:inputText value="#{mbAnuncio.tela.anuncio.areaAtuacao}" size="70" required="true"
+                                 requiredMessage="Informe a área de atuação da empresa" />
+
+                              <h:outputText value="Nome pessoa contato: " />
+                              <p:inputText value="#{mbAnuncio.tela.anuncio.nompes}" size="70" required="true"
+                                 requiredMessage="Informe o nome da pessoa de contato" />
+
+                              <h:outputText value="E-mail contato: " />
+                              <p:inputText value="#{mbAnuncio.tela.anuncio.email}" size="70" required="true" requiredMessage="Informe o e-mail de contato" />
+
+
+                              <h:outputText value="Telefone: " />
+                              <p:inputText value="#{mbAnuncio.tela.anuncio.numtel}" size="70" required="true" requiredMessage="Informe o telefone" />
+
+                              <h:outputText value="Website da Empresa: " />
+                              <p:inputText value="#{mbAnuncio.tela.anuncio.urlweb}" size="70" />
+
+                           </h:panelGrid>
+                        </p:panel>
+
+
+                        <p:panel>
+
+                           <h:outputText value="Vaga" styleClass="page_section" />
+                           <h:panelGrid columns="2">
+
+                              <h:outputText value="Título da Vaga: " />
+                              <p:inputText value="#{mbAnuncio.tela.anuncio.titvag}" size="70" required="true" requiredMessage="Informe o título da vaga" />
+
+                              <h:outputText value="Local de Trabalho: " />
+                              <p:inputText value="#{mbAnuncio.tela.anuncio.loctrb}" size="70" required="true" requiredMessage="Informe o local de trabalho" />
+
+
+                              <h:outputText value="Atividades: " />
+                              <p:inputTextarea value="#{mbAnuncio.tela.anuncio.desvag}" cols="80" rows="5" required="true"
+                                 requiredMessage="Informe a descrição da vaga" />
+
+                              <h:outputText value="Regime de Contratação: " />
+                              <p:selectOneRadio value="#{mbAnuncio.tela.anuncio.regimeTrabalho}">
+                                 <f:selectItems value="#{comboRegimesTrabalho.regimes}" var="r" itemLabel="#{r.label}" itemValue="#{r.value}" />
+                              </p:selectOneRadio>
+
+
+                              <h:outputText value="Carga Horária Semanal: " />
+                              <p:selectOneRadio value="#{mbAnuncio.tela.anuncio.horsem}" required="true" requiredMessage="Informe a carga horária semanal">
+                                 <f:selectItem itemValue="20" itemLabel="20 horas" />
+                                 <f:selectItem itemValue="25" itemLabel="25 horas" />
+                                 <f:selectItem itemValue="30" itemLabel="30 horas" />
+                                 <f:selectItem itemValue="40" itemLabel="40 horas" />
+                                 <f:selectItem itemValue="44" itemLabel="44 horas" />
+                                 <f:selectItem itemValue="0" itemLabel="Outra / A combinar" />
+                              </p:selectOneRadio>
+
+
+
+                              <h:outputText value="Benefícios Oferecidos: " />
+                              <p:inputTextarea value="#{mbAnuncio.tela.anuncio.benofr}" cols="80" rows="5" />
+
+
+                              <h:outputText value="Bolsa/salário mensal:" />
+                              <p:inputText value="#{mbAnuncio.tela.anuncio.salmes}">
+                                 <f:convertNumber minFractionDigits="2" locale="pt" />
+                              </p:inputText>
+                           </h:panelGrid>
+                        </p:panel>
+
+                        <p:panel>
+                           <h:outputText value="Aluno" styleClass="page_section" />
+                           <h:panelGrid columns="2">
+
+
+                              <h:outputText value="Perfil do Candidato: " />
+                              <p:inputTextarea value="#{mbAnuncio.tela.anuncio.perfilCandidato}" cols="80" rows="5" required="true"
+                                 requiredMessage="Informe a descrição da vaga" />
+
+
+                              <h:outputText value="Cursos: " />
+
+                              <p:dataList value="#{mbAnuncio.tela.anuncio.cursos}" var="c" emptyMessage="Nenhum curso indicado">
+                                 <h:outputText value="#{c.nome} - #{c.nivel}" />
+                              </p:dataList>
+
+
+
+
+
+
+                           </h:panelGrid>
+                        </p:panel>
+
+
+
+                        <p:panel>
+                           <h:outputText value="Anúncio" styleClass="page_section" />
+
+                           <h:panelGrid columns="2">
+                              <h:outputText value="Criação:" />
+                              <h:outputText value="#{mbAnuncio.tela.anuncio.dtaCriacao}">
+                                 <f:convertDateTime type="date" dateStyle="short" locale="pt_BR" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy HH:mm:ss" />
+                              </h:outputText>
+
+                              <h:outputText value="Período de Divulgação: " />
+                              <h:panelGroup>
+                                 <p:calendar value="#{mbAnuncio.tela.anuncio.dtainidiv}" locale="pt" mindate="#{mbAnuncio.hoje}" mask="99/99/9999"
+                                    pattern="dd/MM/yyyy" />
+							 a
+							 <p:calendar value="#{mbAnuncio.tela.anuncio.dtafimdiv}" locale="pt" mindate="#{mbAnuncio.hoje}" mask="99/99/9999" pattern="dd/MM/yyyy" />
+                              </h:panelGroup>
+                           </h:panelGrid>
+
+                        </p:panel>
+
+
+                        <p:panel>
+                           <h:outputText value="Administração" styleClass="page_section" />
+
+                           <h:panelGrid columns="2">
+                              <h:outputText value="Aprovado:" />
+                              <h:panelGroup>
+                                 <h:selectOneRadio value="#{mbAnuncio.tela.anuncio.aprovado}" required="true" requiredMessage="Informe se o anúcio foi aprovado">
+                                    <f:selectItem itemValue="true" itemLabel="SIM" />
+                                    <f:selectItem itemValue="false" itemLabel="NÃO" />
+                                 </h:selectOneRadio>
+
+
+                                 <h:outputText rendered="#{a.aprovado}" value="#{a.dtaAprovacao}">
+                                    <f:convertDateTime type="date" dateStyle="short" locale="pt_BR" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy HH:mm:ss" />
+                                 </h:outputText>
+                              </h:panelGroup>
+
+                              <h:outputText value="Anti-Repúdio:" />
+                              <h:panelGroup>
+                                 <h:outputText rendered="#{a.repchk}" value="Sim" />
+                                 <h:outputText rendered="#{not a.repchk}" value="Não" />
+                              </h:panelGroup>
+
+                           </h:panelGrid>
+
+                        </p:panel>
+
+                        <p:commandButton action="#{mbAnuncio.atualizarAnuncio()}" value="Salvar" ajax="false" icon="fa fa-fw fa-save" />
+                        <p:commandButton action="#{mbAnuncio.salvarFechar()}" value="Salvar e fechar" ajax="false" icon="fa fa-fw fa-save" />
+                        <p:commandButton action="#{mbAnuncio.fecharEdicao()}" value="Fechar" ajax="false" icon="fa fa-fw fa-times-circle" />
+
+
+
+                     </h:form>
+
+                  </b:column>
+               </b:row>
+            </b:container>
+         </f:view>
+      </ui:define>
+
+
+   </ui:composition>
+</h:body>
+</html>

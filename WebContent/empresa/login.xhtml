@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://primefaces.org/ui" xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+<h:head>
+   <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+</h:head>
+
+<h:body>
+
+   <ui:composition template="../template.xhtml">
+
+
+
+
+      <ui:define name="content">
+         <f:loadBundle basename="messages" var="msgs" />
+
+         <h:form rendered="#{!UsuarioLogado.autenticado}" id="main">
+
+            <b:container fluid="false">
+               <b:row>
+                  <b:column col-xs="10" col-sm="5" col-md="4" col-lg="4">
+
+                     <h2>#{msgs.appName}</h2>
+
+                     <p>#{msgs.appDescription}</p>
+
+                     <p>Para entrar no sistema, informe suas credencias de acesso</p>
+
+                  </b:column>
+
+                  <b:column col-xs="12" col-sm="5" col-md="6" col-lg="5">
+
+                     <div class="caixa_login_empresa">
+
+
+
+                        <h4>ÁREA EXCLUSIVA PARA EMPRESAS</h4>
+                        <p>Para anunciar as oportunidades de estágios de sua empresa para os alunos do IME-USP, faça login ou escolha a opção primeiro acesso, caso ainda não possua uma conta no sistema</p>
+
+                        <p>Usuário (E-mail)</p>
+                        <p:inputText id="codlog" value="#{Auth.codlog}" required="true" requiredMessage="Informe o No. USP" placeholder="e-mail" />
+                        <p>Senha</p>
+
+                        <p:password id="senha" value="#{Auth.senha}" required="true" requiredMessage="Informe a senha" placeholder="senha" />
+
+
+                        <p:message for="senha" />
+                        <p:message for="codlog" />
+                        <p:message for="main" />
+
+
+                        <p:commandButton value="Acessar" actionListener="#{Auth.autenticar()}" ajax="false" />
+                        <br />
+
+                        <h:outputText value="Usuário Logado: #{UsuarioLogado.nompes}" rendered="#{UsuarioLogado.autenticado}" />
+                        <br />
+                        <p:commandButton action="#{PageTransition.chamaMeusAnuncios()}" value="Início" rendered="#{UsuarioLogado.autenticado}"
+                           icon="ui-icon-home" />
+                        <p:commandButton action="#{ControladorAAAnunciante.logout()}" value="Sair" rendered="#{UsuarioLogado.autenticado}" icon="ui-icon-close"
+                           immediate="true" />
+                        <br />
+
+                        <p:message for="codlog" />
+                        <p:message for="senha" />
+
+                        <p:link href="cadastro.xhtml"  value="Primeiro Acesso"  />
+                        <p:link href="recuperar_senha.xhtml"  value="Recuperar Senha"  />
+
+                        <hr />
+
+
+                        <p:link value="Acesso para alunos" href="../public/login.xhtml" />
+                     </div>
+                     <br />
+                  </b:column>
+
+               </b:row>
+            </b:container>
+
+
+
+         </h:form>
+
+
+
+      </ui:define>
+   </ui:composition>
+
+</h:body>
+</html>

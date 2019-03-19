@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://primefaces.org/ui" xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+<h:head>
+   <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+
+ 
+    
+</h:head>
+
+<h:body>
+
+   <ui:composition template="../template.xhtml">
+
+
+
+
+
+      <ui:define name="content">
+         <h:form rendered="#{!UsuarioLogado.autenticado}" id="main">
+
+            <b:container fluid="false">
+               <b:row>
+                  <b:column col-xs="10" col-sm="5" col-md="4" col-lg="4">
+
+                     <h2>#{msgs.appName}</h2>
+
+                     <p>#{msgs.appDescription}</p>
+
+
+                     
+                     
+                     <h:form>
+                        <h:button value="Acesso local" onclick="toggle('caixa_login_local'); return false;" />
+                     </h:form>
+                     
+
+                  </b:column>
+
+                  <b:column col-xs="12" col-sm="5" col-md="6" col-lg="5">
+
+                     <div class="caixa_login"></div>
+
+                     
+
+                     <div class="caixa_login_local" id="caixa_login_local">
+                        <p>No. USP</p>
+                        <p:inputText id="codlog" value="#{Auth.codlog}" required="false" requiredMessage="Informe o No. USP" />
+                        <p>Senha</p>
+
+
+<ui:remove>                        
+                           <p:inputText id="senha" value="#{Auth.senha}" required="false" requiredMessage="Informe a senha" />
+             </ui:remove>
+
+
+                        <p:password value="#{Auth.senha}" id="senha" required="false" requiredMessage="Informe a senha" />
+           
+
+                        <p:message for="senha" />
+                        <p:message for="codlog" />
+                        <p:message for="main" />
+
+
+                        <p:commandButton value="Entrar" actionListener="#{Auth.autenticar()}" ajax="false" />
+                        <p:link value="Recuperar a senha" href="requisicao_senha.xhtml" />
+
+                        <br />
+                     </div>
+                     <p:commandButton value="Entrar com Senha única USP" actionListener="#{Auth.getTokenUsp()}" ajax="false" immediate="true"
+                        styleClass="botao_senha_unica" />
+
+
+
+                     <br />
+                     <p:link value="Acesso para empresas" href="../empresa/login.xhtml" />
+
+
+
+                     <br />
+                     <br />
+
+                  </b:column>
+
+
+
+
+               </b:row>
+            </b:container>
+
+
+         </h:form>
+
+
+         <h:form rendered="#{UsuarioLogado.autenticado}">Você já está logado.</h:form>
+      </ui:define>
+   </ui:composition>
+   
+   
+ 
+    
+</h:body>
+</html>

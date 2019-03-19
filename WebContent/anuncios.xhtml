@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:p="http://primefaces.org/ui" xmlns:b="http://bootsfaces.net/ui" xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+<h:head>
+   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+   <meta http-equiv="refresh" content="#{session.maxInactiveInterval};url=index.xhtml?reason=expired" />
+
+
+</h:head>
+
+<h:body>
+
+   <ui:composition template="./template.xhtml">
+
+
+      <ui:define name="content">
+
+         <f:view>
+            <f:loadBundle basename="messages" var="msgs" />
+
+
+            <b:container fluid="false">
+               <b:row>
+                  <b:column span="12">
+
+                     <h:form id="main" rendered="#{UsuarioLogado.adm || UsuarioLogado.opr}">
+
+                        <p:panel>
+                           <h:outputText value="Anúncios" styleClass="page_title" />
+                        </p:panel>
+                        <br />
+
+
+
+                        <p:message for="main" />
+                        <p:growl id="main" showDetail="false" sticky="true" life="100000" />
+
+
+                     </h:form>
+
+
+                     <h:form id="listagem" acceptcharset="ISO-8859-1" binding="#{mbAnuncio.tela.frmLista}"
+                        rendered="#{UsuarioLogado.adm || UsuarioLogado.opr || UsuarioLogado.usr}">
+
+
+                        <p:dataTable id="listagem_anuncios" var="a" value="#{mbAnuncio.anunciosAlunos}" rowStyleClass="col30l, col5c, col5c, col5c"
+                           styleClass="ultimo,primeiro" emptyMessage="Nenhum registro encontrado" paginator="true" rows="30">
+                           <f:facet name="header">
+                           </f:facet>
+
+
+
+                           <p:column>
+                              <f:facet name="header">
+                                 <h:outputText value="Oportunidade" />
+                              </f:facet>
+
+                              <p:commandLink actionListener="#{mbAnuncio.visualizarAnuncio(a)}" value="#{a.titvag}" styleClass="alerta-vinho" ajax="false" />
+                           </p:column>
+
+                           <p:column>
+                              <f:facet name="header">
+                                 <h:outputText value="Empresa" />
+                              </f:facet>
+                              <h:outputText value="#{a.nomeEmpresa}" />
+                           </p:column>
+
+
+                           <p:column>
+                              <f:facet name="header">
+                                 <h:outputText value="Regime de Trabalho" />
+                              </f:facet>
+
+                              <h:outputText value="#{a.regimeTrabalho.valor}" />
+                              <br />
+                           </p:column>
+
+
+
+
+                           <p:column>
+                              <f:facet name="header">
+                                 <h:outputText value="Carga Horária Semanal" />
+                              </f:facet>
+                              <h:outputText value="#{a.horsem}" rendered="#{a.horsem > 0}" />
+                              <h:outputText value="A combinar" rendered="#{a.horsem == 0}" />
+                           </p:column>
+
+
+                           <p:column>
+                              <f:facet name="header">
+                                 <h:outputText value="Remuneração Mensal" />
+                              </f:facet>
+                              <h:outputText value="#{a.salmesFormatado}" />
+                           </p:column>
+
+
+
+
+
+
+                        </p:dataTable>
+                     </h:form>
+
+                     <h:form id="visualizacao" acceptcharset="ISO-8859-1" binding="#{mbAnuncio.tela.frmVisualizacao}" rendered="false">
+
+                        <p:commandButton action="#{mbAnuncio.fecharVisualizacao()}" value="Voltar" ajax="false" icon="ui-icon-ui-icon-circle-triangle-w" />
+                        <p:commandButton action="#{mbAnuncio.downloadAnuncio(a)}" value="Cartaz da Empresa" ajax="false" icon="ui-icon-print"
+                           rendered="#{not empty a.cartaz}" />
+                        <p:commandButton action="#{mbAnuncio.gerarCartaz(a)}" value="Cartaz" ajax="false" icon="ui-icon-print" />
+
+
+
+                        <p:panel>
+
+                           <h:outputText value="#{mbAnuncio.tela.anuncio.titvag}" styleClass="page_section" />
+
+
+
+                           <h:panelGrid columns="2">
+
+
+                              <h:outputText value="Empresa: " styleClass="bold" />
+                              <h:outputText value="#{mbAnuncio.tela.anuncio.nomeEmpresa}" />
+
+                              <h:outputText value="Breve Descrição: " styleClass="bold" />
+                              <h:outputText value="#{mbAnuncio.tela.anuncio.descricaoEmpresa}" />
+
+                              <h:outputText value="Área de Atuação: " styleClass="bold" />
+                              <h:outputText value="#{mbAnuncio.tela.anuncio.areaAtuacao}" />
+
+
+                              <h:outputText value="Local: " styleClass="bold" />
+                              <h:outputText value="#{mbAnuncio.tela.anuncio.loctrb}" />
+
+
+
+
+                              <h:outputText value="Atividades: " styleClass="bold" />
+                              <h:outputText value="#{mbAnuncio.tela.anuncio.desvag}" />
+
+
+
+
+                              <h:outputText value="Perfil do Candidato: " styleClass="bold" />
+                              <h:outputText value="#{mbAnuncio.tela.anuncio.perfilCandidato}" />
+
+
+                              <h:outputText value="Cursos: " styleClass="bold" />
+
+                              <ui:repeat var="c" value="#{mbAnuncio.tela.anuncio.cursos}">
+
+                                 <h:outputText value="#{c.nome}" />
+                                 <br />
+                              </ui:repeat>
+
+
+
+
+                              <h:outputText value="Regime: " styleClass="bold" />
+                              <h:outputText value="#{mbAnuncio.tela.anuncio.regimeTrabalho.valor}" />
+
+                              <h:outputText value="Carga Horária Semanal: " styleClass="bold" />
+                              <h:outputText value="#{mbAnuncio.tela.anuncio.horsem}" />
+
+
+
+
+
+
+                              <h:outputText value="Benefícios: " styleClass="bold" />
+                              <h:outputText value="#{mbAnuncio.tela.anuncio.benofr}" />
+
+
+                              <h:outputText value="Remuneração:" styleClass="bold" />
+                              <h:outputText value="#{mbAnuncio.tela.anuncio.salmesFormatado}" />
+
+
+
+                           </h:panelGrid>
+                        </p:panel>
+
+
+                        <p:panel>
+
+                           <h:outputText value="Candidate-se" styleClass="page_section" />
+                           <h:panelGrid columns="2">
+
+
+                              <h:outputText value="E-mail: " rendered="#{not empty mbAnuncio.tela.anuncio.emailInscricao}" styleClass="bold" />
+                              <h:outputText value="#{mbAnuncio.tela.anuncio.emailInscricao}" rendered="#{not empty mbAnuncio.tela.anuncio.emailInscricao}" />
+
+
+                              <h:outputText value="Telefone: " rendered="#{not empty mbAnuncio.tela.anuncio.numtelInscricao}" styleClass="bold" />
+                              <h:outputText value="#{mbAnuncio.tela.anuncio.numtelInscricao}" rendered="#{not empty mbAnuncio.tela.anuncio.numtelInscricao}" />
+
+                              <h:outputText value="Website: " rendered="#{not empty mbAnuncio.tela.anuncio.urlweb}" styleClass="bold" />
+                              <h:outputText value="#{mbAnuncio.tela.anuncio.urlweb}" rendered="#{not empty mbAnuncio.tela.anuncio.urlweb}" />
+                           </h:panelGrid>
+                        </p:panel>
+
+
+
+
+                        <p:panel>
+                           <h:outputText value="Anúncio" styleClass="page_section" />
+
+                           <h:panelGrid columns="2">
+                              <h:outputText value="Código :" styleClass="bold" />
+                              <h:outputText value="#{mbAnuncio.tela.anuncio.id}" />
+
+
+                              <h:outputText value="Data de Criação:" styleClass="bold" />
+                              <h:outputText value="#{mbAnuncio.tela.anuncio.dtaCriacao}">
+                                 <f:convertDateTime type="date" dateStyle="short" locale="pt_BR" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy" />
+                              </h:outputText>
+
+                              <h:outputText value="Período de Divulgação: " styleClass="bold" />
+                              <h:panelGroup>
+                                 <h:outputText value="#{mbAnuncio.tela.anuncio.dtainidiv}">
+                                    <f:convertDateTime type="date" dateStyle="short" locale="pt_BR" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy" />
+                                 </h:outputText>
+								
+							 a
+							 <h:outputText value="#{mbAnuncio.tela.anuncio.dtafimdiv}">
+                                    <f:convertDateTime type="date" dateStyle="short" locale="pt_BR" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy" />
+                                 </h:outputText>
+                              </h:panelGroup>
+                           </h:panelGrid>
+
+                        </p:panel>
+
+
+
+                        <p:commandButton action="#{mbAnuncio.fecharVisualizacao()}" value="Voltar" ajax="false" icon="ui-icon-ui-icon-circle-triangle-w" />
+                        <p:commandButton action="#{mbAnuncio.downloadAnuncio(a)}" value="Cartaz da Empresa" ajax="false" icon="ui-icon-print"
+                           rendered="#{not empty a.cartaz}" />
+                        <p:commandButton action="#{mbAnuncio.gerarCartaz(a)}" value="Cartaz" ajax="false" icon="ui-icon-print" />
+
+
+
+                     </h:form>
+
+                  </b:column>
+               </b:row>
+            </b:container>
+         </f:view>
+      </ui:define>
+
+
+   </ui:composition>
+</h:body>
+</html>

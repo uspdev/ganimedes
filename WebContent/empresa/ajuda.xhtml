@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:p="http://primefaces.org/ui" xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:b="http://bootsfaces.net/ui">
+
+<h:head>
+   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+   <meta http-equiv="refresh" content="#{session.maxInactiveInterval};url=index.xhtml?reason=expired" />
+
+
+</h:head>
+
+<h:body>
+
+   <ui:composition template="../template.xhtml">
+      <ui:define name="content">
+
+         <f:view contentType="text/html; charset=UTF-8">
+            <f:loadBundle basename="messages" var="msgs" />
+
+
+            <b:container fluid="false">
+               <b:row>
+                  <b:column>
+
+
+                     <h2>Ajuda</h2>
+
+                     <h:form id="main">
+<br/>
+
+                        <h4>Sobre o sistema</h4>
+
+                        <p>O Sistema Ganimedes tem como objetivo facilitar os trâmites de divulgação de anúncios de estágio, programas de trainee, vagas
+                           efetivas, freelancers e demais modalidades de contratação aos alunos do IME/USP, que estejam regularmente matriculados em cursos de
+                           graduação ou pós graduação.</p>
+
+
+
+
+
+                        <p>
+                           Em caso de dúvidas, sugestões ou informações entre em contato conosco.</p>
+
+<br/>
+<br/>
+<br/>
+<h4>Contato</h4>                           
+
+                            <p><strong>Seção de Estágios</strong>
+                            <br/>Instituto de Matemática e Estatística da Universidade de São Paulo
+                            <br/>Endereço: Rua do Matão, 1010 sala B-12 - Cidade Universitária - São Paulo
+                            <br />Telefone: +55 11 3091-6107 
+                           <br/>Website: https://www.ime.usp.br/estagios
+                           <br />E-mail: estagios@ime.usp.br
+                        </p>
+                        <p:message for="main" />
+
+
+
+                     </h:form>
+
+
+                  </b:column>
+               </b:row>
+            </b:container>
+
+         </f:view>
+
+      </ui:define>
+
+
+   </ui:composition>
+</h:body>
+</html>
+

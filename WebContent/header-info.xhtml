@@ -1,0 +1,48 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:f="http://java.sun.com/jsf/core" xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://primefaces.org/ui">
+   <f:view>
+      <f:loadBundle basename="messages" var="msgs" />
+
+
+      <b:container fluid="true">
+
+         <b:row>
+
+
+
+
+            <b:column col-md="2">
+               <h:outputLink value="#{facesContext.externalContext.requestContextPath}" styleClass="logo-imagem" />
+
+
+            </b:column>
+
+            <b:column col-md="10">
+               <h:outputLink value="#{facesContext.externalContext.requestContextPath}" styleClass="logo-texto"> .</h:outputLink>
+            </b:column>
+         </b:row>
+
+
+         <b:row class="logo-faixa" rendered="#{!UsuarioLogado.autorizado}">
+            <h:outputText value=" #{msgs.appName}" />
+         </b:row>
+
+
+         <b:row class="logo-faixa" rendered="#{UsuarioLogado.autorizado}">
+            <h:outputText value="#{UsuarioLogado.codpes} - " />
+            <h:outputText value="#{UsuarioLogado.nompes} | " />
+            <h:outputText value=" ADMINISTRADOR | " rendered="#{UsuarioLogado.adm}" />
+            <h:outputText value=" OPERADOR | " rendered="#{UsuarioLogado.opr}" />
+            <h:outputText value=" USUÁRIO | " rendered="#{UsuarioLogado.usr}" />
+            <h:outputText value=" ALUNO | " rendered="#{UsuarioLogado.aluno}" />
+            <h:outputText value=" ANUNCIANTE | " rendered="#{UsuarioLogado.anunciante}" />
+            <p:commandLink action="#{Auth.logout()}" value="Sair" styleClass="link-faixa"  />
+         </b:row>
+
+
+      </b:container>
+
+   </f:view>
+
+
+</ui:composition>

@@ -1,0 +1,372 @@
+h1 {
+	font-family: Arial, "Arial CE", "Lucida Grande CE", lucida,
+		"Helvetica CE", sans-serif;
+	border-bottom: 1px solid #AFAFAF;
+	font-size: 16px;
+	font-weight: bold;
+	margin: 0px;
+	padding: 0px;
+	color: #D20005;
+}
+
+a:link,a:visited {
+	color: #045491;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+a:link:hover,a:visited:hover {
+	color: #045491;
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+#top a:link,#top a:visited {
+	color: white;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+#top a:link:hover,#top a:visited:hover {
+	color: black;
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+.page_title {
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.media {
+	font-size: 16px;
+	color: #003366;
+}
+
+.info {
+	font-size: 16px;
+	color: blue;
+	font-style: bold;
+	font-size: 22px;
+}
+
+.alerta {
+	color: #800000;
+	font-weight: bold;
+	font-size: 16px;
+}
+
+.alerta-vermelho {
+	color: #A00000;
+	font-weight: bold;
+	font-size: 16px;
+	text-align: center;
+}
+
+.alerta-azul {
+	color: #0000FF;
+	font-weight: bold;
+	font-size: 15px;
+}
+
+
+.alerta-vinho {
+	color: #770000;
+	font-weight: bold;
+	font-size: 15px;
+}
+
+
+
+.media-azul {
+	color: #0000FF;
+	font-size: 14px;
+}
+
+.media-preto {
+	color: #000000;
+	font-size: 14px;
+}
+
+.pequena-preto {
+	color: #000000;
+	font-size: 10px;
+	font-style: bold;
+}
+
+.pequena-cinza {
+	font-size: 10px;
+	font-stretch: expanded;
+	font-weight: bolder;
+	color: #505050;
+}
+
+.grande-azul-escuro {
+	color: #003366;
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.botao{
+	padding: 5px;
+	border: 5px;
+}
+
+
+.botao100{
+	width: 100px;
+	padding: 5px;
+	border: 5px;
+}
+
+.bold{
+	font-weight: bold;
+}
+
+.foto {
+	width: 150px;
+	/*
+	margin-left: 10px;
+	margin-right: 10px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	*/
+	border-style: solid;
+	/*border-width: 2px;*/
+	display: block;
+
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.mini-foto {
+	width: 20px;
+	height: 30px;
+	/*
+	margin-left: 30px;
+	margin-right: 30px;
+	margin-top: 30px;
+	margin-bottom: 30px;
+	border-style: solid;
+	border-width: 1px;
+	display: block;
+	*/
+}
+
+.tabela {
+	border-width: 0px;
+}
+
+table,th,td {
+	border: 0px solid black;
+	padding: 3px;
+}
+
+.page_title {
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.page_section {
+	font-size: 15px;
+	font-weight: bold;
+}
+
+.media {
+	font-size: 16px;
+}
+
+.page_title {
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.section_title {
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.tabela {
+	border: 1;
+	cellspacing: 0;
+	cellpadding: 3;
+	/*width: 900px;*/
+}
+
+.tabela300 {
+	border: 1;
+	cellspacing: 0;
+	cellpadding: 3;
+	width: 300px;
+}
+
+.tabela600 {
+	border: 1;
+	cellspacing: 0;
+	cellpadding: 3;
+	width: 600px;
+}
+
+.tabela1024 {
+	border: 1;
+	cellspacing: 0;
+	cellpadding: 3;
+	width: 1024px;
+}
+
+.col5j {
+	width: 5%;
+	text-align: justify;
+}
+
+.col5c {
+	width: 5%;
+	text-align: center;
+}
+
+.col5l {
+	width: 5%;
+	text-align: left;
+}
+
+.col5r {
+	width: 5%;
+	text-align: right;
+}
+
+.col10j {
+	width: 10%;
+	text-align: justify;
+}
+
+.col10c {
+	width: 10%;
+	text-align: center;
+}
+
+.col10l {
+	width: 10%;
+	text-align: left;
+}
+
+.col10r {
+	width: 10%;
+	text-align: right;
+}
+
+.col20j {
+	width: 20%;
+	text-align: justify;
+}
+
+.col20c {
+	width: 20%;
+	text-align: center;
+}
+
+.col20l {
+	width: 20%;
+	text-align: left;
+}
+
+.col20r {
+	width: 20%;
+	text-align: right;
+}
+
+.col30j {
+	width: 30%;
+	text-align: justify;
+}
+
+.col30c {
+	width: 30%;
+	text-align: center;
+}
+
+.col30l {
+	width: 30%;
+	text-align: left;
+}
+
+.col30r {
+	width: 30%;
+	text-align: right;
+}
+
+.col40j {
+	width: 40%;
+	text-align: justify;
+}
+
+.col40c {
+	width: 40%;
+	text-align: center;
+}
+
+.col40l {
+	width: 40%;
+	text-align: left;
+}
+
+.col40r {
+	width: 40%;
+	text-align: right;
+}
+
+.col50j {
+	width: 40%;
+	text-align: justify;
+}
+
+.col50c {
+	width: 40%;
+	text-align: center;
+}
+
+.col50l {
+	width: 40%;
+	text-align: left;
+}
+
+.col50r {
+	width: 40%;
+	text-align: right;
+}
+
+/* Definicao de estilos para tabs */
+.tab800 {
+	width: 800px;
+}
+
+/* Definicaoo de estilos para linha de cabecalho da tabela*/
+.negrito {
+	font-weight: bold;
+}
+
+.cabecalho {
+	text-align: center;
+	background-color: /*font: 12px Arial, sans-serif;*/
+		/*font-weight: normal;*/
+		/*color: Snow;*/ /*background-color: #0099CC;*/
+		/*background-color: #FFA500;*/
+		/*background-color: #FFFFFF;*/
+		/*background-color: #ece3a5;*/
+		/*background-color:#F4ED7C*/
+		/*color: Snow;*/
+		/*background-color: #FFFFCC;*/ background-color :     #D7C981 ;
+}
+
+/* Definição de estilos para coluna */
+.primeiro {
+	text-align: center;
+	background-color: #FFFFFF;
+	padding: 50px;
+}
+
+/* Definicao de estilos para coluna */
+.ultimo {
+	text-align: center;
+	/* background: #BCEE68; */ /*background-color: #BFE3FE;*/
+	background-color: #EEEEEE;
+}

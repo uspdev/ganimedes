@@ -1,0 +1,109 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:p="http://primefaces.org/ui" xmlns:b="http://bootsfaces.net/ui" xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+<h:head>
+   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+   <meta http-equiv="refresh" content="#{session.maxInactiveInterval};url=index.xhtml?reason=expired" />
+
+
+</h:head>
+
+<h:body>
+
+   <f:metadata>
+      <f:event type="preRenderView" listener="#{mbLog.carregar()}" />
+   </f:metadata>
+
+   <ui:composition template="./template.xhtml">
+
+
+      <ui:define name="content">
+
+         <f:view>
+            <f:loadBundle basename="messages" var="msgs" />
+
+            <b:container fluid="false">
+               <b:row>
+                  <b:column span="12">
+                     <h:form id="main">
+
+                        <h3>Logs</h3>
+                        <p:message for="main" />
+
+                     </h:form>
+
+                     <h:form id="consulta">
+
+
+                        <p:dataTable var="l" value="#{mbLog.logs}" rowClasses="primeiro, ultimo" headerClass="cabecalho"
+                           columnClasses="col20c, col10c,col40c, col20c" styleClass="tabela" id="tbl_log" paginator="true" rows="100"
+                           paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                           rowsPerPageTemplate="100,200,500, 1000, 5000, 10000, 100000" emptyMessage="Nenhum registro encontrado">
+                           <f:facet name="header">
+                              <h:outputText value="" />
+                           </f:facet>
+
+                           <p:column styleClass="col5c">
+                              <f:facet name="header">
+                                 <h:outputText value="Data" />
+                              </f:facet>
+                              <h:outputText value="${l.timestamp}">
+                                 <f:convertDateTime type="date" dateStyle="short" locale="pt_BR" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy HH:mm:ss" />
+                              </h:outputText>
+                           </p:column>
+
+
+                           <p:column filterBy="#{l.operacao}" filterMatchMode="contains" styleClass="col5c">
+                              <f:facet name="header">
+                                 <h:outputText value="Operação" />
+                              </f:facet>
+                              <h:outputText value="${l.operacao}" />
+                           </p:column>
+
+
+
+                           <p:column styleClass="col5c">
+                              <f:facet name="header">
+                                 <h:outputText value="Status" />
+                              </f:facet>
+                              <h:outputText value="${l.status}" />
+                           </p:column>
+
+
+                           <p:column filterBy="#{l.usuario.nompes}" filterMatchMode="contains" styleClass="col10l">
+                              <f:facet name="header">
+                                 <h:outputText value="Usuário" />
+                              </f:facet>
+                              <h:outputText value="${l.usuario.nompes}" />
+                           </p:column>
+
+
+                           <p:column filterBy="#{l.operacao}" filterMatchMode="contains" styleClass="col20l">
+                              <f:facet name="header">
+                                 <h:outputText value="Descrição" />
+                              </f:facet>
+                              <h:outputText value="${l.descricao}" />
+                           </p:column>
+
+
+
+
+
+                        </p:dataTable>
+                        <p:message for="consulta" />
+                     </h:form>
+
+                  </b:column>
+               </b:row>
+            </b:container>
+         </f:view>
+
+      </ui:define>
+
+
+   </ui:composition>
+</h:body>
+</html>

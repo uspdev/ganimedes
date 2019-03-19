@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:p="http://primefaces.org/ui" xmlns:b="http://bootsfaces.net/ui" xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+<h:head>
+   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+   <meta http-equiv="refresh" content="#{session.maxInactiveInterval};url=index.xhtml?reason=expired" />
+
+
+</h:head>
+
+<h:body>
+
+   <ui:composition template="../template.xhtml">
+
+      <ui:define name="content">
+
+         <f:view>
+            <f:loadBundle basename="messages" var="msgs" />
+
+            <b:container fluid="false">
+               <b:row>
+                  <b:column span="12">
+
+                     <h:form id="main">
+
+                        <h2>Recuperação de senha</h2>
+
+
+                        <p>Para acessar o sistema novamente será necessário criar uma nova senha. Por favor, informe abaixo a nova senha e confirme.</p>
+
+                        <p:message for="main" />
+
+
+                        <h:panelGroup rendered="#{mbEsqueciMinhaSenha.pedidoValido()}">
+                           <h:panelGrid columns="2">
+                              <h:outputText value="Nova senha:" />
+                              <p:password id="pwd1" value="#{mbEsqueciMinhaSenha.senhaNova}" match="pwd2" validatorMessage="Senhas não conferem" required="true"
+                                 requiredMessage="Informe a senha" />
+
+                              <h:outputText value="Confirmar nova senha:" />
+                              <p:password id="pwd2" value="#{mbEsqueciMinhaSenha.confirmacaoSenha}" required="true"
+                                 requiredMessage="Informe a confirmação da senha" />
+                           </h:panelGrid>
+                           <p:message for="pwd1" />
+                           <p:message for="pwd2" />
+
+
+                           <p:commandButton value="Salvar" actionListener="#{mbEsqueciMinhaSenha.salvarNovaSenha(param.codigo)}" ajax="false">
+                              <f:param name="codigo" value="#{param.codigo}" />
+                           </p:commandButton>
+
+                        </h:panelGroup>
+                        <br />
+                        <br />
+                        <p:separator />
+
+                        <p:link value="Acessar o Sistema" href="login.xhtml" />
+                        
+                        
+
+
+                     </h:form>
+                  </b:column>
+               </b:row>
+            </b:container>
+
+         </f:view>
+      </ui:define>
+   </ui:composition>
+
+</h:body>
+</html>

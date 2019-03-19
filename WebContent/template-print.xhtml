@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>  
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich" xmlns:p="http://primefaces.org/ui" xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+<h:head>
+
+
+	<meta http-equiv="Content-Type" content="text/html;  charset=ISO-8859-1" />
+	<!--
+             <link href="../resources/css/default.css" rel="stylesheet" type="text/css" />
+             <link href="../resources/css/cssLayout.css" rel="stylesheet" type="text/css" />
+        -->
+
+	<link href="#{facesContext.externalContext.requestContextPath}/resources/css/default.css" rel="stylesheet" type="text/css" />
+	<link href="#{facesContext.externalContext.requestContextPath}/resources/css/cssLayout.css" rel="stylesheet" type="text/css" />
+
+	<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/js/locale-br.js"></script>
+	<title>Intranet</title>
+</h:head>
+
+<body>
+	<div id="page">
+
+
+
+		<div id="body">
+			<div id="content" class="center_content">
+				<ui:insert name="content"></ui:insert>
+			</div>
+		</div>
+
+	</div>
+
+
+</body>
+
+</html>

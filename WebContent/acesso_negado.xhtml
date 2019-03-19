@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:p="http://primefaces.org/ui" xmlns:b="http://bootsfaces.net/ui" xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+<h:head>
+   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+   <meta http-equiv="refresh" content="#{session.maxInactiveInterval};url=index.xhtml?reason=expired" />
+
+
+</h:head>
+
+<h:body>
+
+   <ui:composition template="./template.xhtml">
+
+
+      <ui:define name="content">
+
+         <f:view>
+            <f:loadBundle basename="messages" var="msgs" />
+
+
+            <b:container fluid="false">
+               <b:row>
+                  <b:column span="12">
+                     <h:form id="main">
+
+                        <p:panel>
+                           <h:outputText value="Acesso negado" styleClass="page_title" />
+                        </p:panel>
+                        <br />
+
+                        <p>Para visualizar os anúncios é necessário ser aluno do IME-USP com vínculo ativo</p>
+
+                        
+
+                        <p:message for="main" />
+
+
+
+                     </h:form>
+
+                  </b:column>
+               </b:row>
+            </b:container>
+
+         </f:view>
+      </ui:define>
+
+   </ui:composition>
+</h:body>
+</html>
+

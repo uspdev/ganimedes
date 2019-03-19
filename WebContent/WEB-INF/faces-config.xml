@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_3.xsd"
+	version="2.3">
+
+	<converter>
+		<converter-id>converter</converter-id>
+		<converter-class>br.usp.ime.ganimedes.view.GenericConverter</converter-class>
+	</converter>
+
+	<validator>
+		<validator-id>validator.CPFValidator</validator-id>
+		<validator-class>br.usp.ime.util.CPFValidator</validator-class>
+	</validator>
+
+
+
+	<application>
+		<message-bundle>messages</message-bundle>
+		<locale-config>
+			<default-locale>pt_BR</default-locale>
+			<supported-locale>pt</supported-locale>
+			<supported-locale>en_US</supported-locale>
+		</locale-config>
+	</application>
+
+	<lifecycle>
+		<phase-listener>br.usp.ime.ganimedes.view.RestoreViewPhaseListener</phase-listener>
+	</lifecycle>
+
+
+
+</faces-config>

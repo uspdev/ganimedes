@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:p="http://primefaces.org/ui" xmlns:b="http://bootsfaces.net/ui" xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+<h:head>
+   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+   <meta http-equiv="refresh" content="#{session.maxInactiveInterval};url=index.xhtml?reason=expired" />
+
+
+</h:head>
+
+
+
+<h:body>
+
+   <ui:composition template="../template.xhtml">
+
+      <ui:define name="content">
+
+         <f:view>
+            <f:loadBundle basename="messages" var="msgs" />
+
+            <b:container fluid="false">
+               <b:row>
+                  <b:column span="12">
+
+                     <h:form id="main">
+
+
+                        <f:event type="preRenderView" listener="#{mbConfirmacao.confirmarEmail()}" />
+
+                        <h2>Confirmação de cadastro de usuário</h2>
+
+                        <p:message for="main" />
+                     </h:form>
+
+
+                     <h:form id="frmConfirmacao" binding="#{mbConfirmacao.frmConfirmacao}" rendered="false">
+                        <p:panel>
+                           <p>
+                              <b>Conta ativada</b>
+                           </p>
+
+                           <p>Sua conta já está pronta para uso. Clique no botão login.</p>
+                           <p>
+                              <br />
+                              <p:commandButton action="#{PageTransition.chamaLoginEmpresa()}" value="Login" ajax="false" />
+                           </p>
+                        </p:panel>
+                     </h:form>
+
+
+                     <h:form id="frmLinkInvalido" binding="#{mbConfirmacao.frmLinkInvalido}" rendered="false">
+                        <p:panel>
+                           <p>
+                              <b>Link Inválido</b>
+                           </p>
+
+                           <p>
+                              O link de ativação deve ter expirado. Escolha uma das opções abaixo: <br /> <br /> <br />
+
+                              <p:commandButton value="Reenviar Link" actionListener="#{ControladorAAAnunciante.reenviarEmailConfirmacao}" ajax="false" />
+
+                              <p:commandButton value="Recuperar Senha" actionListener="#{ControladorAAAnunciante.esqueciMinhaSenha}" ajax="false" />
+
+                              <p:commandButton action="#{PageTransition.chamaCadastro()}" value="Criar Conta" ajax="false" />
+
+                           </p>
+                        </p:panel>
+                     </h:form>
+
+                  </b:column>
+               </b:row>
+            </b:container>
+
+         </f:view>
+      </ui:define>
+   </ui:composition>
+
+</h:body>
+</html>

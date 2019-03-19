@@ -1,0 +1,189 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:p="http://primefaces.org/ui" xmlns:b="http://bootsfaces.net/ui" xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+
+   <h:form id="frm_cadastro">
+      <h2>Cadastro de anúncio</h2>
+
+      <p:growl id="messages" showDetail="true" sticky="true" />
+      <p:panel>
+         <h4>Empresa</h4>
+
+         <h:panelGrid columns="2">
+            <h:outputText value="Nome da Empresa: " />
+            <p:inputText value="#{mbAnuncio.tela.anuncio.nomeEmpresa}" size="70" required="true" requiredMessage="Informe o nome da empresa" />
+
+
+            <h:outputText value="Breve Descrição: " />
+            <p:inputTextarea value="#{mbAnuncio.tela.anuncio.descricaoEmpresa}" cols="80" rows="5" required="false" />
+
+
+            <h:outputText value="Área de Atuação: " />
+            <p:inputText value="#{mbAnuncio.tela.anuncio.areaAtuacao}" size="70" required="true" requiredMessage="Informe a área de atuação da empresa" />
+
+            <h:outputText value="Nome pessoa contato: " />
+            <p:inputText value="#{mbAnuncio.tela.anuncio.nompes}" size="70" required="true" requiredMessage="Informe o nome da pessoa de contato" />
+
+            <h:outputText value="E-mail contato: " />
+            <p:inputText value="#{mbAnuncio.tela.anuncio.email}" size="70" required="true" requiredMessage="Informe o e-mail de contato" />
+
+            <h:outputText value="Telefone: " />
+            <p:inputText value="#{mbAnuncio.tela.anuncio.numtel}" size="70" required="true" requiredMessage="Informe o telefone" />
+         </h:panelGrid>
+      </p:panel>
+
+
+      <p:panel>
+         <h4>Vaga</h4>
+         <h:panelGrid columns="2">
+
+            <h:outputText value="Título da Vaga: " />
+            <p:inputText value="#{mbAnuncio.tela.anuncio.titvag}" size="70" required="true" requiredMessage="Informe o título da vaga" />
+
+            <h:outputText value="Local de Trabalho: " />
+            <p:inputText value="#{mbAnuncio.tela.anuncio.loctrb}" size="70" required="true" requiredMessage="Informe o local de trabalho" />
+
+
+            <h:outputText value="Atividades: " />
+            <p:inputTextarea value="#{mbAnuncio.tela.anuncio.desvag}" cols="80" rows="5" required="true" requiredMessage="Informe a descrição da vaga" />
+
+          
+            <h:outputText value="Regime de Contratação: " />
+            <p:selectOneRadio id="sel_regime_trabalho" value="#{mbAnuncio.tela.anuncio.regimeTrabalho}" required="true"
+               requiredMessage="Indique o regime de contratação" binding="#{mbAnuncio.tela.selRegimeTrabalho}">
+
+               <f:selectItems value="#{comboRegimesTrabalho.regimes}" var="r" itemLabel="#{r.label}" itemValue="#{r.value}" />
+               <ui:remove>
+                  <p:ajax event="valueChange" update="sel_carga_horaria, grid_cursos" />
+               </ui:remove>
+            </p:selectOneRadio>
+
+
+            <h:outputText value="Carga Horária Semanal: " />
+
+            <h:panelGroup>
+               <p:inputText value="#{mbAnuncio.tela.anuncio.horsem}" />
+               <h:outputText value=" Deixe em branco em caso de 'a combinar'" />
+               <h:outputText value="A combinar" rendered="#{mbAnuncio.tela.anuncio.horsem == 0}" />
+            </h:panelGroup>
+
+
+            <h:outputText value="Benefícios Oferecidos: " />
+            <p:inputTextarea value="#{mbAnuncio.tela.anuncio.benofr}" cols="80" rows="5" />
+
+
+            <h:outputText value="Remuneração mensal: R$" />
+
+            <h:panelGroup>
+               <p:inputText value="#{mbAnuncio.tela.anuncio.salmes}">
+                  <f:convertNumber minFractionDigits="2" locale="pt" />
+               </p:inputText>
+               <h:outputText value=" Deixe em branco em caso de 'a combinar'" />
+               <h:outputText value="A combinar" rendered="#{mbAnuncio.tela.anuncio.salmes == 0.00}" />
+            </h:panelGroup>
+         </h:panelGrid>
+      </p:panel>
+
+      <p:panel>
+         <h4>Aluno</h4>
+         <h:panelGrid columns="2">
+
+            <h:outputText value="Curso(s): " />
+
+
+
+
+            <h:panelGroup>
+               <p:dataList value="#{mbAnuncio.tela.anuncio.cursos}" var="c" emptyMessage="Clique em um ou mais cursos para selecionar">
+                  <h:outputText value="#{c.nivel} - #{c.nome}" />
+               </p:dataList>
+
+
+
+               <h:selectManyListbox id="grid_cursos" value="#{mbAnuncio.tela.anuncio.cursos}" layout="grid" columns="3" converter="converter"
+                  collectionType="java.util.ArrayList">
+                  <f:selectItems value="#{comboCursos.cursos}" var="c" itemLabel="#{c.label}" itemValue="#{c}" />
+               </h:selectManyListbox>
+
+
+            </h:panelGroup>
+
+
+            <h:outputText value="Perfil do Candidato: " />
+
+            <p:inputTextarea value="#{mbAnuncio.tela.anuncio.perfilCandidato}" cols="80" rows="5" required="true" requiredMessage="Informe a descrição da vaga" />
+
+         </h:panelGrid>
+      </p:panel>
+
+      <p:panel>
+         <h4>Formas de inscrição</h4>
+
+         <h:panelGrid columns="2">
+            <h:outputText value="E-mail: " />
+            <p:inputText value="#{mbAnuncio.tela.anuncio.emailInscricao}" size="70" />
+
+            <h:outputText value="Website: " />
+            <p:inputText value="#{mbAnuncio.tela.anuncio.urlweb}" size="70" />
+
+            <h:outputText value="Telefone: " />
+            <p:inputText value="#{mbAnuncio.tela.anuncio.numtelInscricao}" />
+         </h:panelGrid>
+
+      </p:panel>
+
+
+      <p:panel>
+         <h4>Anúncio</h4>
+
+         <h:panelGrid columns="2">
+            <h:outputText value="Período de Divulgação: " />
+            <h:panelGroup>
+
+               <p:calendar value="#{mbAnuncio.tela.anuncio.dtainidiv}" locale="pt" mindate="#{mbAnuncio.hoje}" required="true"
+                  requiredMessage="Informe o início do período de divulgação" mask="99/99/9999" pattern="dd/MM/yyyy">
+                  <p:ajax event="dateSelect" listener="#{mbAnuncio.mudarDataMaximaDivulgacao}" update="dtafimdiv" />
+               </p:calendar>
+							 a
+							 <p:calendar value="#{mbAnuncio.tela.anuncio.dtafimdiv}" id="dtafimdiv" locale="pt" mindate="#{mbAnuncio.tela.anuncio.dtainidiv}" required="true"
+                  requiredMessage="Informe o término do período de divulgação" mask="99/99/9999" pattern="dd/MM/yyyy" />
+            </h:panelGroup>
+         </h:panelGrid>
+
+
+
+      </p:panel>
+
+
+
+
+      <p:panel>
+         <h4>Arquivos</h4>
+
+         <p>Envie um logotipo da sua empresa ou o cartaz do anúncio</p>
+
+         <br />
+         <h:outputText value="Faça o upload do logotipo da sua empresa" />
+         <p:fileUpload fileUploadListener="#{mbAnuncio.uploadLogo}" mode="advanced" dragDropSupport="false" update="messages" sizeLimit="500000" fileLimit="10"
+            allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+         <h:outputText value="(Tamanho máximo de 500 kb, formato png ou jpg)" />
+         <br />
+         <br />
+         <h:outputText value="Envie o cartaz do anúncio feito na sua empresa (se possuir)" />
+
+
+         <p:fileUpload fileUploadListener="#{mbAnuncio.uploadCartaz}" mode="advanced" dragDropSupport="false" update="messages" sizeLimit="1000000"
+            fileLimit="10" allowTypes="/(\.|\/)(pdf)$/" />
+         <h:outputText value="(Tamanho máximo 1000 kb, formato pdf)" />
+      </p:panel>
+
+      <p:commandButton action="#{mbAnuncio.salvarAnuncio()}" value="Salvar" ajax="false" icon="fa fa-fw fa-save" />
+      <p:commandButton action="#{PageTransition.chamaHomeEmpresa()}" value="Fechar sem salvar" ajax="false" icon="fa fa-fw fa-times-circle" immediate="true"  rendered="#{UsuarioLogado.anunciante}"/>
+      <p:commandButton action="#{PageTransition.chamaHomeEmpresa()}" value="Fechar sem salvar" ajax="false" icon="fa fa-fw fa-times-circle" immediate="true"  rendered="#{!UsuarioLogado.anunciante}"/>
+
+
+
+
+   </h:form>
+</ui:composition>

@@ -1,0 +1,174 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:p="http://primefaces.org/ui" xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:b="http://bootsfaces.net/ui">
+
+<h:head>
+   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+   <meta http-equiv="refresh" content="#{session.maxInactiveInterval};url=index.xhtml?reason=expired" />
+
+
+</h:head>
+
+<h:body>
+
+   <ui:composition template="./template.xhtml">
+      <ui:define name="content">
+
+         <f:view contentType="text/html; charset=UTF-8">
+            <f:loadBundle basename="messages" var="msgs" />
+
+
+            <b:container fluid="false">
+               <b:row>
+                  <b:column>
+                     <h:form id="main" rendered="#{UsuarioLogado.adm || UsuarioLogado.opr}">
+
+
+                       
+                           <h2>Verificações</h2>
+
+<p:panel>                       
+
+                           <h:outputText value="Selecione os tipos de verificação:" />
+
+
+                           <p:selectManyCheckbox value="#{mbEstagio.tela.verificacoesSelecionadas}" layout="grid" columns="1">
+                              <f:selectItem itemLabel="Aluno com Programa Encerrado ou Trancado" itemValue="PROGRAMA_TRANCADO" />
+                              <f:selectItem itemLabel="Aluno sem Matrícula" itemValue="SEM_MATRICULA" />
+                              <f:selectItem itemLabel="Aluno com Estágios Simultâneos" itemValue="ESTAGIOS_SIMULTANEOS" />
+                              <f:selectItem itemLabel="Falta Relatório de Atividades" itemValue="RELATORIO_ATIVIDADES" />
+                              <f:selectItem itemLabel="Falta Termo de Realização" itemValue="ESTAGIO_ENCERRADO_SEM_COMPROVACAO" />
+                              <f:selectItem itemLabel="Aluno estagiando em Empresa com Convênio Encerrado" itemValue="CONVENIO_ENCERRADO" />
+                              <f:selectItem itemLabel="Estágios próximo do encerramento (30 dias)" itemValue="ESTAGIO_PROXIMO_ENCERRAMENTO" />
+                              <f:selectItem itemLabel="Convênios Próximo do encerramento (60 dias)" itemValue="CONVENIO_PROXIMO_ENCERRAMENTO" />
+                           </p:selectManyCheckbox>
+
+
+                           <br />
+                           <p:commandButton action="#{mbEstagio.verificarEstagios()}" value="Verificar" ajax="false" />
+                           <br />
+                           <br />
+
+
+                           <p:dataTable value="#{mbEstagio.tela.alunos}" var="a" rendered="#{not empty mbEstagio.tela.alunos}">
+
+
+                              <p:column styleClass="col5c">
+                                 <f:facet name="header">
+                                    <h:outputText value="No. USP" />
+                                 </f:facet>
+                                 <h:outputText value="#{a.codpes}" />
+                              </p:column>
+
+                              <p:column styleClass="col10l">
+                                 <f:facet name="header">
+                                    <h:outputText value="Nome" />
+                                 </f:facet>
+                                 <h:outputText value="#{a.nompes}" />
+                              </p:column>
+
+                              <p:column styleClass="col30l">
+                                 <f:facet name="header">
+                                    <h:outputText value="Observação" />
+                                 </f:facet>
+                                 <h:outputText value="#{a.observacao}" escape="false" />
+                              </p:column>
+
+
+                              <ui:remove>
+                                 <p:column styleClass="col20l">
+                                    <f:facet name="header">
+                                       <h:outputText value="Período e Empresa" />
+                                    </f:facet>
+
+
+                                    <p:dataTable var="e" value="#{a.estagios}">
+
+                                       <p:column styleClass="col5c">
+                                          <h:outputText value="#{e.periodo}" />
+                                       </p:column>
+
+                                       <p:column styleClass="col10l">
+                                          <h:outputText value="#{e.empresa.nome}" />
+                                          <br />
+                                          <h:outputText value="#{e.empresa.cnpj}" />
+                                       </p:column>
+                                    </p:dataTable>
+
+                                 </p:column>
+                              </ui:remove>
+
+
+                           </p:dataTable>
+
+
+
+                           <p:dataTable value="#{mbEstagio.tela.empresas}" var="e" rendered="#{not empty mbEstagio.tela.empresas}">
+
+
+
+                              <p:column styleClass="col10l">
+                                 <f:facet name="header">
+                                    <h:outputText value="Empresa" />
+                                 </f:facet>
+                                 <h:outputText value="#{e.nome}" />
+                              </p:column>
+
+                              <p:column styleClass="col5c">
+                                 <f:facet name="header">
+                                    <h:outputText value="CNPJ" />
+                                 </f:facet>
+                                 <h:outputText value="#{e.cnpj}" />
+                              </p:column>
+
+
+                              <p:column styleClass="col20c">
+                                 <f:facet name="header">
+                                    <h:outputText value="Convênio(s)" />
+                                 </f:facet>
+
+                                 <p:dataTable id="listagem_convenios" var="c" value="#{e.convenios}" rowStyleClass="col5c, col5c, col5c"
+                                    styleClass="ultimo,primeiro">
+                                    <p:column>
+                                       <f:facet name="header">
+                                          <h:outputText value="Período" />
+                                       </f:facet>
+                                       <h:panelGroup>
+                                          <h:outputText value="#{c.dtaini}">
+                                             <f:convertDateTime type="date" dateStyle="short" locale="pt_BR" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy" />
+                                          </h:outputText>
+                                          <h:outputText value=" à " />
+                                          <h:outputText value="#{c.dtafim}">
+                                             <f:convertDateTime type="date" dateStyle="short" locale="pt_BR" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy" />
+                                          </h:outputText>
+                                       </h:panelGroup>
+
+                                    </p:column>
+
+                                    <p:column>
+                                       <f:facet name="header">
+                                          <h:outputText value="Processo" />
+                                       </f:facet>
+                                       <h:outputLink value="https://uspdigital.usp.br/proteos/obterAndamento?numpro=#{c.numpro}" title="#{c.numpro}"
+                                          target="_BLANK">#{c.numpro}</h:outputLink>
+                                    </p:column>
+                                 </p:dataTable>
+                              </p:column>
+
+                           </p:dataTable>
+                        </p:panel>
+
+
+                     </h:form>
+
+                  </b:column>
+               </b:row>
+            </b:container>
+
+         </f:view>
+      </ui:define>
+   </ui:composition>
+</h:body>
+</html>

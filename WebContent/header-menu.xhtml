@@ -1,0 +1,43 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:f="http://java.sun.com/jsf/core" xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://primefaces.org/ui">
+
+   <f:view>
+      <f:loadBundle basename="messages" var="msgs" />
+
+
+      <b:navBar brand="#{msgs.appName}" brandHref="index.xhtml"
+         rendered="#{UsuarioLogado.aluno || UsuarioLogado.opr || UsuarioLogado.anunciante || UsuarioLogado.adm}">
+
+         <b:navbarLinks>
+
+            <b:navLink value="Anúncios" href="controle_anuncios.xhtml" icon-awesome="fa-bullhorn" rendered="#{UsuarioLogado.opr || UsuarioLogado.adm || UsuarioLogado.usr}" />
+            <b:navLink value="Oportunidades" href="index.xhtml" icon-awesome="fa-bullhorn" rendered="#{UsuarioLogado.aluno}" />
+            <b:navLink value="Anúncios" href="index.xhtml" icon-awesome="fa-bullhorn" rendered="#{UsuarioLogado.anunciante}" />
+
+            <b:navLink value="Convênios" href="convenios.xhtml" icon-awesome="fa-file" ajax="false" rendered="#{UsuarioLogado.opr || UsuarioLogado.adm}" />
+
+            <b:dropMenu value="Estágios" href="estagios.xhtml" icon-awesome="fa-briefcase" rendered="#{UsuarioLogado.opr || UsuarioLogado.adm}">
+               <b:navLink value="Estágios" href="aluno.xhtml" icon-awesome="fa-briefcase" rendered="#{UsuarioLogado.opr || UsuarioLogado.adm}" />
+               <b:navLink value="Relatórios" href="relatorios.xhtml" icon-awesome="fa-copy" rendered="#{UsuarioLogado.opr || UsuarioLogado.adm}" />
+               <b:navLink value="Verificações" href="verificacoes.xhtml" icon-awesome="fa-check-circle" rendered="#{UsuarioLogado.opr || UsuarioLogado.adm}" />
+            </b:dropMenu>
+
+
+
+            <b:dropMenu value=" Usuários " label="Admin" icon-awesome="fa-users" rendered="#{UsuarioLogado.adm || UsuarioLogado.opr}">
+               <b:navLink value="Usuários" href="usuario.xhtml" icon-awesome="fa-user" />
+               <b:navLink value="Grupos" href="grupo.xhtml" icon-awesome="fa-group" rendered="#{UsuarioLogado.adm}"/>
+               <b:navLink value="Papéis" href="papel.xhtml" icon-awesome="fa-vcard" rendered="#{UsuarioLogado.adm}"/>
+            </b:dropMenu>
+
+            <b:dropMenu value=" Manutenção " label="Manutenção" icon-awesome="fa-wrench" rendered="#{UsuarioLogado.adm}">
+               <b:navLink value="Logs" href="log.xhtml" />
+               <b:navLink value="Mensagens" href="mensagem.xhtml" />
+               <b:navLink value="Manutenção" href="manutencao.xhtml" />
+            </b:dropMenu>
+
+
+         </b:navbarLinks>
+      </b:navBar>
+   </f:view>
+</ui:composition>

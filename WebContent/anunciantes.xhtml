@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:p="http://primefaces.org/ui" xmlns:b="http://bootsfaces.net/ui" xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+<h:head>
+   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+   <meta http-equiv="refresh" content="#{session.maxInactiveInterval};url=index.xhtml?reason=expired" />
+
+
+</h:head>
+
+<h:body>
+
+   <ui:composition template="./template.xhtml">
+
+
+      <ui:define name="content">
+
+         <f:view>
+            <f:loadBundle basename="messages" var="msgs" />
+
+
+            <b:container fluid="false">
+               <b:row>
+                  <b:column span="12">
+
+
+                     <h:form id="main" rendered="#{UsuarioLogado.adm || UsuarioLogado.opr}">
+
+                        <p:panel>
+                           <h:outputText value="Usuários" styleClass="page_title" />
+                        </p:panel>
+
+
+
+                        <p:messages id="main" />
+                        <p:dataTable id="usuarios" var="u" value="#{mbAnunciante.anunciantes}" rowStyleClass="col5c, col10c" styleClass="ultimo,primeiro">
+                           <f:facet name="header">
+                              <h:outputText value="#{fn:length(mbAnunciante.anunciantes)} usuário(s)" styleClass="page_section" />
+                           </f:facet>
+                           <p:column>
+                              <f:facet name="header">
+                                 <h:outputText value="id" />
+                              </f:facet>
+                              <h:outputText value="#{u.id}" ajax="false" />
+                           </p:column>
+                           <p:column>
+                              <f:facet name="header">
+                                 <h:outputText value="Nome" />
+                              </f:facet>
+                              <h:outputText value="#{u.nome}" ajax="false" />
+                           </p:column>
+                           <p:column>
+                              <f:facet name="header">
+                                 <h:outputText value="Email" />
+                              </f:facet>
+                              <h:outputText value="#{u.codlog}" />
+                           </p:column>
+                           <p:column>
+                              <f:facet name="header">
+                                 <h:outputText value="CPF" />
+                              </f:facet>
+                              <h:outputText value="#{u.cpf}" />
+                           </p:column>
+
+                           <p:column>
+                              <f:facet name="header">
+                                 <h:outputText value="Telefone" />
+                              </f:facet>
+                              <h:outputText value="#{u.telefone}" />
+                           </p:column>
+
+                           <p:column>
+                              <f:facet name="header">
+                                 <h:outputText value="Ativado" />
+                              </f:facet>
+                              <h:commandLink value="Sim" actionListener="#{mbAnunciante.mudarAtivo(u)}" ajax="false" rendered="#{u.ativado}" />
+                              <h:commandLink value="Não" actionListener="#{mbAnunciante.mudarAtivo(u)}" ajax="false" rendered="#{!u.ativado}" />
+                           </p:column>
+
+                           <p:column>
+                              <f:facet name="header">
+                                 <h:outputText value="Ações" />
+                              </f:facet>
+                              <p:commandButton value="Excluir" action="#{mbAnunciante.excluir(u)}" ajax="false"
+                                 onclick="return confirm('O item será excluído');" />
+                           </p:column>
+
+
+                        </p:dataTable>
+                     </h:form>
+
+                  </b:column>
+               </b:row>
+            </b:container>
+         </f:view>
+      </ui:define>
+
+
+   </ui:composition>
+</h:body>
+</html>

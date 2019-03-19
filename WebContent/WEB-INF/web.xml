@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+	id="WebApp_ID" version="3.1">
+	<display-name>ganimedes</display-name>
+	<welcome-file-list>
+		<welcome-file>index.xhtml</welcome-file>
+	</welcome-file-list>
+	<context-param>
+		<param-name>javax.faces.PROJECT_STAGE</param-name>
+		<param-value>Production</param-value>
+	</context-param>
+	<context-param>
+		<param-name>javax.faces.SKIP_COMMENTS</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	<context-param>
+		<param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	<context-param>
+		<param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+		<param-value>server</param-value>
+	</context-param>
+
+	<!-- <context-param> <param-name>primefaces.THEME</param-name> <param-value>bootstrap</param-value> 
+		</context-param> -->
+
+	<!-- A configuracao abaixo possibilita usar bindings sem apresenta o erro 
+		de duplicated component id -->
+	<context-param>
+		<param-name>javax.faces.PARTIAL_STATE_SAVING</param-name>
+		<param-value>false</param-value>
+	</context-param>
+
+
+	<mime-mapping>
+		<extension>ecss</extension>
+		<mime-type>text/css</mime-type>
+	</mime-mapping>
+	<session-config>
+		<session-timeout>360</session-timeout>
+	</session-config>
+	<login-config>
+		<auth-method>BASIC</auth-method>
+	</login-config>
+	<error-page>
+		<exception-type>javax.faces.application.ViewExpiredException</exception-type>
+		<location>/index.xhtml</location>
+	</error-page>
+	<context-param>
+		<description>The maximum number of logical views (GET requests) to store per session (http://tinyurl.com/yw6f2e)</description>
+		<param-name>com.sun.faces.numberOfLogicalViews</param-name>
+		<param-value>3</param-value>
+	</context-param>
+	<context-param>
+		<description>The maximum number of JSF views (POST requests) stored in the session for per logical view (http://tinyurl.com/yw6f2e)</description>
+		<param-name>com.sun.faces.numberOfViewsInSession</param-name>
+		<param-value>3</param-value>
+	</context-param>
+
+	<filter>
+		<filter-name>PrimeFaces FileUpload Filter</filter-name>
+		<filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>PrimeFaces FileUpload Filter</filter-name>
+		<servlet-name>Faces Servlet</servlet-name>
+	</filter-mapping>
+
+</web-app>

@@ -1,0 +1,184 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:p="http://primefaces.org/ui" xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:b="http://bootsfaces.net/ui">
+
+<h:head>
+   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+</h:head>
+
+<h:body>
+
+   <ui:composition template="./template.xhtml">
+      <ui:define name="content">
+
+         <f:view contentType="text/html; charset=UTF-8">
+            <f:loadBundle basename="messages" var="msgs" />
+
+            <b:container fluid="false">
+               <b:row>
+                  <b:column span="12">
+                  
+                     <h:form id="main">
+
+                        <h2>Grupos</h2>
+                        <p:message for="main" />
+
+
+                     </h:form>
+
+                     <h:form id="list" binding="#{mbGrupo.frmList}">
+                        <p:commandButton onclick="PF('dlgAdd').show()" icon="fa fa-fw fa-plus-circle" value="Adicionar grupo" />
+                    
+                        <p:dataTable var="g" value="#{mbGrupo.grupos}" styleClass="tabela600">
+                           <p:column styleClass="col10l">
+                              <p:commandLink action="#{mbGrupo.mostrarGrupo(g)}" value="#{g.nome}" ajax="false" />
+                           </p:column>
+                           <f:facet name="footer">
+                              <h:outputText value="#{fn:length(mbGrupo.grupos)} grupo(s)" />
+                           </f:facet>
+                        </p:dataTable>
+                     </h:form>
+
+
+                     <h:form id="show" binding="#{mbGrupo.frmShow}" rendered="false">
+
+
+                        <p:panel>
+                           <p:commandButton action="#{PageTransition.chamaGrupo()}" icon="fa fa-fw fa-close" immediate="true"
+                              style="float:right;" />
+
+
+
+
+                           <h:panelGrid columns="2">
+                              <h:outputText value="Grupo: " styleClass="bold" />
+                              <h:outputText value="#{mbGrupo.grupo.nome}" />
+
+                              <h:outputText value="E-mail: " styleClass="bold" />
+                              <h:outputText value="#{mbGrupo.grupo.email}" />
+
+
+                           </h:panelGrid>
+
+                           <p:commandButton icon="fa fa-fw fa-edit" onclick="PF('dlgEdit').show();" value="Editar grupo" />
+                           <p:commandButton action="#{mbGrupo.deletar}" icon="fa fa-fw fa-trash" ajax="false" value="Excluir grupo"
+                              onclick="return confirm('Tem certeza que deseja deletar?');" />
+
+                           <br />
+                           <br />
+
+                           <p:message for="show" />
+
+                           <p:dataTable id="list_membros" var="u" value="#{mbGrupo.grupo.usuarios}" styleClass="tabela600"
+                              selection="#{mbGrupo.usuariosSelecionados}" rowKey="#{u.id}" style="margin-bottom:0">
+
+                              <f:facet name="header">
+                                 <h:outputText value="Membros" />
+                              </f:facet>
+
+                              <f:facet name="footer">
+                                 <h:outputText value="#{fn:length(mbGrupo.grupo.usuarios)} membro(s)" />
+                              </f:facet>
+
+
+                              <p:column styleClass="col20l">
+                                 <f:facet name="header">
+
+                                    <p:commandButton icon="fa fa-fw fa-plus-circle" onclick="PF('dlgAddUser').show();" value="Incluir membro" />
+                                    <p:commandButton action="#{mbGrupo.desassociarUsuariosAGrupo()}" icon="fa fa-fw fa-trash"
+                                       value="Remover membro" ajax="false" />
+
+                                 </f:facet>
+
+                                 <p:link href="usuario.xhtml?codpes=#{u.codpes}" value="#{u.nompes}" ajax="false" />
+                              </p:column>
+
+                              <p:column selectionMode="multiple" styleClass="col5c" />
+
+                           </p:dataTable>
+
+                        </p:panel>
+
+
+
+                     </h:form>
+
+                  </b:column>
+               </b:row>
+            </b:container>
+
+
+            <p:dialog id="dlgAdd" header="Cadastro de Grupo" widgetVar="dlgAdd" modal="true">
+               <h:form id="add">
+
+                  <h:panelGrid columns="3">
+
+                     <h:outputText value="Nome: " />
+                     <p:inputText value="#{mbGrupo.grupo.nome}" required="true" requiredMessage="Informe o nome" id="txt_grupo" />
+                     <p:message for="txt_grupo" />
+
+                     <h:outputText value="E-mail: " />
+                     <p:inputText value="#{mbGrupo.grupo.email}" required="true" requiredMessage="Informe o e-mail" id="txt_email" />
+                     <p:message for="txt_email" />
+
+
+                     <p:commandButton action="#{mbGrupo.salvar}" value="Adicionar" ajax="false" />
+                     <p:commandButton value="Cancelar" onclick="PF('dlgAdd').hide();" type="button" immediate="true" />
+                  </h:panelGrid>
+
+                  <p:messages />
+               </h:form>
+
+            </p:dialog>
+
+
+            <p:dialog id="dlgEdit" header="Editar Grupo" widgetVar="dlgEdit" modal="true">
+               <h:form id="edit">
+
+
+
+                  <h:panelGrid columns="2">
+
+                     <h:outputText value="Nome: " />
+                     <p:inputText value="#{mbGrupo.grupo.nome}" />
+
+                     <h:outputText value="E-mail: " />
+                     <p:inputText value="#{mbGrupo.grupo.email}" />
+
+                  </h:panelGrid>
+
+                  <h:panelGrid columns="2">
+                     <p:commandButton action="#{mbGrupo.atualizar()}" value="Salvar" ajax="false" />
+                     <p:commandButton value="Cancelar" onclick="PF('dlgEdit').hide();" type="button" />
+                  </h:panelGrid>
+               </h:form>
+            </p:dialog>
+
+
+            <p:dialog id="dlgAddUser" header="Inclusão de usuário no grupo" widgetVar="dlgAddUser" modal="true">
+               <h:form id="adduser">
+
+
+
+
+                  <p:selectManyMenu value="#{mbGrupo.usuarios}" converter="converter" style="min-width: 300px;">
+                     <f:selectItems value="#{comboUsuarios.usuarios}" />
+                  </p:selectManyMenu>
+
+                  <p:commandButton action="#{mbGrupo.associarUsuariosAGrupo()}" value="Adicionar" ajax="false" />
+                  <p:commandButton value="Cancelar" onclick="PF('dlgAddUser').hide();" type="button" />
+
+
+                  <p:messages />
+               </h:form>
+
+            </p:dialog>
+
+         </f:view>
+      </ui:define>
+
+   </ui:composition>
+</h:body>
+</html>

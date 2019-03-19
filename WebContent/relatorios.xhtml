@@ -1,0 +1,136 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:p="http://primefaces.org/ui" xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:b="http://bootsfaces.net/ui">
+
+<h:head>
+   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+   <meta http-equiv="refresh" content="#{session.maxInactiveInterval};url=index.xhtml?reason=expired" />
+
+
+</h:head>
+
+<h:body>
+
+   <ui:composition template="./template.xhtml">
+      <ui:define name="content">
+
+         <f:view contentType="text/html; charset=UTF-8">
+            <f:loadBundle basename="messages" var="msgs" />
+
+
+            <b:container fluid="false">
+               <b:row>
+                  <b:column>
+
+
+                     <h2>Relatórios</h2>
+
+                     <h:form id="relatorio_estagio" acceptcharset="ISO-8859-1" rendered="#{UsuarioLogado.adm || UsuarioLogado.opr}">
+
+                        <p:panel>
+                           <h4>Relatório de Estágios</h4>
+
+
+
+                           <h:panelGrid columns="2">
+                              <h:outputText value="Empresa: " />
+                              <p:selectOneMenu id="empresa" value="#{mbRelatorio.tela.estagio.empresa}" converter="converter" effect="fade" filter="true"
+                                 filterMatchMode="contains" var="e">
+                                 <f:selectItem itemLabel="selecione uma empresa" itemValue="" />
+                                 <f:selectItems value="#{comboEmpresas.empresas}" var="empresa" itemLabel="#{e.nome}" itemValue="#{e}" />
+
+                                 <p:column style="width:10%">
+                                    <h:outputText styleClass="ui-theme ui-theme-#{e.nome}" />
+                                 </p:column>
+
+                                 <p:column>
+                                    <h:outputText value="#{e.nome}" />
+                                 </p:column>
+                              </p:selectOneMenu>
+
+
+
+
+
+                              <ui:remove>
+                                 <h:selectManyListbox id="grid_cursos" value="#{mbRelatorio.tela.cursos}" layout="grid" columns="2" converter="converter"
+                                    collectionType="java.util.ArrayList">
+                                    <f:selectItems value="#{comboCursos.cursos}" var="c" itemLabel="#{c.label}" itemValue="#{c}" />
+                                 </h:selectManyListbox>
+                              </ui:remove>
+                              <ui:remove>
+                                 <p:selectManyCheckbox id="grid_cursos" value="#{mbRelatorio.tela.cursosGraduacao}" layout="grid" columns="3"
+                                    converter="converter" collectionType="java.util.ArrayList">
+                                    <f:selectItems value="#{comboCursosGraduacao.cursos}" var="c" itemLabel="#{c.label}" itemValue="#{c}" />
+                                 </p:selectManyCheckbox>
+                              </ui:remove>
+
+                              <h:outputText value="Curso: " />
+                              <p:selectCheckboxMenu id="sel_curso" value="#{mbRelatorio.tela.cursosGraduacao}" converter="converter" var="c" filter="true"
+                                 filterMatchMode="contains" columns="3" layout="pageDirection" label="selecione um ou mais cursos">
+                                 <f:selectItems value="#{comboCursosGraduacao.cursos}" var="curso" itemLabel="#{curso.label}" itemValue="#{curso}">
+                                 </f:selectItems>
+                              </p:selectCheckboxMenu>
+
+
+
+                              <h:outputText value="Período: " />
+
+                              <h:panelGroup>
+                                 <p:calendar value="#{mbRelatorio.tela.dtaini}" locale="pt" id="cal_data_ini" size="10" readonlyInput="false" mask="99/99/9999"
+                                    pattern="dd/MM/yyyy" required="true" requiredMessage="Informe a data inicial do período" placeholder="Início" />
+                                 <h:outputText value=" até " />
+                                 <p:calendar value="#{mbRelatorio.tela.dtafim}" locale="pt" id="cal_data_fim" size="10" readonlyInput="false" mask="99/99/9999"
+                                    pattern="dd/MM/yyyy" required="true" requiredMessage="Informe a data final do período" placeholder="Término" />
+                              </h:panelGroup>
+
+                              <ui:remove>
+                                 <h:outputText value="Situação: " />
+                                 <p:selectOneRadio value="#{mbRelatorio.tela.txtStatus}">
+                                    <f:selectItem itemLabel="ATIVO" itemValue="ATIVO" />
+                                    <f:selectItem itemLabel="ENCERRADO" itemValue="ENCERRADO" />
+                                 </p:selectOneRadio>
+                              </ui:remove>
+
+                           </h:panelGrid>
+                           <p:commandButton action="#{mbRelatorio.gerarRelatorioEstagio()}" ajax="false" value="Gerar Relatório" disabled="false" />
+
+                           <p:message for="relatorio_estagio" />
+                           <p:message for="sel_curso" />
+                        </p:panel>
+
+                     </h:form>
+
+                     <br />
+
+                     <h:form id="relatorio_convenio" acceptcharset="ISO-8859-1" rendered="#{UsuarioLogado.adm || UsuarioLogado.opr}">
+
+                        <p:panel>
+                           <h4>Relatório de Convênios</h4>
+
+
+                           <h:panelGrid columns="3">
+                              <h:outputText value="Vigente na data: " />
+                              <p:calendar value="#{mbRelatorio.tela.dta}" locale="pt" id="cal_data" size="10" readonlyInput="false" mask="99/99/9999"
+                                 pattern="dd/MM/yyyy" required="true" requiredMessage="Informe a data de vigência do convênio" placeholder="Data de vigência" />
+                              <p:commandButton action="#{mbRelatorio.gerarRelatorioConvenio()}" ajax="false" value="Gerar Relatório" />
+                           </h:panelGrid>
+
+                        </p:panel>
+
+
+
+                     </h:form>
+                  </b:column>
+               </b:row>
+            </b:container>
+
+         </f:view>
+      </ui:define>
+
+
+   </ui:composition>
+</h:body>
+</html>

@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:p="http://primefaces.org/ui" xmlns:b="http://bootsfaces.net/ui" xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+<h:head>
+   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+   <meta http-equiv="refresh" content="#{session.maxInactiveInterval};url=index.xhtml?reason=expired" />
+
+
+</h:head>
+
+<h:body>
+
+   <ui:composition template="../template.xhtml">
+
+
+      <ui:define name="content">
+
+         <f:view>
+            <f:loadBundle basename="messages" var="msgs" />
+
+
+            <b:container fluid="false">
+               <b:row>
+                  <b:column col-xs="10" col-sm="5" col-md="4" col-lg="4">
+
+                     <h2>#{msgs.appName}</h2>
+
+                     <p>#{msgs.appDescription}</p>
+
+                     <p>Para recuperar a senha, informe o e-mail cadastrado</p>
+
+                  </b:column>
+
+                  <b:column col-xs="12" col-sm="5" col-md="6" col-lg="5">
+
+                     <div class="caixa_login_empresa">
+
+                        <h:form rendered="#{!UsuarioLogado.autenticado}" id="main">
+
+
+                           <h4>Recuperação de senha</h4>
+
+                           <p>Usuário (E-mail)</p>
+                           <p:inputText id="codlog" value="#{mbEsqueciMinhaSenha.codlog}" size="30" required="true" requiredMessage="Informe o e-mail" />
+                           <p:message for="codlog" />
+                        
+
+                           <p:commandButton value="Recuperar a senha" actionListener="#{mbEsqueciMinhaSenha.gerarPedido(mbEsqueciMinhaSenha.codlog)}"
+                              ajax="false" />
+
+                        </h:form>
+
+                        <br />
+
+                        <p:link href="cadastro.xhtml" value="Primeiro Acesso" />
+                        <p:link href="login.xhtml" value="Acessar o Sistema" />
+
+
+                        <hr />
+                        <p:link value="Acesso para empresas" href="../empresa/login.xhtml" />
+
+                     </div>
+                     <br />
+                       
+                                        <p:message for="main" />
+                     
+                  </b:column>
+               </b:row>
+            </b:container>
+
+         </f:view>
+      </ui:define>
+   </ui:composition>
+</h:body>
+</html>

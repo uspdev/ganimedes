@@ -1,0 +1,325 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:p="http://primefaces.org/ui" xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:b="http://bootsfaces.net/ui">
+
+<h:head>
+   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+   <meta http-equiv="refresh" content="#{session.maxInactiveInterval};url=index.xhtml?reason=expired" />
+
+
+</h:head>
+
+<h:body>
+
+   <ui:composition template="./template.xhtml">
+      <ui:define name="content">
+
+         <f:view contentType="text/html; charset=UTF-8">
+            <f:loadBundle basename="messages" var="msgs" />
+
+
+            <b:container fluid="false">
+               <b:row>
+                  <b:column>
+
+
+                     <h2>Convênios</h2>
+
+
+                     <h:form id="main" rendered="#{UsuarioLogado.adm || UsuarioLogado.opr}">
+
+                        <p:selectOneMenu id="empresa" value="#{mbConvenio.empresa}" converter="converter" effect="fade" filter="true" filterMatchMode="contains"
+                           var="e">
+                           <f:selectItem itemLabel="Selecione uma empresa" itemValue="" />
+                           <f:selectItems value="#{comboEmpresas.empresas}" var="empresa" itemLabel="#{e.nome}" itemValue="#{e}" />
+
+                           <p:column style="width:10%">
+                              <h:outputText styleClass="ui-theme ui-theme-#{e.nome}" />
+                           </p:column>
+                           <p:column>
+                              <h:outputText value="#{e.nome}" />
+                           </p:column>
+                           <p:ajax event="valueChange" listener="#{mbConvenio.carregarEmpresa}" update="@form, dlgEdit" />
+                        </p:selectOneMenu>
+
+                        <br />
+                        <p:commandButton action="#{mbConvenio.mostrarInclusaoEmpresa()}" ajax="false" icon="fa fa-fw fa-plus-circle" value="Adicionar empresa" />
+                        <p:message for="main" />
+
+
+                        <p:panel rendered="#{not empty mbConvenio.empresa.cnpj}">
+                           <h4>#{mbConvenio.empresa.nome}</h4>
+                           <p>#{mbConvenio.empresa.cnpj}</p>
+
+                           <p:commandButton icon="fa fa-fw fa-edit" onclick="PF('dlgEdit').show();" value="Editar" />
+                           <br />
+
+
+
+
+                           <p:dataTable id="listagem_convenios" var="c" value="#{mbConvenio.empresa.convenios}">
+                              <f:facet name="header">
+                                 Convênios
+                               
+                              </f:facet>
+
+                              <p:column styleClass="col10l">
+                                 <f:facet name="header">
+                                    <h:outputText value="Período" />
+                                 </f:facet>
+                                 <h:panelGroup>
+                                    <h:outputText value="#{c.dtaini}">
+                                       <f:convertDateTime type="date" dateStyle="short" locale="pt_BR" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy" />
+                                    </h:outputText>
+                                    <h:outputText value=" à " />
+                                    <h:outputText value="#{c.dtafim}">
+                                       <f:convertDateTime type="date" dateStyle="short" locale="pt_BR" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy" />
+                                    </h:outputText>
+                                 </h:panelGroup>
+
+                              </p:column>
+
+                              <p:column styleClass="col10l">
+                                 <f:facet name="header">
+                                    <h:outputText value="Processo" />
+                                 </f:facet>
+                                 <h:outputLink value="https://uspdigital.usp.br/proteos/obterAndamento?numpro=#{c.numpro}" title="#{c.numpro}" target="_BLANK">#{c.numpro}</h:outputLink>
+                              </p:column>
+
+                              <p:column styleClass="col5c">
+                                 <f:facet name="header">
+                                    <p:commandButton icon="fa fa-fw fa-plus-circle" onclick="PF('dlgAddConvenio').show();" />
+                                 </f:facet>
+
+                                 <p:commandButton icon="fa fa-fw fa-edit" action="#{mbConvenio.mostrarEdicaoConvenio(c)}" ajax="false" />
+
+
+                                 <p:commandButton icon="fa fa-fw fa-trash" onclick="return confirm('Tem certeza que deseja deletar?');"
+                                    action="#{mbConvenio.deletarConvenio(c)}" ajax="false" />
+
+                              </p:column>
+
+                           </p:dataTable>
+
+                           <br />
+                           <p:dataTable id="listagem_contatos" var="c" value="#{mbConvenio.empresa.contatos}">
+                              <f:facet name="header">
+                              Contatos
+                              </f:facet>
+
+                              <p:column styleClass="col10l">
+                                 <f:facet name="header">
+                                    <h:outputText value="Nome" />
+                                 </f:facet>
+                                 <h:outputText value="#{c.nome}" />
+                              </p:column>
+
+                              <p:column styleClass="col10l">
+                                 <f:facet name="header">
+                                    <h:outputText value="Telefone" />
+                                 </f:facet>
+
+                                 <h:outputText value="#{c.fone}" />
+                              </p:column>
+
+                              <p:column styleClass="col10l">
+                                 <f:facet name="header">
+                                    <h:outputText value="E-mail" />
+                                 </f:facet>
+                                 <h:outputText value="#{c.email}" />
+                              </p:column>
+
+                              <p:column styleClass="col5c">
+                                 <f:facet name="header">
+                                    <p:commandButton icon="fa fa-fw fa-plus-circle" onclick="PF('dlgAddContato').show();" />
+                                 </f:facet>
+
+                                 <p:commandButton icon="fa fa-fw fa-edit" action="#{mbConvenio.mostrarEdicaoContato(c)}" ajax="false" />
+                                 <p:commandButton icon="fa fa-fw fa-trash" onclick="return confirm('Tem certeza que deseja deletar?');"
+                                    action="#{mbConvenio.deletarContato(c)}" update="listagem_contatos" />
+
+
+                              </p:column>
+
+                           </p:dataTable>
+                        </p:panel>
+
+                     </h:form>
+
+
+
+
+
+
+                     <p:dialog id="dlgAddEmpresa" header="Cadastro de empresa" widgetVar="dlgAddEmpresa" modal="true">
+                        <h:form id="frm_cadastro">
+
+                           <h:panelGrid columns="2">
+
+
+
+                              <h:outputText value="CNPJ:" />
+
+
+                              <ui:remove>
+                                 <p:inputText value="#{mbConvenio.empresa.cnpj}" id="CNPJ" size="20" mask="99.999.999/9999-99" required="false"
+                                    requiredMessage="O campo CNPJ deve ser preenchido">
+                                 </p:inputText>
+                              </ui:remove>
+
+                              <p:inputMask value="#{mbConvenio.empresa.cnpj}" id="CNPJ" size="20" mask="99.999.999/9999-99" required="false"
+                                 requiredMessage="O campo CNPJ deve ser preenchido">
+                              </p:inputMask>
+
+
+
+                              <h:outputText value="Nome:" />
+                              <p:inputText value="#{mbConvenio.empresa.nome}" size="60" required="false" requiredMessage="O campo nome deve ser preenchido" />
+
+                           </h:panelGrid>
+
+
+                           <p:commandButton action="#{mbConvenio.criarEmpresa()}" value="Salvar" ajax="false" styleClass="botao" />
+                           <p:commandButton action="#{PageTransition.chamaConvenios()}" value="Cancelar" ajax="false" styleClass="botao"
+                              onclick="return confirm('Operação será cancelada');" immediate="true" />
+
+
+                        </h:form>
+                     </p:dialog>
+
+
+                     <p:dialog id="dlgEdit" header="Edição" widgetVar="dlgEdit" modal="true">
+                        <h:form id="edit">
+
+                           <h:panelGrid columns="2">
+
+                              <h:outputText value="CNPJ:" />
+                              <p:inputText id="CNPJ" size="20" mask="99.999.999/9999-99" required="true" value="#{mbConvenio.empresa.cnpj}"
+                                 requiredMessage="O campo CNPJ deve ser preenchido">
+                              </p:inputText>
+
+                              <h:outputText value="Nome:" />
+                              <p:inputText value="#{mbConvenio.empresa.nome}" size="60" required="true" requiredMessage="O campo nome deve ser preenchido" />
+
+                           </h:panelGrid>
+
+
+                           <p:commandButton action="#{mbConvenio.salvarEmpresa}" value="Salvar" ajax="false" styleClass="botao" />
+
+                           <p:commandButton action="#{PageTransition.chamaConvenios()}" value="Cancelar" ajax="false" styleClass="botao"
+                              onclick="return confirm('Operação será cancelada');" immediate="true" />
+
+                        </h:form>
+                     </p:dialog>
+
+
+                     <p:dialog id="dlgAddContato" header="Edição" widgetVar="dlgAddContato" modal="true">
+                        <h:form id="add_contato">
+
+                           <h:panelGrid columns="2">
+                              <h:outputText value="Nome" />
+                              <p:inputText value="#{mbConvenio.contato.nome}" size="20" />
+                              <h:outputText value="Telefone" />
+                              <p:inputText value="#{mbConvenio.contato.fone}" size="20" />
+                              <h:outputText value="E-mail" />
+                              <p:inputText value="#{mbConvenio.contato.email}" size="20" />
+
+                           </h:panelGrid>
+                           <p:commandButton action="#{mbConvenio.adicionarContato()}" value="Salvar" ajax="false" styleClass="botao" />
+
+                           <p:commandButton action="#{PageTransition.chamaConvenios()}" value="Cancelar" ajax="false" styleClass="botao"
+                              onclick="return confirm('Operação será cancelada');" immediate="true" />
+                        </h:form>
+                     </p:dialog>
+
+                     <p:dialog id="dlgAddConvenio" header="Cadastro de convênio" widgetVar="dlgAddConvenio" modal="true">
+                        <h:form id="add_convenio">
+
+                           <h:panelGrid columns="2">
+                              <h:outputText value="Data Início" />
+                              <p:calendar value="#{mbConvenio.convenio.dtaini}" locale="pt" id="calDataIni" required="true"
+                                 requiredMessage="A data inicial deve ser informada" mask="99/99/9999" pattern="dd/MM/yyyy" />
+
+                              <h:outputText value="Data Fim" />
+
+                              <p:calendar value="#{mbConvenio.convenio.dtafim}" locale="pt" id="calDataFim" required="true"
+                                 requiredMessage="A data final deve ser informada" mask="99/99/9999" pattern="dd/MM/yyyy" />
+
+
+                              <h:outputText value="Processo" />
+                              <p:inputText value="#{mbConvenio.convenio.numpro}" size="20" required="true"
+                                 requiredMessage="O número do processo deve ser informado" />
+
+                           </h:panelGrid>
+                           <p:commandButton action="#{mbConvenio.adicionarConvenio()}" value="Salvar" ajax="false" styleClass="botao" />
+
+                           <p:commandButton action="#{PageTransition.chamaConvenios()}" value="Cancelar" ajax="false" styleClass="botao"
+                              onclick="return confirm('Operação será cancelada');" immediate="true" />
+                        </h:form>
+                     </p:dialog>
+
+
+
+                     <p:dialog id="dlgEditConvenio" header="Edição de convênio" widgetVar="dlgEditConvenio" modal="true">
+                        <h:form id="edit_convenio">
+
+                           <h:panelGrid columns="2">
+                              <h:outputText value="Data Início" />
+                              <p:calendar value="#{mbConvenio.convenio.dtaini}" locale="pt" id="calDataIni" required="true"
+                                 requiredMessage="A data inicial deve ser informada" mask="99/99/9999" pattern="dd/MM/yyyy" />
+
+                              <h:outputText value="Data Fim" />
+
+                              <p:calendar value="#{mbConvenio.convenio.dtafim}" locale="pt" id="calDataFim" required="true"
+                                 requiredMessage="A data final deve ser informada" mask="99/99/9999" pattern="dd/MM/yyyy" />
+
+
+                              <h:outputText value="Processo" />
+                              <p:inputText value="#{mbConvenio.convenio.numpro}" size="20" required="true"
+                                 requiredMessage="O número do processo deve ser informado" />
+
+                           </h:panelGrid>
+                           <p:commandButton action="#{mbConvenio.atualizarConvenio()}" value="Salvar" ajax="false" styleClass="botao" />
+
+                           <p:commandButton action="#{PageTransition.chamaConvenios()}" value="Cancelar" ajax="false" styleClass="botao"
+                              onclick="return confirm('Operação será cancelada');" immediate="true" />
+                        </h:form>
+                     </p:dialog>
+
+
+                     <p:dialog id="dlgEditContato" header="Edição de contato" widgetVar="dlgEditContato" modal="true">
+                        <h:form id="edit_contato">
+
+                           <h:panelGrid columns="2">
+                              <h:outputText value="Nome" />
+                              <p:inputText value="#{mbConvenio.contato.nome}" size="20" />
+                              <h:outputText value="Telefone" />
+                              <p:inputText value="#{mbConvenio.contato.fone}" size="20" />
+                              <h:outputText value="E-mail" />
+                              <p:inputText value="#{mbConvenio.contato.email}" size="20" />
+
+                           </h:panelGrid>
+
+
+                           <p:commandButton action="#{mbConvenio.atualizarContato()}" value="Salvar" ajax="false" styleClass="botao" />
+
+                           <p:commandButton action="#{PageTransition.chamaConvenios()}" value="Cancelar" ajax="false" styleClass="botao"
+                              onclick="return confirm('Operação será cancelada');" immediate="true" />
+                        </h:form>
+                     </p:dialog>
+
+                  </b:column>
+               </b:row>
+            </b:container>
+
+
+
+         </f:view>
+      </ui:define>
+
+
+   </ui:composition>
+</h:body>
+</html>

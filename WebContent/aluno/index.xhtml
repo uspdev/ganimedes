@@ -1,0 +1,195 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:p="http://primefaces.org/ui" xmlns:b="http://bootsfaces.net/ui" xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+<h:head>
+   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+   <meta http-equiv="refresh" content="#{session.maxInactiveInterval};url=index.xhtml?reason=expired" />
+</h:head>
+
+<h:body>
+
+   <ui:composition template="../template.xhtml">
+
+      <ui:define name="content">
+
+         <f:view>
+            <f:loadBundle basename="messages" var="msgs" />
+
+            <b:container fluid="false">
+               <b:row>
+                  <b:column span="12">
+
+                     <h:form id="main">
+                        <p:message for="main" />
+                     </h:form>
+
+
+
+                     <h:form id="frm_lista" binding="#{mbAluno.frmLista}">
+
+
+                        <div class="anuncios">
+                           <ui:repeat var="a" value="#{mbAluno.anuncios}">
+                              <div class="item-anuncio">
+                                 <h4>
+                                    <p:commandLink value="#{a.titvag}" action="#{mbAluno.abrirAnuncio()}" ajax="false" style="display: block;">
+                                       <f:setPropertyActionListener target="#{mbAluno.anuncio}" value="#{a}" />
+                                    </p:commandLink>
+                                 </h4>
+
+
+                                 <h5>
+                                    <p:commandLink value="#{a.nomeEmpresa}" action="#{mbAluno.abrirAnuncio()}" ajax="false" style="display: block;">
+                                       <f:setPropertyActionListener target="#{mbAluno.anuncio}" value="#{a}" />
+                                    </p:commandLink>
+                                 </h5>
+
+                                 <p:commandLink value="#{a.regimeTrabalho.valor}" action="#{mbAluno.abrirAnuncio()}" ajax="false" style="display: block;">
+                                    <f:setPropertyActionListener target="#{mbAluno.anuncio}" value="#{a}" />
+                                 </p:commandLink>
+
+
+                                 <p:commandLink value="#{a.dtaCriacaoFormatado}" action="#{mbAluno.abrirAnuncio()}" ajax="false" style="display: block;">
+                                    <f:setPropertyActionListener target="#{mbAluno.anuncio}" value="#{a}" />
+                                 </p:commandLink>
+                              </div>
+                           </ui:repeat>
+                        </div>
+
+
+
+                     </h:form>
+
+
+                     <h:form id="frm_show" binding="#{mbAluno.frmDetalhe}" rendered="false">
+                        <div class="item-anuncio">
+
+                           <p:panel>
+                              <p:commandButton action="#{mbAluno.fecharAnuncio()}" ajax="false" icon="fa fa-fw fa-close" style="float:right;" />
+
+                              <h4>#{mbAluno.anuncio.titvag}</h4>
+
+
+                              <h5>#{mbAluno.anuncio.nomeEmpresa}</h5>
+                              <h:outputText value="Área de atuação: #{mbAluno.anuncio.areaAtuacao}" />
+                              <p style="text-align: justify;">
+                                 <h:outputText value="#{mbAluno.anuncio.descricaoEmpresa}" escape="true" />
+                              </p>
+
+                              <br />
+                              <br />
+                              <h5>DESCRIÇÃO DA OPORTUNIDADE</h5>
+                              <p>
+                                 <h:outputText value="Atividades: " />
+                                 <h:outputText value="#{mbAluno.anuncio.desvag}" escape="true" />
+                              </p>
+
+                              <p>
+                                 <h:outputText value="Regime de Contratação: " />
+                                 <h:outputText value="#{mbAluno.anuncio.regimeTrabalho.valor}" />
+                              </p>
+                              <p>
+
+                                 <h:outputText value="Carga Horária Semanal: " />
+                                 <h:outputText value="#{mbAluno.anuncio.horsem} horas" rendered="#{mbAluno.anuncio.horsem != 0}" />
+                                 <h:outputText value="a combinar" rendered="#{mbAluno.anuncio.horsem == 0}" />
+                              </p>
+                              <p>
+
+
+
+                                 <h:outputText value="Benefícios Oferecidos: " />
+                                 <h:outputText value="#{mbAluno.anuncio.benofr}" />
+                              </p>
+                              <p>
+
+                                 <h:outputText value="Bolsa/salário mensal:" />
+                                 <h:outputText value="#{mbAluno.anuncio.salmesFormatado}" rendered="#{mbAluno.anuncio.salmes != 0}">
+                                    <f:convertNumber minFractionDigits="2" locale="pt" />
+                                 </h:outputText>
+
+                                 <h:outputText value="a combinar" rendered="#{mbAluno.anuncio.salmes == 0}" />
+
+                              </p>
+                              <p>
+                                 <h:outputText value="Local de Trabalho: " />
+                                 <h:outputText value="#{mbAluno.anuncio.loctrb}" />
+                              </p>
+
+
+
+                              <br />
+                              <br />
+                              <h5>PERFIL DO CANDIDATO</h5>
+                              <p>
+                                 <h:outputText value="#{mbAluno.anuncio.perfilCandidato}" escape="true" />
+
+                              </p>
+                              <p>
+                                 <h:outputText value="Cursos: " />
+                                 <ui:repeat value="#{mbAluno.anuncio.cursos}" var="c">
+                                    <ul>
+                                       <li><h:outputText value="#{c.nome} - #{c.nivel.valor}" /></li>
+                                    </ul>
+                                 </ui:repeat>
+                              </p>
+
+                              <br />
+                              <br />
+                              <h5>COMO SE CANDIDATAR</h5>
+
+
+                              <h:panelGrid columns="2">
+                                 <h:outputText value="Contato: " />
+                                 <h:outputText value="#{mbAluno.anuncio.nompes}" />
+
+                                 <h:outputText value="E-mail: " rendered="#{not empty mbAluno.anuncio.email}" />
+                                 <h:outputText value="#{mbAluno.anuncio.email}" rendered="#{not empty mbAluno.anuncio.email}" />
+
+
+                                 <h:outputText value="Telefone: " rendered="#{not empty mbAluno.anuncio.numtel}" />
+                                 <h:outputText value="#{mbAluno.anuncio.numtel}" rendered="#{not empty mbAluno.anuncio.numtel}" />
+
+                                 <h:outputText value="Website: " rendered="#{not empty mbAluno.anuncio.urlweb}" />
+                                 <h:outputText value="#{mbAluno.anuncio.urlweb}" rendered="#{not empty mbAluno.anuncio.urlweb}" />
+                              </h:panelGrid>
+
+
+                              <br />
+                              <p:commandButton action="#{mbAnuncio.downloadAnuncio(mbAluno.anuncio)}" value=" Cartaz " ajax="false" icon="fa fa-fw fa-print"
+                                 rendered="#{not empty mbAluno.anuncio.cartaz}" />
+
+                              <br />
+                              <br />
+
+                              <p>
+                                 <em> <h:outputText value="Oportunidade cadastrada em " /> <h:outputText value="#{mbAluno.anuncio.dtaCriacao}">
+                                       <f:convertDateTime type="date" dateStyle="short" locale="pt_BR" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy" />
+                                    </h:outputText>
+                                 </em>
+                              </p>
+
+                           </p:panel>
+                        </div>
+                     </h:form>
+
+
+                  </b:column>
+               </b:row>
+            </b:container>
+
+
+
+
+
+
+
+         </f:view>
+      </ui:define>
+   </ui:composition>
+
+</h:body>
+</html>

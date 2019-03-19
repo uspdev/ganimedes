@@ -1,0 +1,263 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:p="http://primefaces.org/ui" xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:b="http://bootsfaces.net/ui">
+
+<h:head>
+   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+   <meta http-equiv="refresh" content="#{session.maxInactiveInterval};url=index.xhtml?reason=expired" />
+
+
+</h:head>
+
+<h:body>
+
+
+   <f:metadata>
+      <f:viewParam name="codpes" value="#{mbUsuario.codpes}" />
+      <f:event type="preRenderView" listener="#{mbUsuario.carregarUsuario()}" />
+   </f:metadata>
+
+   <ui:composition template="./template.xhtml">
+      <ui:define name="content">
+
+         <f:view contentType="text/html; charset=UTF-8">
+            <f:loadBundle basename="messages" var="msgs" />
+
+
+            <b:container fluid="false">
+               <b:row>
+                  <b:column span="12">
+                     <h:form id="main">
+                        <h2>Usuários</h2>
+                        <p:message for="main" />
+                     </h:form>
+
+                     <h:form id="list" binding="#{mbUsuario.frmList}">
+
+                        <p:commandButton icon="fa fa-fw fa-plus-circle" onclick="PF('dlgAddUser').show();" value="Adicionar usuário" />
+
+
+                        <p:dataTable id="list" var="u" value="#{mbUsuario.usuarios}" styleClass="tabela600">
+
+
+
+
+                           <p:column styleClass="col10l">
+
+                              <p:commandLink action="#{mbUsuario.mostrarUsuario(u)}" value="#{u.nompes}" ajax="false" />
+                           </p:column>
+
+
+                           <f:facet name="footer">
+                              <h:outputText value="#{fn:length(mbUsuario.usuarios)} usuário(s)" />
+                           </f:facet>
+
+                        </p:dataTable>
+                     </h:form>
+
+
+
+
+
+                     <h:form id="show" binding="#{mbUsuario.frmShow}" rendered="false">
+
+
+                        <p:panel>
+                           <p:message for="show" />
+                           <div style="float: right">
+                              <p:commandButton action="#{PageTransition.chamaUsuario()}" ajax="false" icon="fa fa-fw fa-close" />
+                           </div>
+
+                           <h:panelGrid columns="2">
+                              <h:outputText value="No. USP: " styleClass="bold" />
+                              <h:outputText value="#{mbUsuario.usuario.codpes}" />
+                              <h:outputText value="CPF: " styleClass="bold" />
+                              <h:outputText value="#{mbUsuario.usuario.cpf}" />
+                              <h:outputText value="Nome: " styleClass="bold" />
+                              <h:outputText value="#{mbUsuario.usuario.nompes}" />
+                              <h:outputText value="E-mail: " styleClass="bold" />
+                              <h:outputText value="#{mbUsuario.usuario.codlog}" />
+
+                              <h:outputText value="Ativado: " styleClass="bold" />
+                              <h:outputText value="Sim" rendered="#{mbUsuario.usuario.ativado}" />
+                              <h:outputText value="Não" rendered="#{not mbUsuario.usuario.ativado}" />
+
+                              <h:outputText value="Cadastro: " styleClass="bold" />
+                              <h:outputText value="#{mbUsuario.usuario.dataCadastro}">
+                                       <f:convertDateTime type="date" dateStyle="short" locale="pt_BR" timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy HH:mm:ss" />
+                                    </h:outputText>
+                           </h:panelGrid>
+
+
+
+
+
+
+                           <p:commandButton icon="fa fa-fw fa-edit" onclick="PF('dlgEditUser').show();" value="Editar usuário" />
+
+
+                           <p:commandButton icon="ui-icon-key" action="#{mbUsuario.changePassword()}" value="Alterar Senha" ajax="false"
+                              onclick="return confirm('Tem certeza que deseja criar uma nova senha para o usuário?');" />
+
+
+                           <p:commandButton icon="fa fa-fw fa-trash" onclick="return confirm('Tem certeza que deseja deletar?');" action="#{mbUsuario.deletar}"
+                              ajax="false" value="Excluir usuário" />
+
+
+                           <br />
+                           <br />
+
+                           <p:dataTable id="grupos" var="g" value="#{mbUsuario.usuario.grupos}" styleClass="tabela300">
+                              <f:facet name="header">
+                                 <h:outputText value="Grupos" />
+                              </f:facet>
+
+                              <p:column styleClass="col20l">
+                                 <f:facet name="header">
+                                 </f:facet>
+                                 <h:outputText value="#{g.nome}" />
+                              </p:column>
+
+
+                              <p:column styleClass="col5c">
+                                 <f:facet name="header">
+                                    <p:commandButton icon="fa fa-fw fa-plus-circle" onclick="PF('dlgAddGrupo').show();" />
+                                 </f:facet>
+                                 <p:commandButton action="#{mbUsuario.desassociarGrupo(g)}" icon="ui-icon-trash" ajax="false" />
+                              </p:column>
+                           </p:dataTable>
+
+                           <br />
+                           <p:dataTable id="papeis" var="p" value="#{mbUsuario.usuario.papeis}" styleClass="tabela300">
+                              <f:facet name="header">
+                                 <h:outputText value="Papéis" />
+                              </f:facet>
+
+                              <p:column styleClass="col20l">
+
+                                 <f:facet name="header">
+                                    <h:outputText value="" />
+                                 </f:facet>
+
+                                 <h:outputText value="#{p.nome}" />
+                              </p:column>
+
+                              <p:column styleClass="col5c">
+                                 <f:facet name="header">
+                                    <p:commandButton icon="fa fa-fw fa-plus-circle" onclick="PF('dlgAddPapel').show();" />
+                                 </f:facet>
+                                 <p:commandButton action="#{mbUsuario.desassociarPapel(p)}" icon="fa fa-fw fa-trash" ajax="false" />
+                              </p:column>
+                           </p:dataTable>
+
+                        </p:panel>
+                     </h:form>
+                  </b:column>
+               </b:row>
+            </b:container>
+
+
+            <p:dialog id="dlgAddGrupo" header="Associar Grupo" widgetVar="dlgAddGrupo" modal="true">
+               <h:form id="addGrupo">
+
+
+                  <h:panelGrid columns="1">
+                     <h:outputText value="Selecione um ou mais grupos:" />
+
+                     <p:selectManyMenu value="#{mbUsuario.grupos}" converter="converter">
+                        <f:selectItems value="#{mbGrupo.grupos}" var="g" itemLabel="#{g.nome}" itemValue="#{g}" />
+                     </p:selectManyMenu>
+                  </h:panelGrid>
+                  <h:panelGrid columns="2">
+                     <p:commandButton action="#{mbUsuario.associarGrupos()}" value="Associar" ajax="false" />
+                     <p:commandButton value="Cancelar" onclick="PF('dlgAddGrupo').hide();" type="button" />
+                  </h:panelGrid>
+               </h:form>
+            </p:dialog>
+
+
+
+            <p:dialog id="dlgAddPapel" header="Associar Papel" widgetVar="dlgAddPapel" modal="true">
+               <h:form id="addPapel">
+                  <h:panelGrid columns="1">
+                     <h:outputText value="Selecione um ou mais papel:" />
+
+                     <p:selectManyMenu value="#{mbUsuario.papeis}" converter="converter">
+                        <f:selectItems value="#{mbPapel.papeis}" var="p" itemLabel="#{p.nome}" itemValue="#{p}" />
+                     </p:selectManyMenu>
+                  </h:panelGrid>
+                  <h:panelGrid columns="2">
+                     <p:commandButton action="#{mbUsuario.associarPapeis()}" value="Associar" ajax="false" />
+                     <p:commandButton value="Cancelar" onclick="PF('dlgAddPapel').hide();" type="button" />
+                  </h:panelGrid>
+               </h:form>
+            </p:dialog>
+
+
+            <p:dialog id="dlgEditUser" header="Editar Usuário" widgetVar="dlgEditUser" modal="true">
+               <h:form id="edit">
+                  <h:panelGrid value="#{mbUsuario.usuario}" columns="2">
+                     <h:outputText value="No. USP: " />
+                     <h:inputText value="#{mbUsuario.usuario.codpes}" />
+
+                     <h:outputText value="CPF: " />
+                     <h:inputText value="#{mbUsuario.usuario.cpf}" />
+
+                     <h:outputText value="Nome: " />
+                     <h:inputText value="#{mbUsuario.usuario.nompes}" />
+
+                     <h:outputText value="E-mail: " />
+                     <h:inputText value="#{mbUsuario.usuario.codlog}" />
+
+                     <h:outputText value="Telefone: " />
+                     <h:inputText value="#{mbUsuario.usuario.telefone}" />
+
+
+                     <h:outputText value="Ativado: " />
+                     <p:selectBooleanCheckbox value="#{mbUsuario.usuario.ativado}" />
+
+
+                  </h:panelGrid>
+
+                  <h:panelGrid columns="2">
+                     <p:commandButton action="#{mbUsuario.atualizar()}" value="Salvar" ajax="false" />
+                     <p:commandButton value="Cancelar" onclick="PF('dlgEditUser').hide();" type="button" />
+                  </h:panelGrid>
+               </h:form>
+            </p:dialog>
+
+            <p:dialog id="dlgAddUser" header="Cadastro de Usuário" widgetVar="dlgAddUser" modal="true">
+               <h:form id="addUser">
+
+                  <h:panelGrid value="#{mbUsuario.usuario}" columns="3">
+                     <h:outputText value="No. USP: " />
+                     <h:inputText value="#{mbUsuario.usuario.codpes}" id="txt_codpes" required="true" requiredMessage="Informe o No. USP" />
+                     <p:message for="txt_codpes" />
+
+                     <h:outputText value="Nome: " />
+                     <h:inputText value="#{mbUsuario.usuario.nompes}" id="txt_nome" required="true" requiredMessage="Informe o nome" />
+                     <p:message for="txt_nome" />
+
+                     <h:outputText value="E-mail: " />
+                     <h:inputText value="#{mbUsuario.usuario.codlog}" id="txt_email" required="true" requiredMessage="Informe o e-mail" />
+                     <p:message for="txt_email" />
+                  </h:panelGrid>
+
+                  <h:panelGrid columns="2">
+                     <p:commandButton action="#{mbUsuario.criarUsuario()}" value="Salvar" ajax="false" />
+                     <p:commandButton value="Cancelar" onclick="PF('dlgAddUser').hide();" type="button" />
+                  </h:panelGrid>
+               </h:form>
+            </p:dialog>
+
+
+
+
+         </f:view>
+      </ui:define>
+
+   </ui:composition>
+</h:body>
+</html>
