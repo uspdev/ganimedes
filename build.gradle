@@ -1,0 +1,62 @@
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'eclipse'
+apply plugin: 'eclipse-wtp'
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+jar {
+    baseName = 'jsf-primefaces-example'
+    version =  '0.1.0'
+}
+
+eclipse {
+	project {
+		natures 'org.springsource.ide.eclipse.gradle.core.nature', 'org.eclipse.jdt.groovy.core.groovyNature', 'org.eclipse.wst.common.project.facet.core.nature'
+	}
+	classpath {
+		containers 'org.springsource.ide.eclipse.gradle.classpathcontainer'
+	}
+	wtp {
+		facet {
+		  facet name: 'jst.web', version: '3.1'
+		  facet name: 'java', version: '1.8'
+		}
+	}
+	jdt {
+		sourceCompatibility = 1.8
+		targetCompatibility = 1.8
+	}
+}
+
+repositories {
+    mavenCentral()
+	maven {
+		url "http://repository.primefaces.org"
+	}
+}
+
+
+dependencies {
+	providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.0'
+  	providedCompile group: 'javax.enterprise', name: 'cdi-api', version: '1.2'
+	providedCompile 'com.sun.faces:jsf-api:2.2.13'
+	providedCompile 'com.sun.faces:jsf-impl:2.2.13'
+    providedCompile group: 'org.hibernate', name: 'hibernate-core', version: '5.3.6.Final'
+    providedCompile group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.3.6.Final'
+    providedCompile group: 'org.hibernate', name: 'hibernate-validator', version: '5.3.6.Final'
+    providedCompile 'javax.inject:javax.inject:1'
+  	providedCompile 'javax.validation:validation-api:1.1.0.Final'
+  	providedCompile 'commons-codec:commons-codec:1.12'
+    providedCompile group: 'dom4j', name: 'dom4j', version: '1.6.1'
+  	providedCompile group: 'javax.mail', name: 'javax.mail-api', version: '1.6.2'
+  	providedCompile 'javax.ejb:javax.ejb-api:3.2.2'   
+    
+    compile 'org.primefaces:primefaces:6.1'
+	compile 'org.scribe:scribe:1.3.2'
+   	compile 'com.itextpdf:itextpdf:5.5.13'
+  	compile 'com.lowagie:itext:2.1.7'
+  	compile group: 'net.sf.json-lib', name: 'json-lib', version: '2.4', classifier: 'jdk15'
+  	
+}
