@@ -8,7 +8,7 @@
 
 	<persistence-unit name="replicado" transaction-type="JTA">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
-		<jta-data-source>java:/replicado</jta-data-source>
+		<jta-data-source>java:/jdbc/replicado</jta-data-source>
 		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 	</persistence-unit>
 
