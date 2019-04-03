@@ -9,6 +9,9 @@ acompanhamento dos estágios realizados pelos alunos do Instituto.
 Este guia de instalação foi elaborado para o sistema operacional Ubuntu. No entanto, com os devidos ajustes esse guia pode ser
 adaptado para outros sistemas Linux, Windows ou MacOS.
 
+
+
+
 ### Instalação do Java JDK
 
 Adicione o PPA da Oracle, atualize seu repositório de pacotes e instale:
@@ -24,7 +27,7 @@ $ sudo apt-get install oracle-java8-installer
 
 ### Instalação do Gradle
 
-<a href='https://gradle.org/releases/' >[Baixe]</a> o Gradle e descompacte em <code>/opt/gradle</code>:
+[Baixe](https://gradle.org/releases/')</a> o Gradle e descompacte em <code>/opt/gradle</code>:
 
 ```bash  
 $ mkdir /opt/gradle
@@ -55,16 +58,14 @@ $ sudo /opt/wildfly/bin/standalone.sh
 
 
 
-Crie um usuário para acessar o console de administração do Wildfly.
+Crie um usuário para acessar a interface web de administração do Wildfly.
 
 ```bash          
 $ /opt/wildfly/bin/add-user.sh -u 'admin' -p 'admin.1234' -g 'admin'
 ```
 
-Para visualizar a página inicial e o console de administração do Wildfly acesse <code>http://localhost:8080</code>.
-
-
-O Wildfly também possui uma interface de linha de comando, conhecido como Wildfly CLI, que é o método adotado nesse guia.
+Para visualizar a página inicial e a interface web de administração do Wildfly acesse <code>http://localhost:8080</code>. O Wildfly
+também possui uma interface de linha de comando, o Wildfly CLI, que foi o método adotado nesse guia pela simplicidade para a documentação.
 
 
 
@@ -78,7 +79,7 @@ executado em um servidor Microsoft SQL Server e com um banco de dados MySQL para
 
 <strong>Configuração do Microsoft SQL Server</strong>
 
-Baixe o driver JDBC do <a href='http://ida.fel.cvut.cz/maven/com/microsoft/sqlserver/sqljdbc42/6.0.8112/sqljdbc42-6.0.8112.jar'>Microsoft SQL Server</a>.
+[Baixe](http://ida.fel.cvut.cz/maven/com/microsoft/sqlserver/sqljdbc42/6.0.8112/sqljdbc42-6.0.8112.jar') o driver JDBC do Microsoft SQL Server.
 
 
 Através do CLI conecte-se à instância do Wildfly em execução:
@@ -91,10 +92,10 @@ $ /opt/wildfly/bin/jboss-cli.sh --connect
 Adicione o módulo do driver no WildFly, indicando a localização do arquivo jar que foi baixado:
 
 ```bash
-module add --name=system.layers.base.com.microsoft --resources=/home/usuario/Downloads/sqljdbc42.jar --dependencies=javax.api,javax.transaction.api,javax.xml.bind.api                </pre>
+module add --name=system.layers.base.com.microsoft --resources=/home/usuario/Downloads/sqljdbc42.jar --dependencies=javax.api,javax.transaction.api,javax.xml.bind.api                
 ```
 
-Execute também o comando abaixo para concluir o procedimento:
+Execute também o comando abaixo para concluir a inclusão do módulo:
 
 ```bash
 /subsystem=datasources/jdbc-driver=sqlserver:add(driver-name=sqlserver,driver-module-name=system.layers.base.com.microsoft)
@@ -119,7 +120,7 @@ $ exit
 <strong>Configuração do MySQL</strong>
 
 
-Baixe os drivers do <a href='http://central.maven.org/maven2/mysql/mysql-connector-java/8.0.15/mysql-connector-java-8.0.15.jar'>MySQL</a>
+[Baixe](http://central.maven.org/maven2/mysql/mysql-connector-java/8.0.15/mysql-connector-java-8.0.15.jar) o driver do MySQL.
 
 ```bash
 $ /opt/wildfly/bin/jboss-cli.sh --connect
@@ -131,7 +132,7 @@ Adicione o módulo do driver no WildFly, indicando a localização do arquivo ja
 module add --name=system.layers.base.com.mysql --resources=[PATH_PARA_O_JAR] --dependencies=javax.api,javax.transaction.api
 ```
 
-Execute também o comando abaixo para concluir o procedimento:
+Execute também o comando abaixo para concluir a inclusão do módulo:
 
 ```bash
 /subsystem=datasources/jdbc-driver=mysql:add(driver-name=mysql,driver-module-name=system.layers.base.com.mysql)
@@ -151,11 +152,45 @@ $ exit
 ```
 
 
-Acesse o console de administração do Wildfly para verificar se os drivers estão corretamente instalados e para
+Acesse a interface web de administração do Wildfly para verificar se os drivers estão corretamente instalados e para
 e testar se as conexões dos datasources com os bancos de dados estão funcionando.
 
 As configurações de bancos de dados estão em: <code>Administration Console -> Configuration -> Subsystems -> DataSources & Drivers</code>
 
+
+### Compilação
+
+
+<h2>Compilação</h2>
+
+
+Clone o projeto do gitlab:
+
+
+
+```bash
+$ git clone https://github.com/uspdev/ganimedes.git
+```
+
+Acesse o diretório criado:
+
+```bash
+$ cd ganimedes
+```
+
+Execute o procedimento de build do Gradle:
+
+```bash
+$ ./gradlew build
+```
+
+
+O resultado esperado é a criação do arquivo <code>buld/libs/ganimedes.war</code>
+
+
+
+
+### Implantação
 
 
 
