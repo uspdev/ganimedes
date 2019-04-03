@@ -7,7 +7,7 @@ acompanhamento dos estágios realizados pelos alunos do Instituto.
 ## Instalação
 
 Este guia de instalação foi elaborado para o sistema operacional Ubuntu. No entanto, com os devidos ajustes esse guia pode ser perfeitamente
-adaptado para que a implantação seja realizada em outros sistemas operacionais como Windows ou MacOS.
+adaptado para que a implantação seja realizada em outros sistemas Linux, Windows ou MacOS.
 
 ### Instalação do Java JDK
 
@@ -42,8 +42,8 @@ PATH="/opt/gradle/gradle-5.3/bin"
 
 
 ```bash          
-$ mkdir /opt/wildfly
-$ unzip -d /opt/wildfly wildfly-16.0.0.Final.zip
+$ sudo mkdir /opt/wildfly
+$ sudo unzip -d /opt/wildfly wildfly-16.0.0.Final.zip
 ```
 
 Inicie o Wildfly
@@ -106,7 +106,7 @@ Para finalizar, instalamos o driver no Wildfly:
 Com o módulo criado, então criamos o datasource indicando a configuração do servidor MySQL onde está instalado o banco de dados:
 
 ```bash
-data-source add --jndi-name=java:/jdbc/replicado --name=replicado --connection-url=jdbc:sqlserver://fqdn-do-servidor:1433;DatabaseName=replicado --driver-name=sqlserver --user-name=replicado --password=password
+data-source add --jndi-name=java:/jdbc/replicado --name=replicado --connection-url=jdbc:sqlserver://[SERVIDOR]:1433;DatabaseName=[NOME DO BANCO] --driver-name=sqlserver --user-name=[USUARIO] --password=[SENHA]
 ```
 
 
@@ -143,7 +143,7 @@ Para finalizar, instalamos o driver no Wildfly:
 Com o módulo criado, então criamos o datasource indicando a configuração do servidor MySQL onde está instalado o banco de dados:
 
 ```bash
-data-source add --jndi-name=java:/jdbc/ganimedes --name=ganimedes --connection-url=jdbc:mysql://fqdn-do-servidor:3306/ganimedes --driver-name=mysql --user-name=ganimedes --password=password
+data-source add --jndi-name=java:/jdbc/ganimedes --name=ganimedes --connection-url=jdbc:mysql://[SERVIDOR]:3306/[NOME DO BANCO] --driver-name=mysql --user-name=[USUARIO] --password=[SENHA]
 ```
 
 Encerre o CLI
