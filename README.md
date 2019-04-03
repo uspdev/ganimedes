@@ -111,7 +111,7 @@ data-source add --jndi-name=java:/jdbc/replicado --name=replicado --connection-u
 
 Encerre o CLI
 
-```bash
+```
 exit
 ```
 
@@ -147,7 +147,7 @@ data-source add --jndi-name=java:/jdbc/ganimedes --name=ganimedes --connection-u
 
 Encerre o CLI
 
-```bash
+```
 exit
 ```
 
@@ -172,7 +172,7 @@ Acesse o diretório criado:
 $ cd ganimedes
 ```
 
-Compile e crie o arquivo war com o Gradle.
+Compile e crie o arquivo WAR com o Gradle.
 
 ```bash
 $ ./gradlew build
@@ -186,6 +186,12 @@ Se o procedimento foi realizado com sucesso, espera-se que o Gradle tenha criado
 
 ### Implantação
 
+
+Para implantar a aplicação no servidor de aplicação Wildfly, execute o comando abaixo indicando o caminho do WAR:
+
+```bash
+$ /opt/wildfly/bin/jboss-cli.sh --connect --command="deploy --force [CAMINHO DO WAR]"
+```
 
 
 ## Uso
