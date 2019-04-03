@@ -6,7 +6,8 @@ acompanhamento dos estágios realizados pelos seus alunos.
 
 ## Instalação
 
-Este guia de instalação foi escrito para sistema operacional Ubuntu.
+Este guia de instalação foi elaborado para o sistema operacional Ubuntu. No entanto, com os devidos ajustes esse guia pode ser perfeitamente
+adaptado para que a implantação seja realizada em outros sistemas operacionais como Windows ou MacOS.
 
 ### Instalação do Java JDK
 
@@ -20,7 +21,7 @@ $ sudo apt-get install oracle-java8-installer
 
 
 
-### Instalação do gradle
+### Instalação do Gradle
 
 <a href='https://gradle.org/releases/' >[Baixe]</a> o Gradle e descompacte em <code>/opt/gradle</code>:
 
@@ -32,10 +33,10 @@ $ unzip -d /opt/gradle gradle-5.3-bin.zip
 Edite o arquivo <code>/etc/enviroment</code> e inclua o caminho do executável do Gradle na variável PATH
 
 ```bash          
-PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games<strong>:/opt/gradle/gradle-5.3/bin</strong>"
+PATH="/opt/gradle/gradle-5.3/bin"
 ```
 
-### Instalação do Wildfly
+### Instalação e configuração do Wildfly
 
 [Baixe](https://wildfly.org/downloads) o Wildfly e descompacte em <code>/opt/wildfly</code>:
 
@@ -50,19 +51,20 @@ Inicie o Wildfly
 $ sudo /opt/wildfly/bin/standalone.sh
 ```
 
-Acesse <code>http://localhost:8080</code> para visualizar a página inicial do Wildfly.
 
 
 
-#### Configuração do Wildfly
-
-Crie um usuário para administração do Wildfly. Escolha o usuário e a senha de sua preferência.
+Crie um usuário para administração do Wildfly. Altere o código abaixo com os valores dos parâmetros de sua preferência.
 
 ```bash          
 $ /opt/wildfly/bin/add-user.sh -u 'admin' -p 'admin.1234' -g 'admin'
 ```
 
-Acesse <code>http://localhost:9990</code> para visualizar o painel de controle do Wildfly.
+Acesse <code>http://localhost:8080</code> com o seu navegador para visualizar a página inicial e o console de administração do Wildfly.
+
+
+Além do console de administração web o Wildfly possui uma interface de linha de comando, conhecido como Wildfly CLI, que é o método
+adotado nesse guia.
 
 
 
@@ -72,8 +74,6 @@ Acesse <code>http://localhost:9990</code> para visualizar o painel de controle d
 O Sistema Ganimedes utiliza duas conexões com servidores de bancos de dados, sendo uma com o banco replicado (somente leitura),
 executado em um servidor Microsoft SQL Server e com um banco de dados MySQL para armazenamento dos dados produzidos localmente na unidade.
 
-A configuração de conexões com bancos de dados no Wildfly pode ser feita pelo painel de controle e pelo CLI (Command Line Interface),
-que é o método apresentado aqui.
 
 
 <strong>Configuração do Microsoft SQL Server</strong>
@@ -153,6 +153,10 @@ $ exit
 ```
 
 
+Acesse o console de administração do Wildfly para verificar se os drivers estão corretamente instalados
+e testar as conexões dos datasources com os respectivos bancos de dados.
+
+Essas configurações estão disponíveis em: <code>Administration Console -> Configuration -> Subsystems -> DataSources & Drivers</code>
 
 
 
