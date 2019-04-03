@@ -42,8 +42,9 @@ public class Anunciante implements Serializable {
 
 	private String telefone;
 
-	@OneToMany(mappedBy = "anunciante", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Anuncio> anuncios = new ArrayList<Anuncio>();
+
 
 	public Integer getId() {
 		return id;
@@ -142,7 +143,7 @@ public class Anunciante implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Anunciante other = (Anunciante) obj;
-		
+
 		if (ativado != other.ativado)
 			return false;
 		if (codlog == null) {
