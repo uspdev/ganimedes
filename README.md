@@ -187,7 +187,7 @@ Se o procedimento foi realizado com sucesso, espera-se que o Gradle tenha criado
 ### Implantação
 
 
-Para implantar a aplicação no servidor de aplicação Wildfly, execute o comando abaixo indicando o caminho do WAR:
+Para implantar a aplicação no Wildfly, execute o comando abaixo indicando o caminho do WAR:
 
 ```bash
 $ /opt/wildfly/bin/jboss-cli.sh --connect --command="deploy --force [CAMINHO DO WAR]"
