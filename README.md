@@ -1,7 +1,7 @@
 # Sistema Ganimedes
 
 O Sistema Ganimedes foi idealizado pela Seção de Estágios do IME-USP para o
-acompanhamento dos estágios realizados pelos seus alunos.
+acompanhamento dos estágios realizados pelos alunos do Instituto.
 
 
 ## Instalação
