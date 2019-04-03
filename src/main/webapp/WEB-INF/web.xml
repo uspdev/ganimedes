@@ -24,10 +24,10 @@
 		<param-value>server</param-value>
 	</context-param>
 
-	<!-- <context-param> <param-name>primefaces.THEME</param-name> <param-value>bootstrap</param-value> 
+	<!-- <context-param> <param-name>primefaces.THEME</param-name> <param-value>bootstrap</param-value>
 		</context-param> -->
 
-	<!-- A configuracao abaixo possibilita usar bindings sem apresenta o erro 
+	<!-- A configuracao abaixo possibilita usar bindings sem apresenta o erro
 		de duplicated component id -->
 	<context-param>
 		<param-name>javax.faces.PARTIAL_STATE_SAVING</param-name>
@@ -59,7 +59,7 @@
 		<param-name>com.sun.faces.numberOfViewsInSession</param-name>
 		<param-value>3</param-value>
 	</context-param>
-
+<!--
 	<filter>
 		<filter-name>PrimeFaces FileUpload Filter</filter-name>
 		<filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
@@ -68,5 +68,5 @@
 		<filter-name>PrimeFaces FileUpload Filter</filter-name>
 		<servlet-name>Faces Servlet</servlet-name>
 	</filter-mapping>
-
+-->
 </web-app>
