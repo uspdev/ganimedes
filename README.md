@@ -65,7 +65,7 @@ $ /opt/wildfly/bin/add-user.sh -u 'admin' -p 'admin.1234' -g 'admin'
 ```
 
 Para visualizar a página inicial e a interface web de administração do Wildfly acesse <code>http://localhost:8080</code>. O Wildfly
-também possui uma interface de linha de comando, o Wildfly CLI, que foi o método adotado nesse guia pela simplicidade para a documentação.
+também possui uma interface de linha de comando, o Wildfly <strong>CLI</strong>.
 
 
 
@@ -73,7 +73,7 @@ também possui uma interface de linha de comando, o Wildfly CLI, que foi o méto
 
 
 O Sistema Ganimedes utiliza duas conexões com servidores de bancos de dados, sendo uma com o banco replicado (somente leitura),
-executado em um servidor Microsoft SQL Server e com um banco de dados MySQL para armazenamento dos dados produzidos localmente na unidade.
+executado em um servidor Microsoft SQL Server e outra com um banco de dados MySQL para armazenamento dos dados do sistema.
 
 
 
@@ -112,7 +112,7 @@ data-source add --jndi-name=java:/jdbc/replicado --name=replicado --connection-u
 Encerre o CLI
 
 ```bash
-$ exit
+exit
 ```
 
 
@@ -148,7 +148,7 @@ data-source add --jndi-name=java:/jdbc/ganimedes --name=ganimedes --connection-u
 Encerre o CLI
 
 ```bash
-$ exit
+exit
 ```
 
 
@@ -160,13 +160,7 @@ As configurações de bancos de dados estão em: <code>Administration Console ->
 
 ### Compilação
 
-
-<h2>Compilação</h2>
-
-
-Clone o projeto do gitlab:
-
-
+Clone o projeto:
 
 ```bash
 $ git clone https://github.com/uspdev/ganimedes.git
@@ -178,14 +172,14 @@ Acesse o diretório criado:
 $ cd ganimedes
 ```
 
-Execute o procedimento de build do Gradle:
+Compile e crie o arquivo war com o Gradle.
 
 ```bash
 $ ./gradlew build
 ```
 
 
-O resultado esperado é a criação do arquivo <code>buld/libs/ganimedes.war</code>
+Se o procedimento foi realizado com sucesso, espera-se que o Gradle tenha criado o arquivo <code>buld/libs/ganimedes.war</code>
 
 
 
