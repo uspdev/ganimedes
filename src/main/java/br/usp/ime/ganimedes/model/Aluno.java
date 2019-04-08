@@ -157,6 +157,12 @@ public class Aluno implements Serializable {
 		this.codpes = codpes;
 	}
 
+	public Aluno(Integer codpes, String nompes) {
+		super();
+		this.codpes = codpes;
+		this.nompes = nompes;
+	}
+
 	public Aluno() {
 		super();
 		// TODO Auto-generated constructor stub

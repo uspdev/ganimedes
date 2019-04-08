@@ -3,7 +3,6 @@ package br.usp.ime.ganimedes.ejb;
 import java.util.List;
 
 import javax.ejb.Remote;
-import javax.persistence.Query;
 
 import br.usp.ime.ganimedes.model.Aluno;
 import br.usp.ime.ganimedes.model.CursoGr;
@@ -13,6 +12,19 @@ import br.usp.model.replicado.VinculoPessoaUsp;
 
 @Remote
 public interface DaoReplicadoInterface {
+	/*
+	 * public String buscarEmailPrincipal(Integer codpes);
+	 *
+	 * public List<Pessoa> buscarDocentesDepartamento(String departamento);
+	 *
+	 * public List<Pessoa> buscarDocentes(String nompes);
+	 *
+	 * public List<Pessoa> buscarFuncionarios(String nompes);
+	 *
+	 * public List<Pessoa> buscarFuncionarios();
+	 *
+	 * public List<Pessoa> buscarFuncionariosPorSetor(Short codset);
+	 */
 
 	public Aluno buscarAlunoGr(Integer codpes);
 
@@ -35,7 +47,11 @@ public interface DaoReplicadoInterface {
 	public String buscarNomePessoa(int codpes);
 
 	public String buscarEmailPrincipal(Integer codpes);
-	
+
 	public boolean isAluno(Integer codpes);
+
+	public boolean temMatriculaAtiva(Integer codpes);
+
+	public boolean temProgramaAtivo(Integer codpes);
 
 }

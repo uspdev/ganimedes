@@ -21,7 +21,6 @@ import br.usp.ime.ganimedes.dao.DaoMensagem;
 import br.usp.ime.ganimedes.dao.DaoPapel;
 import br.usp.ime.ganimedes.dao.DaoToken;
 import br.usp.ime.ganimedes.dao.DaoUsuario;
-import br.usp.ime.ganimedes.ejb.GanimedesInterface;
 import br.usp.ime.ganimedes.mail.MessageFactory;
 import br.usp.ime.ganimedes.model.Mensagem;
 import br.usp.ime.ganimedes.model.Papel;
@@ -40,8 +39,6 @@ public class MbAnunciante implements Serializable {
 	FacesContext fc = FacesContext.getCurrentInstance();
 	HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 
-	@EJB
-	GanimedesInterface ejb;
 
 	@EJB
 	DaoUsuario daoUsuario;
@@ -62,7 +59,7 @@ public class MbAnunciante implements Serializable {
 	PageTransitionBean pt;
 
 	public MbAnunciante() {
-
+		// TODO Auto-generated constructor stub
 	}
 
 	private Usuario usuario = new Usuario();
@@ -113,6 +110,7 @@ public class MbAnunciante implements Serializable {
 		usuario.setSenha(DigestUtils.sha256Hex(this.getSenhaNova() + this.usuario.getSalt()));
 		usuario.setAtivado(false);
 
+
 		Papel papel = daoPapel.buscarPapel("ANUNCIANTE");
 		usuario.getPapeis().add(papel);
 
@@ -134,7 +132,7 @@ public class MbAnunciante implements Serializable {
 
 		MessageFactory mf = new MessageFactory();
 
-		String msg = MessageFactory.getMsgNovoToken(token);
+		String msg = mf.getMsgNovoToken(token);
 
 		Recursos recursos = new Recursos();
 

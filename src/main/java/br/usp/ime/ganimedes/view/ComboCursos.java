@@ -9,7 +9,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
-import br.usp.ime.ganimedes.ejb.GanimedesInterface;
+import br.usp.ime.ganimedes.dao.DaoCurso;
 import br.usp.ime.ganimedes.mb.MbAnuncio;
 import br.usp.ime.ganimedes.model.Curso;
 import br.usp.ime.ganimedes.model.ENivelCurso;
@@ -20,7 +20,7 @@ import br.usp.ime.ganimedes.model.ERegime;
 public class ComboCursos {
 
 	@EJB
-	GanimedesInterface ejb;
+	DaoCurso daoCurso;
 
 	public List<SelectItem> getCursos() {
 		List<SelectItem> itens = new ArrayList<SelectItem>();
@@ -31,12 +31,12 @@ public class ComboCursos {
 		try {
 			if (!mbAnuncio.getTela().getSelRegimeTrabalho().getValue().equals(ERegime.ESTAGIO)) {
 
-				for (Curso c : ejb.buscarCursos()) {
+				for (Curso c : daoCurso.buscarCursos()) {
 					itens.add(new SelectItem(c, c.getNivel().getValor() + " - " + c.getNome()));
 
 				}
 			} else {
-				for (Curso c : ejb.buscarCursos()) {
+				for (Curso c : daoCurso.buscarCursos()) {
 
 					if (c.getNivel().equals(ENivelCurso.GRADUACAO)) {
 						itens.add(new SelectItem(c, c.getNivel().getValor() + " - " + c.getNome()));
@@ -48,7 +48,7 @@ public class ComboCursos {
 		}
 
 		catch (Exception e) {
-			for (Curso c : ejb.buscarCursos()) {
+			for (Curso c : daoCurso.buscarCursos()) {
 
 				if (c.getNivel().equals(ENivelCurso.GRADUACAO)) {
 					itens.add(new SelectItem(c, c.getNivel().getValor() + " - " + c.getNome()));
@@ -61,22 +61,5 @@ public class ComboCursos {
 		return itens;
 
 	}
-
-/*
-	public List<SelectItem> getAll() {
-		List<SelectItem> itens = new ArrayList<SelectItem>();
-
-		FacesContext fc = FacesContext.getCurrentInstance();
-		MbAnuncio mbAnuncio = (MbAnuncio) fc.getApplication().getVariableResolver().resolveVariable(fc, "mbAnuncio");
-
-		for (Curso c : ejb.buscarCursos()) {
-			itens.add(new SelectItem(c, c.getNivel().getValor() + " - " + c.getNome()));
-
-		}
-
-		return itens;
-
-	}
-	*/
 
 }

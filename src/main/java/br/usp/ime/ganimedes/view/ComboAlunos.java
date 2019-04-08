@@ -8,7 +8,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.model.SelectItem;
 
-import br.usp.ime.ganimedes.ejb.DaoGanimedes;
+import br.usp.ime.ganimedes.dao.DaoAluno;
 import br.usp.ime.ganimedes.model.Aluno;
 
 @ManagedBean(name = "comboAlunos")
@@ -16,12 +16,12 @@ import br.usp.ime.ganimedes.model.Aluno;
 public class ComboAlunos {
 
 	@EJB
-	DaoGanimedes daoGanimedes;
+	DaoAluno daoAluno;
 
 	public List<SelectItem> getAlunos() {
 		List<SelectItem> itens = new ArrayList<SelectItem>();
 
-		for (Aluno a : daoGanimedes.buscarAlunos()) {
+		for (Aluno a : daoAluno.buscarAlunos()) {
 			itens.add(new SelectItem(a, a.getNompes()));
 		}
 

@@ -27,7 +27,7 @@
 
                      <h2>Relatórios</h2>
 
-                     <h:form id="relatorio_estagio" acceptcharset="ISO-8859-1" rendered="#{UsuarioLogado.adm || UsuarioLogado.opr}">
+                     <h:form id="relatorio_estagio" rendered="#{UsuarioLogado.adm || UsuarioLogado.opr}">
 
                         <p:panel>
                            <h4>Relatório de Estágios</h4>
@@ -36,7 +36,7 @@
 
                            <h:panelGrid columns="2">
                               <h:outputText value="Empresa: " />
-                              <p:selectOneMenu id="empresa" value="#{mbRelatorio.tela.estagio.empresa}" converter="converter" effect="fade" filter="true"
+                              <p:selectOneMenu id="sel_empresa" value="#{mbRelatorio.tela.estagio.empresa}" converter="converter" effect="fade" filter="true"
                                  filterMatchMode="contains" var="e">
                                  <f:selectItem itemLabel="selecione uma empresa" itemValue="" />
                                  <f:selectItems value="#{comboEmpresas.empresas}" var="empresa" itemLabel="#{e.nome}" itemValue="#{e}" />
@@ -60,6 +60,7 @@
                                     <f:selectItems value="#{comboCursos.cursos}" var="c" itemLabel="#{c.label}" itemValue="#{c}" />
                                  </h:selectManyListbox>
                               </ui:remove>
+
                               <ui:remove>
                                  <p:selectManyCheckbox id="grid_cursos" value="#{mbRelatorio.tela.cursosGraduacao}" layout="grid" columns="3"
                                     converter="converter" collectionType="java.util.ArrayList">
@@ -67,13 +68,14 @@
                                  </p:selectManyCheckbox>
                               </ui:remove>
 
+
+
                               <h:outputText value="Curso: " />
                               <p:selectCheckboxMenu id="sel_curso" value="#{mbRelatorio.tela.cursosGraduacao}" converter="converter" var="c" filter="true"
                                  filterMatchMode="contains" columns="3" layout="pageDirection" label="selecione um ou mais cursos">
                                  <f:selectItems value="#{comboCursosGraduacao.cursos}" var="curso" itemLabel="#{curso.label}" itemValue="#{curso}">
                                  </f:selectItems>
                               </p:selectCheckboxMenu>
-
 
 
                               <h:outputText value="Período: " />
@@ -86,6 +88,7 @@
                                     pattern="dd/MM/yyyy" required="true" requiredMessage="Informe a data final do período" placeholder="Término" />
                               </h:panelGroup>
 
+
                               <ui:remove>
                                  <h:outputText value="Situação: " />
                                  <p:selectOneRadio value="#{mbRelatorio.tela.txtStatus}">
@@ -94,11 +97,19 @@
                                  </p:selectOneRadio>
                               </ui:remove>
 
+
+
                            </h:panelGrid>
                            <p:commandButton action="#{mbRelatorio.gerarRelatorioEstagio()}" ajax="false" value="Gerar Relatório" disabled="false" />
 
                            <p:message for="relatorio_estagio" />
                            <p:message for="sel_curso" />
+                           <p:message for="sel_curso" />
+                           <p:message for="sel_empresa" />
+                           <p:message for="cal_data_ini" />
+                           <p:message for="cal_data_fim" />
+
+
                         </p:panel>
 
                      </h:form>

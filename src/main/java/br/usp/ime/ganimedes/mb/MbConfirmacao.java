@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import br.usp.ime.ganimedes.dao.DaoToken;
 import br.usp.ime.ganimedes.dao.DaoUsuario;
-import br.usp.ime.ganimedes.ejb.GanimedesInterface;
 import br.usp.ime.ganimedes.model.Token;
 import br.usp.ime.ganimedes.model.Usuario;
 import br.usp.ime.ganimedes.view.MessageBean;
@@ -28,8 +27,6 @@ public class MbConfirmacao implements Serializable {
 	@ManagedProperty(value = "#{param.token}")
 	private String sToken;
 
-	@EJB
-	GanimedesInterface ejb;
 
 	@EJB
 	DaoToken daoToken;
@@ -85,6 +82,7 @@ public class MbConfirmacao implements Serializable {
 			return;
 		}
 		mb.addMessage("me", "main", FacesMessage.SEVERITY_INFO);
+		// Mailer.sendConfirmacaoEmail(confirmacaoEmail.getAnunciante().getCodlog(), confirmacaoEmail.getCodigoURL());
 	}
 
 	public String getCodlog() {

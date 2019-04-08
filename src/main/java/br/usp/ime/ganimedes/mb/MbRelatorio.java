@@ -19,9 +19,13 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.itextpdf.text.DocumentException;
 
+import br.usp.ime.ganimedes.dao.DaoCurso;
+import br.usp.ime.ganimedes.dao.DaoEmpresa;
+import br.usp.ime.ganimedes.dao.DaoEstagio;
+import br.usp.ime.ganimedes.documentos.RelatorioEmpresa;
 import br.usp.ime.ganimedes.documentos.RelatorioEstagio;
 import br.usp.ime.ganimedes.documentos.RelatorioEstagioPorCurso;
-import br.usp.ime.ganimedes.ejb.GanimedesInterface;
+import br.usp.ime.ganimedes.ejb.DaoReplicadoInterface;
 import br.usp.ime.ganimedes.model.CursoGr;
 import br.usp.ime.ganimedes.model.Empresa;
 import br.usp.ime.ganimedes.model.Estagio;
@@ -45,7 +49,16 @@ public class MbRelatorio implements Serializable {
 	Logger log = Logger.getLogger(MbRelatorio.class.getName());
 
 	@EJB
-	GanimedesInterface ejb;
+	DaoEstagio daoEstagio;
+
+	@EJB
+	DaoReplicadoInterface daoReplicado;
+
+	@EJB
+	DaoEmpresa daoEmpresa;
+
+	@EJB
+	DaoCurso daoCurso;
 
 	private ViewRelatorio tela = new ViewRelatorio();
 
@@ -66,23 +79,18 @@ public class MbRelatorio implements Serializable {
 		Date df = this.tela.getDtafim();
 
 		if (di.after(df)) {
-			mb.addMessage("dipdf", "main", FacesMessage.SEVERITY_ERROR);
+			mb.addMessage("dipdf", "relatorio_estagio", FacesMessage.SEVERITY_ERROR);
 			return;
 		}
 
 		Empresa empresa = this.tela.getEstagio().getEmpresa();
 
-		List<Estagio> estagios = new ArrayList<Estagio>();
 
-		if (empresa == null) {
 
-			estagios = ejb.buscarEstagiosAtivosPeriodo(di, df);
-		} else {
-			estagios = ejb.buscarEstagiosAtivosPeriodo(di, df, empresa);
-		}
+		 List<Estagio> estagios = daoEstagio.buscarEstagios(di, df, empresa);
 
-		if (estagios.isEmpty()) {
-			mb.addMessage("semreg", "main", FacesMessage.SEVERITY_ERROR);
+		if (estagios == null) {
+			mb.addMessage("semreg", "relatorio_estagio", FacesMessage.SEVERITY_INFO);
 			return;
 		}
 
@@ -108,6 +116,11 @@ public class MbRelatorio implements Serializable {
 	}
 
 	private void gerarRelatorioEstagiosPorCurso(Date di, Date df, List<Estagio> estagios) {
+
+		// obter os cursos dos alunos do replicado
+		for (Estagio estagio : estagios) {
+			estagio.setAluno(daoReplicado.buscarAlunoGr(estagio.getAluno().getCodpes()));
+		}
 
 		HashMap<CursoGr, List<Estagio>> mapaRelatorio = new HashMap<CursoGr, List<Estagio>>();
 
@@ -136,19 +149,26 @@ public class MbRelatorio implements Serializable {
 
 	public void gerarRelatorioConvenio() {
 
-		List<Empresa> empresas = ejb.buscarEmpresasConveniadas(this.tela.getDta());
+		List<Empresa> empresas = daoEmpresa.buscarEmpresasConveniadas(this.tela.getDta());
 
 		if (empresas.isEmpty()) {
 			mb.addMessage("semreg", "main", FacesMessage.SEVERITY_INFO);
 		} else {
-			ejb.gerarRelatorioEmpresasConveniadas(empresas, this.tela.getDta());
-		}
+			RelatorioEmpresa doc = new RelatorioEmpresa();
 
+			try {
+				doc.gerarDocumento(empresas, this.tela.getDta());
+			} catch (DocumentException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
 	}
 
 	public void selecionarTodosCursos() {
 
-		this.tela.setCursos(ejb.buscarCursos());
+		this.tela.setCursos(daoCurso.buscarCursos());
 
 	}
 

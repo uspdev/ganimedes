@@ -1,7 +1,6 @@
 package br.usp.ime.ganimedes.mb;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -13,7 +12,9 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
-import br.usp.ime.ganimedes.ejb.GanimedesInterface;
+import br.usp.ime.ganimedes.dao.DaoContato;
+import br.usp.ime.ganimedes.dao.DaoConvenio;
+import br.usp.ime.ganimedes.dao.DaoEmpresa;
 import br.usp.ime.ganimedes.model.Contato;
 import br.usp.ime.ganimedes.model.Convenio;
 import br.usp.ime.ganimedes.model.Empresa;
@@ -33,10 +34,16 @@ public class MbOperador implements Serializable {
 	@Inject
 	Usuario usuarioLogado;
 
-	Logger log = Logger.getLogger(MbOperador.class.getName());
+	@EJB
+	DaoEmpresa daoEmpresa;
 
 	@EJB
-	GanimedesInterface ejb;
+	DaoContato daoContato;
+
+	@EJB
+	DaoConvenio daoConvenio;
+
+	Logger log = Logger.getLogger(MbOperador.class.getName());
 
 	private ViewOperador tela = new ViewOperador();
 
@@ -54,7 +61,7 @@ public class MbOperador implements Serializable {
 
 	public void buscarEmpresas() {
 
-		List<Empresa> empresas = ejb.buscarEmpresas();
+		List<Empresa> empresas = daoEmpresa.buscarEmpresas();
 
 		if (empresas.isEmpty()) {
 			mb.addMessage("semreg", "main", FacesMessage.SEVERITY_INFO);
@@ -67,6 +74,21 @@ public class MbOperador implements Serializable {
 
 	}
 
+	/*
+	 * public void buscarEmpresa() {
+	 *
+	 * String criterio = this.tela.getCriterio();
+	 *
+	 * List<Empresa> empresas = ejb.buscarEmpresa(criterio);
+	 *
+	 * if (empresas.isEmpty()) { mb.addMessage("semreg", "main", FacesMessage.SEVERITY_INFO); } else { this.tela.setEmpresas(empresas);
+	 * this.tela.getFrmLista().setRendered(true); this.tela.getFrmBusca().setRendered(false);
+	 * this.tela.getFrmEdicaoContatosEmpresa().setRendered(false); this.tela.getFrmEdicaoConveniosEmpresa().setRendered(false);
+	 * this.tela.getFrmInclusao().setRendered(false); }
+	 *
+	 * }
+	 */
+
 	public void salvarEmpresa() {
 		Empresa e = this.tela.getEmpresa();
 
@@ -78,7 +100,7 @@ public class MbOperador implements Serializable {
 			c.setEmpresa(e);
 		}
 
-		if (ejb.salvar(e) != null) {
+		if (daoEmpresa.persist(e) != null) {
 			mb.addMessage("oprok", "main", FacesMessage.SEVERITY_INFO);
 			this.tela.getFrmInclusao().setRendered(false);
 			this.tela.getFrmEdicaoContatosEmpresa().setRendered(false);
@@ -91,22 +113,22 @@ public class MbOperador implements Serializable {
 	}
 
 	public void atualizarEmpresa(Empresa e) {
-		ejb.salvar(e);
+		daoEmpresa.persist(e);
 	}
 
 	public void deletarEmpresa(Empresa e) {
-		ejb.deletar(e);
+		daoEmpresa.delete(e);
 		this.tela.getEmpresas().remove(e);
 		mb.addMessage("oprok", "main", FacesMessage.SEVERITY_INFO);
 	}
 
 	public void deletarContato(Contato c) {
-		ejb.deletarContato(c);
+		daoContato.delete(c);
 		this.tela.getEmpresa().getContatos().remove(c);
 	}
 
 	public void deletarConvenio(Convenio c) {
-		ejb.deletarConvenio(c);
+		daoConvenio.delete(c);
 		this.tela.getEmpresa().getConvenios().remove(c);
 	}
 

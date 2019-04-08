@@ -1,6 +1,5 @@
 package br.usp.ime.ganimedes.mb;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -18,7 +17,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.component.html.HtmlInputText;
 import javax.faces.component.html.HtmlSelectOneMenu;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
@@ -29,10 +27,11 @@ import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
 import br.usp.ime.ganimedes.dao.DaoAluno;
+import br.usp.ime.ganimedes.dao.DaoDocumento;
+import br.usp.ime.ganimedes.dao.DaoEmpresa;
+import br.usp.ime.ganimedes.dao.DaoEstagio;
 import br.usp.ime.ganimedes.dao.DaoMensagem;
-import br.usp.ime.ganimedes.ejb.DaoGanimedes;
 import br.usp.ime.ganimedes.ejb.DaoReplicadoInterface;
-import br.usp.ime.ganimedes.ejb.GanimedesInterface;
 import br.usp.ime.ganimedes.mail.MessageFactory;
 import br.usp.ime.ganimedes.model.Aluno;
 import br.usp.ime.ganimedes.model.Documento;
@@ -70,12 +69,6 @@ public class MbEstagio implements Serializable {
 	Logger log = Logger.getLogger(MbEstagio.class.getName());
 
 	@EJB
-	GanimedesInterface ejb;
-
-	@EJB
-	DaoGanimedes daoGanimedes;
-
-	@EJB
 	DaoMensagem daoMensagem;
 
 	@EJB
@@ -83,6 +76,15 @@ public class MbEstagio implements Serializable {
 
 	@EJB
 	DaoReplicadoInterface daoReplicado;
+
+	@EJB
+	DaoDocumento daoDocumento;
+
+	@EJB
+	DaoEstagio daoEstagio;
+
+	@EJB
+	DaoEmpresa daoEmpresa;
 
 	private ViewEstagio tela = new ViewEstagio();
 
@@ -132,7 +134,7 @@ public class MbEstagio implements Serializable {
 
 	public void carregarAluno() {
 
-		this.tela.setAluno(ejb.buscarAluno(this.tela.getAluno().getCodpes()));
+		this.tela.setAluno(daoAluno.buscarAluno(this.tela.getAluno().getCodpes()));
 
 		if (this.tela.getAluno() == null) {
 			mb.addMessage("ane", "main", FacesMessage.SEVERITY_ERROR);
@@ -144,12 +146,12 @@ public class MbEstagio implements Serializable {
 
 	public void corrigeTabelaAluno() {
 
-		for (Aluno aluno : daoGanimedes.buscarAlunos()) {
+		for (Aluno aluno : daoAluno.buscarAlunos()) {
 
 			try {
-				Aluno a1 = ejb.buscarAluno(aluno.getCodpes());
+				Aluno a1 = daoAluno.buscarAluno(aluno.getCodpes());
 				aluno.setNompes(a1.getNompes());
-				daoGanimedes.salvar(aluno);
+				daoAluno.persist(aluno);
 			} catch (NullPointerException e) {
 				System.out.println("null pointer " + aluno.getCodpes());
 			}
@@ -163,7 +165,7 @@ public class MbEstagio implements Serializable {
 
 			Integer codpes = Integer.valueOf(this.tela.getCriterio());
 
-			a = ejb.buscarAluno(codpes);
+			a = daoAluno.buscarAluno(codpes);
 
 			if (a != null) {
 
@@ -184,17 +186,15 @@ public class MbEstagio implements Serializable {
 	}
 
 	public void iniciarTelaAluno() {
-		try {
 
-			Aluno a = ejb.buscarAluno(Integer.valueOf(this.tela.getCodpes()));
+		if (this.tela.getCodpes() != null) {
+			Aluno a = daoAluno.buscarAluno(Integer.valueOf(this.tela.getCodpes()));
 			this.tela.setAluno(a);
 			this.tela.getFrmLista().setRendered(false);
 			this.tela.getFrmAluno().setRendered(true);
 			if (a == null) {
 				mb.addMessage("ane", "main", FacesMessage.SEVERITY_ERROR);
 			}
-		} catch (Exception e) {
-			// pt.chamaEstagios();
 		}
 
 	}
@@ -253,9 +253,9 @@ public class MbEstagio implements Serializable {
 			documento.setDtaultand(new Date());
 		}
 
-		if (null != ejb.salvar(aluno)) {
+		if (null != daoAluno.persist(aluno)) {
 
-			aluno = ejb.buscarAluno(aluno.getCodpes());
+			aluno = daoAluno.buscarAluno(aluno.getCodpes());
 
 			Collections.sort(aluno.getEstagios(), new OrdenadorEstagioDtaIni());
 			this.tela.setAluno(aluno);
@@ -286,13 +286,10 @@ public class MbEstagio implements Serializable {
 			documento.setDtaultand(new Date());
 		}
 
-		documento = (Documento) ejb.salvar(documento);
+		documento = (Documento) daoDocumento.persist(documento);
 
 		if (null != documento) {
-			this.tela.setEstagio(ejb.buscarEstagio(estagio.getAluno(), estagio.getEmpresa()));
-
-			// Collections.sort(this.tela.getEstagio().getAluno().getEstagios(), new OrdenadorEstagioDtaIni());
-
+			this.tela.setEstagio(daoEstagio.buscarEstagio(estagio.getAluno(), estagio.getEmpresa()));
 			mb.addMessage("cadok", "main", FacesMessage.SEVERITY_INFO);
 			this.tela.getFrmAluno().setRendered(true);
 			this.tela.getFrmEstagio().setRendered(true);
@@ -359,26 +356,26 @@ public class MbEstagio implements Serializable {
 		Estagio e = this.tela.getEstagio();
 
 		for (Documento d : e.getDocumentos()) {
-			ejb.deletarDocumento(d);
+			daoEstagio.deletarDocumento(d);
 		}
 
 		for (Notificacao n : e.getNotificacoes()) {
-			ejb.deletarNotificacao(n);
+			daoEstagio.deletarNotificacao(n);
 		}
 
 		for (Supervisor s : e.getSupervisores()) {
-			ejb.deletarSupervisor(s);
+			daoEstagio.deletarSupervisor(s);
 		}
 
 		for (Remuneracao r : e.getRemuneracoes()) {
-			ejb.deletarRemuneracao(r);
+			daoEstagio.deletarRemuneracao(r);
 		}
 
 		for (Jornada j : e.getJornadas()) {
-			ejb.deletarJornada(j);
+			daoEstagio.deletarJornada(j);
 		}
 
-		ejb.deletarEstagio(e);
+		daoEstagio.deletarEstagio(e);
 
 		this.tela.setEstagio(null);
 		this.tela.getFrmEstagio().setRendered(false);
@@ -389,7 +386,7 @@ public class MbEstagio implements Serializable {
 
 	public void deletarDocumento(Documento d) {
 
-		int result = ejb.deletarDocumento(d);
+		int result = daoEstagio.deletarDocumento(d);
 		if (result > 0) {
 			mb.addMessage("oprok", "main", FacesMessage.SEVERITY_INFO);
 			this.tela.getEstagio().getDocumentos().remove(d);
@@ -401,7 +398,7 @@ public class MbEstagio implements Serializable {
 		if (r.getId() == null) {
 			this.tela.getEstagio().getRemuneracoes().remove(r);
 		} else {
-			int result = ejb.deletarRemuneracao(r);
+			int result = daoEstagio.deletarRemuneracao(r);
 			if (result > 0) {
 				mb.addMessage("oprok", "main", FacesMessage.SEVERITY_INFO);
 				this.tela.getEstagio().getRemuneracoes().remove(r);
@@ -414,7 +411,7 @@ public class MbEstagio implements Serializable {
 			this.tela.getEstagio().getSupervisores().remove(s);
 		} else {
 
-			int result = ejb.deletarSupervisor(s);
+			int result = daoEstagio.deletarSupervisor(s);
 			if (result > 0) {
 				mb.addMessage("oprok", "main", FacesMessage.SEVERITY_INFO);
 				this.tela.getEstagio().getSupervisores().remove(s);
@@ -427,7 +424,7 @@ public class MbEstagio implements Serializable {
 			this.tela.getEstagio().getJornadas().remove(j);
 		} else {
 
-			int result = ejb.deletarJornada(j);
+			int result = daoEstagio.deletarJornada(j);
 			if (result > 0) {
 				mb.addMessage("oprok", "main", FacesMessage.SEVERITY_INFO);
 				this.tela.getEstagio().getJornadas().remove(j);
@@ -441,7 +438,7 @@ public class MbEstagio implements Serializable {
 
 		d.setEstagio(e);
 
-		d = (Documento) ejb.salvar(d);
+		d = (Documento) daoDocumento.persist(d);
 
 		if (d.getId() != null) {
 			mb.addMessage("oprok", "main", FacesMessage.SEVERITY_INFO);
@@ -451,8 +448,8 @@ public class MbEstagio implements Serializable {
 	public void salvarEstagio() {
 		Estagio e = this.tela.getEstagio();
 
-		if (null != (Estagio) ejb.salvar(e)) {
-			this.tela.setEstagio(ejb.buscarEstagio(e.getAluno(), e.getEmpresa()));
+		if (null != (Estagio) daoEstagio.persist(e)) {
+			this.tela.setEstagio(daoEstagio.buscarEstagio(e.getAluno(), e.getEmpresa()));
 		} else {
 			mb.addMessage("erro_cadastro_estagio", "main", FacesMessage.SEVERITY_ERROR);
 		}
@@ -469,8 +466,8 @@ public class MbEstagio implements Serializable {
 			}
 		}
 
-		e = (Estagio) ejb.salvar(e);
-		Estagio e1 = ejb.buscarEstagio(e.getAluno(), e.getEmpresa());
+		e = (Estagio) daoEstagio.persist(e);
+		Estagio e1 = daoEstagio.buscarEstagio(e.getAluno(), e.getEmpresa());
 		this.tela.setEstagio(e1);
 		mb.addMessage("oprok", "main", FacesMessage.SEVERITY_INFO);
 	}
@@ -485,8 +482,8 @@ public class MbEstagio implements Serializable {
 			}
 		}
 
-		e = (Estagio) ejb.salvar(e);
-		Estagio e1 = ejb.buscarEstagio(e.getAluno(), e.getEmpresa());
+		e = (Estagio) daoEstagio.persist(e);
+		Estagio e1 = daoEstagio.buscarEstagio(e.getAluno(), e.getEmpresa());
 		this.tela.setEstagio(e1);
 		mb.addMessage("oprok", "main", FacesMessage.SEVERITY_INFO);
 	}
@@ -501,8 +498,8 @@ public class MbEstagio implements Serializable {
 			}
 		}
 
-		e = (Estagio) ejb.salvar(e);
-		Estagio e1 = ejb.buscarEstagio(e.getAluno(), e.getEmpresa());
+		e = (Estagio) daoEstagio.persist(e);
+		Estagio e1 = daoEstagio.buscarEstagio(e.getAluno(), e.getEmpresa());
 		this.tela.setEstagio(e1);
 		mb.addMessage("oprok", "main", FacesMessage.SEVERITY_INFO);
 	}
@@ -559,7 +556,7 @@ public class MbEstagio implements Serializable {
 
 			// excluir os documentos do banco de dados
 			for (Documento d : this.tela.getDocumentos()) {
-				ejb.deletarDocumento(d);
+				daoEstagio.deletarDocumento(d);
 			}
 
 			int i = this.tela.getDocumentos().size();
@@ -605,7 +602,7 @@ public class MbEstagio implements Serializable {
 		Documento documento = (Documento) (select.getAttributes().get("documento"));
 		ETipoDoc tipo = (ETipoDoc) e.getNewValue();
 		documento.setTipo(tipo);
-		ejb.salvar(documento);
+		daoDocumento.persist(documento);
 	}
 
 	public void notificarRetiradaDocumento() {
@@ -629,10 +626,10 @@ public class MbEstagio implements Serializable {
 		n.setTipo(ETipoNotificacao.AVISO_RETIRADA);
 		e.getNotificacoes().add(n);
 
-		e = (Estagio) ejb.salvar(e);
+		e = (Estagio) daoEstagio.persist(e);
 
 		if (e != null) {
-			Estagio e1 = ejb.buscarEstagio(e.getAluno(), e.getEmpresa());
+			Estagio e1 = daoEstagio.buscarEstagio(e.getAluno(), e.getEmpresa());
 			this.tela.setEstagio(e1);
 
 			// cria a mensagem para ser enviada
@@ -663,7 +660,7 @@ public class MbEstagio implements Serializable {
 		Documento documento = (Documento) (component.getAttributes().get("documento"));
 		EStatusDoc status = (EStatusDoc) e.getNewValue();
 		documento.setStatusDoc(status);
-		ejb.salvar(documento);
+		daoDocumento.persist(documento);
 	}
 
 	public void mudarDataInicio(SelectEvent e) {
@@ -671,7 +668,7 @@ public class MbEstagio implements Serializable {
 		Documento documento = (Documento) (component.getAttributes().get("documento"));
 		Date data = (Date) e.getObject();
 		documento.setDtaini(data);
-		ejb.salvar(documento);
+		daoDocumento.persist(documento);
 	}
 
 	public void mudarDataFim(SelectEvent e) {
@@ -679,7 +676,7 @@ public class MbEstagio implements Serializable {
 		Documento documento = (Documento) (component.getAttributes().get("documento"));
 		Date data = (Date) e.getObject();
 		documento.setDtafim(data);
-		ejb.salvar(documento);
+		daoDocumento.persist(documento);
 	}
 
 	public void mudarDataAndamento(SelectEvent e) {
@@ -687,15 +684,13 @@ public class MbEstagio implements Serializable {
 		Documento documento = (Documento) (component.getAttributes().get("documento"));
 		Date data = (Date) e.getObject();
 		documento.setDtaultand(data);
-		ejb.salvar(documento);
+		daoDocumento.persist(documento);
 	}
 
 	public void mudarRemuneracao(ValueChangeEvent e) {
 		HtmlInputText component = (HtmlInputText) e.getComponent();
 		Documento documento = (Documento) (component.getAttributes().get("documento"));
-		Long txt = (Long) e.getNewValue();
-		// documento.setSalmes(txt);
-		ejb.salvar(documento);
+		daoDocumento.persist(documento);
 	}
 
 	public void mudarCargaHoraria(ValueChangeEvent e) {
@@ -704,7 +699,7 @@ public class MbEstagio implements Serializable {
 		int txt = (int) e.getNewValue();
 
 		documento.setCgahorsem(txt);
-		ejb.salvar(documento);
+		daoDocumento.persist(documento);
 	}
 
 	public void onDateSelect(SelectEvent event) {
@@ -714,15 +709,10 @@ public class MbEstagio implements Serializable {
 	}
 
 	public void verificarEstagios() {
-
 		Date hoje = new Date();
-
 		List<String> verificacoes = new ArrayList<String>(Arrays.asList(this.tela.getVerificacoesSelecionadas()));
-
-		List<Empresa> conveniadas = ejb.buscarEmpresasConveniadas(hoje);
-
-		List<Documento> documentos = ejb.buscarDocumentosAtivosPeriodo(hoje, hoje);
-
+		List<Empresa> conveniadas = daoEmpresa.buscarEmpresasConveniadas(hoje);
+		List<Documento> documentos = daoDocumento.buscarDocumentosAtivosPeriodo(hoje, hoje);
 		Set<Aluno> alunos = new HashSet<Aluno>();
 		Set<Aluno> alunosDetectados = new HashSet<Aluno>();
 		List<Aluno> alunosDetectados1 = new ArrayList<Aluno>();
@@ -740,21 +730,19 @@ public class MbEstagio implements Serializable {
 			String problema = "";
 
 			// Programa Encerrado
-
 			if (verificacoes.contains("PROGRAMA_ENCERRADO")) {
-
-				if (!ejb.temProgramaAtivo(a.getCodpes())) {
+				if (!daoReplicado.temProgramaAtivo(a.getCodpes())) {
 					problema = problema + "<li>Programa encerrado ou trancado</li>";
 				}
-
 			}
 
 			if (verificacoes.contains("SEM_MATRICULA")) {
 				// Sem matricula
-				if (!ejb.temMatriculaAtiva(a.getCodpes())) {
+				if (!daoReplicado.temMatriculaAtiva(a.getCodpes())) {
 					problema = problema + "<li>Aluno sem matrícula</li>";
 				}
 			}
+
 			int ea = 0;
 			for (Estagio e : a.getEstagios()) {
 
@@ -765,6 +753,8 @@ public class MbEstagio implements Serializable {
 				if (verificacoes.contains("ESTAGIOS_SIMULTANEOS")) {
 					// Estágios Simultâneos
 					if (ea > 1) {
+						// a.setObservacao(a.getObservacao() + " Estágios simultâneos ");
+						// this.tela.getAlunos().add(a);
 						problema = problema + "<li>Aluno possui estágios simultâneos</li>";
 					}
 				}
@@ -799,7 +789,7 @@ public class MbEstagio implements Serializable {
 
 			System.out.println("Vai verificar estagio encerrado sem comprovacao");
 
-			List<Estagio> estagios = ejb.buscarEstagios();
+			List<Estagio> estagios = daoEstagio.buscarEstagios();
 
 			for (Estagio e : estagios) {
 
@@ -822,14 +812,12 @@ public class MbEstagio implements Serializable {
 						// pula ...
 					}
 				}
-
 			}
-
 		}
 
 		if (verificacoes.contains("ESTAGIO_PROXIMO_ENCERRAMENTO")) {
 
-			List<Estagio> estagios = ejb.buscarEstagios();
+			List<Estagio> estagios = daoEstagio.buscarEstagios();
 
 			for (Estagio e : estagios) {
 				String problema = "";
@@ -850,9 +838,7 @@ public class MbEstagio implements Serializable {
 						// pula ...
 					}
 				}
-
 			}
-
 		}
 
 		this.tela.getAlunos().clear();
@@ -867,31 +853,9 @@ public class MbEstagio implements Serializable {
 	}
 
 	public void verificarConvenios() {
-
-		List<Empresa> empresas = ejb.buscarEmpresasConveniadasProximoEncerramento();
+		List<Empresa> empresas = daoEmpresa.buscarEmpresasConveniadasProximoEncerramento();
 		this.tela.setEmpresas(empresas);
 		this.tela.getAlunos().clear();
-
-	}
-
-	public String abrirGradeEuropa() {
-
-		int codpes = this.tela.getAluno().getCodpes();
-
-		Recursos r = new Recursos();
-		String europa = r.getResourceValue("europa-url");
-
-		String link = europa + "/comparativo.xhtml?codpes=" + codpes;
-
-		if (link != null) {
-			ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-			try {
-				externalContext.redirect(link.trim());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		return null;
 	}
 
 }

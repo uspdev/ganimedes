@@ -14,8 +14,10 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.primefaces.context.RequestContext;
 
+import br.usp.ime.ganimedes.dao.DaoContato;
+import br.usp.ime.ganimedes.dao.DaoConvenio;
+import br.usp.ime.ganimedes.dao.DaoEmpresa;
 import br.usp.ime.ganimedes.dao.DaoUsuario;
-import br.usp.ime.ganimedes.ejb.GanimedesInterface;
 import br.usp.ime.ganimedes.model.Contato;
 import br.usp.ime.ganimedes.model.Convenio;
 import br.usp.ime.ganimedes.model.Empresa;
@@ -37,10 +39,16 @@ public class MbConvenio implements Serializable {
 	Usuario usuarioLogado;
 
 	@EJB
-	GanimedesInterface ejb;
+	DaoUsuario daoUsuario;
 
 	@EJB
-	DaoUsuario daoUsuario;
+	DaoEmpresa daoEmpresa;
+
+	@EJB
+	DaoConvenio daoConvenio;
+
+	@EJB
+	DaoContato daoContato;
 
 	@Inject
 	MessageBean mb;
@@ -51,11 +59,9 @@ public class MbConvenio implements Serializable {
 	private Contato contato = new Contato();
 	private Convenio convenio = new Convenio();
 	private Empresa empresa = new Empresa();
-	
-
 
 	public void carregarEmpresa() {
-		List<Empresa> empresas = ejb.buscarEmpresa(empresa.getCnpj());
+		List<Empresa> empresas = daoEmpresa.buscarEmpresaPorCnpj(empresa.getCnpj());
 
 		if (empresas.isEmpty()) {
 			mb.addMessage("semreg", "main", FacesMessage.SEVERITY_INFO);
@@ -90,7 +96,7 @@ public class MbConvenio implements Serializable {
 	}
 
 	public void atualizarConvenio() {
-		ejb.salvar(convenio);
+		daoConvenio.persist(convenio);
 	}
 
 	public void mostrarEdicaoContato(Contato contato) {
@@ -106,11 +112,11 @@ public class MbConvenio implements Serializable {
 	}
 
 	public void atualizarContato() {
-		ejb.salvar(contato);
+		daoContato.persist(contato);
 	}
 
 	public void criarEmpresa() {
-		empresa = (Empresa) ejb.salvar(empresa);
+		empresa = (Empresa) daoEmpresa.persist(empresa);
 		if (empresa == null) {
 			mb.addMessage("oprerr", "main", FacesMessage.SEVERITY_ERROR);
 		} else {
@@ -127,7 +133,7 @@ public class MbConvenio implements Serializable {
 			c.setEmpresa(empresa);
 		}
 
-		if (ejb.salvar(empresa) != null) {
+		if (daoEmpresa.persist(empresa) != null) {
 			mb.addMessage("oprok", "main", FacesMessage.SEVERITY_INFO);
 		} else {
 			mb.addMessage("erro_cadastro_empresa", "main", FacesMessage.SEVERITY_ERROR);
@@ -135,32 +141,32 @@ public class MbConvenio implements Serializable {
 	}
 
 	public void atualizarEmpresa(Empresa e) {
-		ejb.salvar(e);
+		daoEmpresa.persist(e);
 	}
 
 	public void adicionarContato() {
 		empresa.getContatos().add(contato);
 		contato.setEmpresa(empresa);
-		ejb.salvar(contato);
+		daoContato.persist(contato);
 	}
 
 	public void adicionarConvenio() {
 		empresa.getConvenios().add(convenio);
 		convenio.setEmpresa(empresa);
-		ejb.salvar(convenio);
+		daoConvenio.persist(convenio);
 	}
 
 	public void deletarEmpresa(Empresa e) {
-		ejb.deletar(empresa);
+		daoEmpresa.delete(empresa);
 	}
 
 	public void deletarContato(Contato c) {
-		ejb.deletarContato(c);
+		daoContato.delete(c);
 		empresa.getContatos().remove(c);
 	}
 
 	public void deletarConvenio(Convenio c) {
-		ejb.deletarConvenio(c);
+		daoConvenio.delete(c);
 		empresa.getConvenios().remove(c);
 	}
 

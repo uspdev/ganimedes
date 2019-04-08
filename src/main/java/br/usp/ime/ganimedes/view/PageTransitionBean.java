@@ -122,16 +122,6 @@ public class PageTransitionBean implements Serializable {
 
 	}
 
-	public void chamaEstagiosAtivos() {
-
-		try {
-			ec.redirect(baseUrl + "estagios-ativos.xhtml");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
 
 	public void chamaAluno(String codpes) {
 

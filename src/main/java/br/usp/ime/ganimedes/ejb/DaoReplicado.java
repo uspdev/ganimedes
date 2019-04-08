@@ -80,6 +80,10 @@ public class DaoReplicado implements DaoReplicadoInterface {
 		return a;
 	}
 
+	// Integer codpes, String nompes, String tipdocidf, String numdocidf, Date dtaexdidf, String sglorgexdidf, String sglest, Character sexpes, String
+	// numcpf, Date dtanas, String tipvin,
+	// char sitatl, Date dtainivin, String tiping, String sitoco, int codcur, short codhab, Short numsemidl)
+
 	@SuppressWarnings("unchecked")
 	public Aluno buscarAlunoPos(Integer codpes) {
 
@@ -91,6 +95,11 @@ public class DaoReplicado implements DaoReplicadoInterface {
 		}
 
 		Aluno a = null;
+
+		/*
+		 * SELECT * FROM PESSOA AS P, VINCULOPESSOAUSP AS V, AGPROGRAMA AS AG, AREA AS AR, NOMECURSO AS NC WHERE P.codpes = 8097880 AND P.codpes =
+		 * V.codpes AND P.codpes = A.codpes AND AG.codpes = 8097880 AND AG.codare = AR.codare AND AR.codcur = NC.codcur;
+		 */
 
 		String query = "SELECT NEW br.usp.ime.ganimedes.model.Aluno"
 				+ "(P.codpes, P.nompes, P.tipdocidf, P.numdocidf, P.dtaexdidf, P.sglorgexdidf, P.sglest, P.sexpes, P.numcpf, P.dtanas, V.VinculoPessoaUspPK.tipvin, V.sitatl, V.dtainivin, V.tiping, V.sitoco, AR.codcur , AR.codare , NC.nomcur) "
@@ -184,12 +193,17 @@ public class DaoReplicado implements DaoReplicadoInterface {
 			e1.printStackTrace();
 		}
 
+		// String query = "SELECT P.numsemidl FROM dbo.PROGRAMAGR AS P WHERE P.codpes = :codpes";
+
 		String query = "SELECT P FROM br.usp.model.replicado.Programagr P WHERE P.programagrPK = :codpes";
 
 		Query q = replicado.createQuery(query);
 		q.setParameter("codpes", codpes);
 
+		// numsemidl = (Short) q.setMaxResults(1).getSingleResult();
+
 		Programagr programa = (Programagr) q.setMaxResults(1).getSingleResult();
+
 		numsemidl = programa.getNumsemidl();
 
 		try {
@@ -267,10 +281,13 @@ public class DaoReplicado implements DaoReplicadoInterface {
 			nompes = result.get(0);
 		}
 
+		// String nompes = (String) q.setMaxResults(1).getSingleResult();
+
 		try {
 			utx.commit();
 		} catch (SecurityException | IllegalStateException | RollbackException | HeuristicMixedException | HeuristicRollbackException
 				| SystemException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -295,6 +312,11 @@ public class DaoReplicado implements DaoReplicadoInterface {
 
 	}
 
+	/**
+	 * Verifica se o aluno eh ativo
+	 *
+	 * @return
+	 */
 	public boolean isAluno(Integer codpes) {
 
 		String query = "SELECT * FROM VINCULOPESSOAUSP WHERE codpes = :codpes AND sitatl = 'A' and codclg = 45";
@@ -310,5 +332,30 @@ public class DaoReplicado implements DaoReplicadoInterface {
 
 		return true;
 	}
+
+
+	public boolean temMatriculaAtiva(Integer codpes) {
+		boolean tem = false;
+
+		List<Histescolargr> historico = this.buscarMatriculasAtivas(codpes);
+
+		if (!historico.isEmpty()) {
+			tem = true;
+		}
+
+		return tem;
+	}
+
+	public boolean temProgramaAtivo(Integer codpes) {
+		boolean tem = false;
+
+		List<Programagr> programas = this.buscarProgramaAtivo(codpes);
+
+		if (!programas.isEmpty()) {
+			tem = true;
+		}
+		return tem;
+	}
+
 
 }
