@@ -1,5 +1,6 @@
 package br.usp.ime.ganimedes.dao;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -35,11 +36,21 @@ public class DaoUsuario extends Dao<Usuario> {
 		List<Usuario> usuarios = query.getResultList();
 		if (usuarios.isEmpty()) {
 			return null;
-			
+
 		}
 
 		Usuario usuario = usuarios.get(0);
 		return usuario;
+
+		/*
+		 * else { codlog = "estagios@ime.usp.br"; String q1 = "SELECT x FROM Usuario x WHERE x.codlog = :codlog"; Query query1 =
+		 * em.createQuery(q1).setParameter("codlog", codlog);
+		 *
+		 * if (query1.getResultList().isEmpty()) { // TODO: cria anunciante e devolve (ENTENDER O MOTIVO DISSO) u.setCodlog("estagios@ime.usp.br");
+		 * u.setCpf("000.000.000-00"); u.setNompes("secretaria"); // a = (Anunciante) this.salvar(a); } else { u = (Usuario) query1.getSingleResult(); } }
+		 *
+		 */
+
 	}
 
 	public List<Usuario> getUsuarios() {
@@ -93,6 +104,21 @@ public class DaoUsuario extends Dao<Usuario> {
 			return (Usuario) query.getSingleResult();
 		}
 		return null;
+	}
+
+	public boolean existeUsuarioAdm() {
+		String query = "SELECT count(*) FROM USUARIO AS U, USUARIO_PAPEL AS UP, PAPEL AS P "
+				+ "	WHERE U.id = UP.usuario_id AND UP.papel_id = P.id AND P.nome = 'ADM'";
+
+		Query q = em.createNativeQuery(query);
+		BigInteger count = (BigInteger) q.setMaxResults(1).getSingleResult();
+
+		if (count.doubleValue() > 0) {
+			return true;
+		}
+
+		return false;
+
 	}
 
 }

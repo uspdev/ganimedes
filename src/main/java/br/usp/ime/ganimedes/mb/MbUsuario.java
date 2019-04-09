@@ -2,6 +2,7 @@ package br.usp.ime.ganimedes.mb;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,6 +17,7 @@ import javax.inject.Named;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 
+import br.usp.ime.ganimedes.dao.DaoPapel;
 import br.usp.ime.ganimedes.dao.DaoUsuario;
 import br.usp.ime.ganimedes.model.Grupo;
 import br.usp.ime.ganimedes.model.Papel;
@@ -29,10 +31,17 @@ import br.usp.ime.util.PasswordGenerator;
 public class MbUsuario implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	// FacesContext fc = FacesContext.getCurrentInstance();
+	// HttpServletRequest request = (HttpServletRequest) fc.getExternalContext().getRequest();
+	// Usuario usuarioLogado = (Usuario) fc.getApplication().getVariableResolver().resolveVariable(fc, "UsuarioLogado");
+
 	Logger log = Logger.getLogger(MbUsuario.class.getName());
 
 	@EJB
 	DaoUsuario daoUsuario;
+
+	@EJB
+	DaoPapel daoPapel;
 
 	@Inject
 	Usuario usuarioLogado;
@@ -171,6 +180,55 @@ public class MbUsuario implements Serializable {
 
 	}
 
+
+	public void criarAdministrador() {
+		Usuario u = this.getUsuario();
+
+		if (!u.getSenha().equals(u.getConfirmacaoSenha())) {
+			mb.addMessage("snc", "main", FacesMessage.SEVERITY_ERROR);
+			return;
+		}
+
+		if (daoUsuario.existeUsuarioAdm()) {
+			mb.addMessage("jeacs", "main", FacesMessage.SEVERITY_ERROR);
+			return;
+		}
+
+
+		this.criarPapeis();
+
+
+		u.setAtivado(true);
+		u.setCodlog(u.getCodpes().toString());
+		List<Papel> papeis = new ArrayList<Papel>();
+		papeis.add(daoPapel.buscarPapel("ADM"));
+		u.setPapeis(papeis);
+		u.setDataCadastro(new Date());
+
+		u.setSalt(Base64.encodeBase64String(PasswordGenerator.generateSalt()));
+		u.setSenha(DigestUtils.sha256Hex(u.getSenha() + u.getSalt()));
+		u = (Usuario) daoUsuario.persist(u);
+
+		if (u != null) {
+			mb.addMessage("ucs", "main", FacesMessage.SEVERITY_INFO);
+			this.usuario = new Usuario();
+		} else {
+			mb.addMessage("oprerr", "main", FacesMessage.SEVERITY_ERROR);
+		}
+
+	}
+
+	private void criarPapeis() {
+		String[] papeis = { "ADM", "OPR", "ALUNO", "ANUNCIANTE" };
+
+		for (String p : papeis) {
+			Papel papel = new Papel(p);
+			daoPapel.persist(papel);
+		}
+
+	}
+
+
 	public void mudarAtivo() {
 		if (usuario.isAtivado()) {
 			usuario.setAtivado(false);
@@ -180,6 +238,8 @@ public class MbUsuario implements Serializable {
 
 		usuario = (Usuario) daoUsuario.persist(usuario);
 	}
+
+	// GETTERS AND SETTERS
 
 	public HtmlForm getFrmList() {
 		return frmList;

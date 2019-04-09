@@ -41,8 +41,10 @@ public class Usuario implements Serializable {
 
 	private boolean ativado = false;
 
+	@Column(name = "codpes", unique = true, nullable = false)
 	private Integer codpes;
 
+	@Column(name = "email", unique = true, nullable = false)
 	private String email;
 
 	private String nompes;
@@ -51,6 +53,10 @@ public class Usuario implements Serializable {
 
 	private String senha;
 
+	@Transient
+	private String confirmacaoSenha;
+
+	@Column(name = "codlog", unique = true)
 	private String codlog;
 	private String telefone;
 	private String cpf;
@@ -274,6 +280,14 @@ public class Usuario implements Serializable {
 
 	public void setDataCadastro(Date dataCadastro) {
 		this.dataCadastro = dataCadastro;
+	}
+
+	public String getConfirmacaoSenha() {
+		return confirmacaoSenha;
+	}
+
+	public void setConfirmacaoSenha(String confirmacaoSenha) {
+		this.confirmacaoSenha = confirmacaoSenha;
 	}
 
 	@Override

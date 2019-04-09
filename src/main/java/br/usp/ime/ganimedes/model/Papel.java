@@ -24,12 +24,19 @@ public class Papel implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String nome;
-	
+
 	@ManyToMany(mappedBy = "papeis", fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
 	private List<Usuario> usuarios = new ArrayList<Usuario>();
 
-	
+	public Papel() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public Papel(String nome) {
+		super();
+		this.nome = nome;
+	}
 
 	public Integer getId() {
 		return id;
@@ -47,8 +54,6 @@ public class Papel implements Serializable {
 		this.nome = nome;
 	}
 
-	
-	
 	public List<Usuario> getUsuarios() {
 		return usuarios;
 	}

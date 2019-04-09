@@ -8,8 +8,8 @@
    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 
 
- 
-    
+
+
 </h:head>
 
 <h:body>
@@ -25,6 +25,7 @@
 
             <b:container fluid="false">
                <b:row>
+
                   <b:column col-xs="10" col-sm="5" col-md="4" col-lg="4">
 
                      <h2>#{msgs.appName}</h2>
@@ -32,12 +33,12 @@
                      <p>#{msgs.appDescription}</p>
 
 
-                     
-                     
+
+
                      <h:form>
                         <h:button value="Acesso local" onclick="toggle('caixa_login_local'); return false;" />
                      </h:form>
-                     
+
 
                   </b:column>
 
@@ -45,21 +46,22 @@
 
                      <div class="caixa_login"></div>
 
-                     
+
 
                      <div class="caixa_login_local" id="caixa_login_local">
                         <p>No. USP</p>
+
                         <p:inputText id="codlog" value="#{Auth.codlog}" required="false" requiredMessage="Informe o No. USP" />
                         <p>Senha</p>
 
 
-<ui:remove>                        
-                           <p:inputText id="senha" value="#{Auth.senha}" required="false" requiredMessage="Informe a senha" />
-             </ui:remove>
+                        <ui:remove>
 
+                           <p:inputText id="senha" value="#{Auth.senha}" required="false" requiredMessage="Informe a senha" />
+                        </ui:remove>
 
                         <p:password value="#{Auth.senha}" id="senha" required="false" requiredMessage="Informe a senha" />
-           
+
 
                         <p:message for="senha" />
                         <p:message for="codlog" />
@@ -79,6 +81,9 @@
                      <br />
                      <p:link value="Acesso para empresas" href="../empresa/login.xhtml" />
 
+                     <br />
+
+                     <p:commandLink onclick="PF('dlgAddAdmin').show();" value="Cadastrar administrador" rendered="#{not mbConfiguracao.existeUsuarioAdm()}" />
 
 
                      <br />
@@ -90,18 +95,60 @@
 
 
                </b:row>
+
+               <p:message for="main" />
+
+
+
+
+
             </b:container>
 
 
          </h:form>
 
 
-         <h:form rendered="#{UsuarioLogado.autenticado}">Você já está logado.</h:form>
+         <p:dialog id="dlgAddAdmin" header="Cadastro de Administrador" widgetVar="dlgAddAdmin" modal="true">
+            <h:form id="addUser">
+
+               <h:panelGrid value="#{mbUsuario.usuario}" columns="3">
+                  <h:outputText value="No. USP: " />
+                  <h:inputText value="#{mbUsuario.usuario.codpes}" id="txt_codpes" required="true" requiredMessage="Informe o No. USP" />
+                  <p:message for="txt_codpes" />
+
+                  <h:outputText value="Nome: " />
+                  <h:inputText value="#{mbUsuario.usuario.nompes}" id="txt_nome" required="true" requiredMessage="Informe o nome" />
+                  <p:message for="txt_nome" />
+
+                  <h:outputText value="E-mail: " />
+                  <h:inputText value="#{mbUsuario.usuario.email}" id="txt_email" required="true" requiredMessage="Informe o e-mail" />
+                  <p:message for="txt_email" />
+
+
+                  <h:outputText value="Senha: " />
+                  <h:inputSecret value="#{mbUsuario.usuario.senha}" id="txt_senha" required="true" requiredMessage="Informe a senha" />
+                  <p:message for="txt_senha" />
+
+
+                  <h:outputText value="Confirme a senha: " />
+                  <h:inputSecret value="#{mbUsuario.usuario.confirmacaoSenha}" id="txt_confirmacao_senha" required="true"
+                     requiredMessage="Informe a confirmação da senha" />
+                  <p:message for="txt_confirmacao_senha" />
+
+
+               </h:panelGrid>
+
+               <h:panelGrid columns="2">
+                  <p:commandButton action="#{mbUsuario.criarAdministrador()}" value="Cadastrar administrador" ajax="false" />
+                  <p:commandButton value="Cancelar" onclick="PF('dlgAddAdmin').hide();" type="button" />
+               </h:panelGrid>
+            </h:form>
+         </p:dialog>
       </ui:define>
    </ui:composition>
-   
-   
- 
-    
+
+
+
+
 </h:body>
 </html>
