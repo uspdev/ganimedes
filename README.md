@@ -43,11 +43,11 @@ PATH="/opt/gradle/gradle-5.3/bin"
 
 ### Configuração e criação do banco de dados no Mysql
 
-```bash          
-$ create database ganimedes;
+```
+create database ganimedes;
 ```
 
-Execute o script a seguir para a criação das tabelas no banco de dados: [src/resources/META-INF/sql/create.sql](src/resources/META-INF/sql/create.sql)
+Execute o script a seguir para a criação das tabelas no banco de dados: [src/main/resources/META-INF/sql/create.sql](src/main/resources/META-INF/sql/create.sql)
 
 
 
