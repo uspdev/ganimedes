@@ -40,6 +40,17 @@ Edite o arquivo <code>/etc/enviroment</code> e inclua o caminho do executável d
 PATH="/opt/gradle/gradle-5.3/bin"
 ```
 
+
+### Configuração e criação do banco de dados no Mysql
+
+```bash          
+$ create database ganimedes;
+```
+
+Execute o script a seguir para a criação das tabelas no banco de dados: [src/resources/META-INF/sql/create.sql](src/resources/META-INF/sql/create.sql)
+
+
+
 ### Instalação e configuração do Wildfly
 
 [Baixe](https://wildfly.org/downloads) o Wildfly e descompacte em <code>/opt/wildfly</code>:
@@ -77,7 +88,7 @@ executado em um servidor Microsoft SQL Server e outra com um banco de dados MySQ
 
 
 
-<strong>Configuração do Microsoft SQL Server</strong>
+<strong>Configuração para o Microsoft SQL Server</strong>
 
 [Baixe](http://ida.fel.cvut.cz/maven/com/microsoft/sqlserver/sqljdbc42/6.0.8112/sqljdbc42-6.0.8112.jar') o driver JDBC do Microsoft SQL Server.
 
@@ -117,7 +128,7 @@ exit
 
 
 
-<strong>Configuração do MySQL</strong>
+<strong>Configuração para o MySQL</strong>
 
 
 [Baixe](http://central.maven.org/maven2/mysql/mysql-connector-java/8.0.15/mysql-connector-java-8.0.15.jar) o driver do MySQL.
@@ -193,5 +204,8 @@ Para implantar a aplicação no Wildfly, execute o comando abaixo indicando o ca
 $ /opt/wildfly/bin/jboss-cli.sh --connect --command="deploy --force [CAMINHO DO WAR]"
 ```
 
+Se tudo deu certo, o sistema pode ser acessado através de <code>http://localhost:8080/ganimedes</code>
 
 ## Uso
+
+Nessa seção serão apresentadas as funcionalidades do sistema.
