@@ -206,6 +206,13 @@ $ /opt/wildfly/bin/jboss-cli.sh --connect --command="deploy --force [CAMINHO DO 
 
 Se tudo deu certo, o sistema pode ser acessado através de <code>http://localhost:8080/ganimedes</code>
 
+Na tela de login há um link com o título <em>Cadastrar administrador</em> que fica disponível até o momento
+da criação do primeiro administrador no sistema.
+
+
+
+
+
 ## Uso
 
 Nessa seção serão apresentadas as funcionalidades do sistema.
