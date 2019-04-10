@@ -27,7 +27,7 @@ $ sudo apt-get install oracle-java8-installer
 
 ### Instalação do Gradle
 
-[Baixe](https://gradle.org/releases/')</a> o Gradle e descompacte em <code>/opt/gradle</code>:
+[Baixe](https://gradle.org/releases/)</a> o Gradle e descompacte em <code>/opt/gradle</code>:
 
 ```bash  
 $ mkdir /opt/gradle
@@ -90,7 +90,7 @@ executado em um servidor Microsoft SQL Server e outra com um banco de dados MySQ
 
 <strong>Configuração para o Microsoft SQL Server</strong>
 
-[Baixe](http://ida.fel.cvut.cz/maven/com/microsoft/sqlserver/sqljdbc42/6.0.8112/sqljdbc42-6.0.8112.jar') o driver JDBC do Microsoft SQL Server.
+[Baixe](http://ida.fel.cvut.cz/maven/com/microsoft/sqlserver/sqljdbc42/6.0.8112/sqljdbc42-6.0.8112.jar) o driver JDBC do Microsoft SQL Server.
 
 
 Através do CLI conecte-se à instância do Wildfly em execução:
