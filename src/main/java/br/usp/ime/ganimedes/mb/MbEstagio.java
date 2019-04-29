@@ -105,6 +105,8 @@ public class MbEstagio implements Serializable {
 	}
 
 	public void adicionarAluno() {
+	Aluno a = null;
+		Integer codpes = 0;
 
 		if (this.tela.getCodpes().isEmpty()) {
 			mb.addMessage("codpes_nao_informado", "main", FacesMessage.SEVERITY_ERROR);
@@ -112,17 +114,24 @@ public class MbEstagio implements Serializable {
 		}
 
 		if (IntegerUtil.isInt(this.tela.getCodpes())) {
-			Aluno a = daoAluno.findById(Integer.valueOf(this.tela.getCodpes()));
-
-			if (a != null) {
-				daoAluno.persist(a);
-				this.tela.getAlunos().add(a);
-				Collections.sort(this.tela.getAlunos(), new OrdenadorAlunoNome());
-			} else {
-				mb.addMessage("codpes_nao_encontrado", "main", FacesMessage.SEVERITY_ERROR);
-			}
-
+			codpes = Integer.valueOf(this.tela.getCodpes());
 		}
+
+		a = daoAluno.findById(codpes);
+
+		if (a == null) {
+			a = daoAluno.buscarAluno(codpes);
+		}
+
+		if (a == null) {
+			mb.addMessage("codpes_nao_encontrado", "main", FacesMessage.SEVERITY_ERROR);
+
+		} else {
+			daoAluno.persist(a);
+			this.tela.getAlunos().add(a);
+			Collections.sort(this.tela.getAlunos(), new OrdenadorAlunoNome());
+		}
+
 
 	}
 
