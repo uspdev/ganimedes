@@ -216,3 +216,8 @@ da criação do primeiro administrador no sistema.
 ## Uso
 
 Nessa seção serão apresentadas as funcionalidades do sistema.
+
+x-special/nautilus-clipboard
+copy
+file:///home/marcelo/Desktop/temp/alfredo/administracao-anuncios.png
+
