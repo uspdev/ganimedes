@@ -216,8 +216,5 @@ da criação do primeiro administrador no sistema.
 ## Uso
 
 Nessa seção serão apresentadas as funcionalidades do sistema.
-
-x-special/nautilus-clipboard
-copy
-file:///home/marcelo/Desktop/temp/alfredo/administracao-anuncios.png
+![administracao-anuncios](https://user-images.githubusercontent.com/25309746/110049123-f4dd2280-7d2f-11eb-9ddb-007740de557b.png)
 
